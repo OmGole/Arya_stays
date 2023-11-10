@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 require('dotenv').config();
 
-const auth = async (req,res,next) => {
+const authCheck = async (req,res,next) => {
   const idToken = req.header('Authorization')?.split('Bearer ')[1];
 
   if (!idToken) {
@@ -30,4 +30,4 @@ const authAdmin = (req,res,next) => {
   next();
 }
 
-module.exports = {auth,authAdmin};
+module.exports = {authCheck,authAdmin};

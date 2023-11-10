@@ -42,9 +42,9 @@ app.use(xss());
 app.use('/uploads', express.static('uploads'));
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/property', propertyRoutes);
-app.use('/api/v1/cart',auth, cartRoutes); 
-app.use('/api/v1/order',auth, orderRoutes); 
-app.use('/api/v1/stripe', stripeRoutes);
+app.use('/api/v1/cart', cartRoutes); 
+app.use('/api/v1/order', orderRoutes); 
+// app.use('/api/v1/stripe', stripeRoutes);
 
 const startServer = async () => {
   try {

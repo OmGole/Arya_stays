@@ -6,34 +6,37 @@ const OrderSchema = new mongoose.Schema({
     ref:'User',
     required:true
   },
-  products:[{
-    productId:{
-      type:mongoose.Types.ObjectId,
-      ref:'Book',
-      required:true
-    },
-    quantity:{
-      type:Number,
-      required:true,
-    },
-    price: {
-      type:Number,
-      required:true
-    },
-    _id:false
-  }],
-  total:{
-     type:Number,
-     required:true
-  },
-  shipping:{
-    type:Object,
+  propertyId:{
+    type:mongoose.Types.ObjectId,
+    ref:'Property',
     required:true
   },
   status:{
     type:String,
+    enum : ['accepted','pending','rejected'],
+    default:"pending"
+  },
+  amenities:[
+    {type:{type:String},
+    value:{type:String},
+    price:{type:Number},
+    _id:false
+  }],
+  guest:{
+    adult: {type: Number},
+    children: {type: Number},
+  },
+  accomodation:{
+    type:String,
+    required:true
+  },
+  check_in:{
+    type:Date,
     required:true,
-    default:"Pending"
+  },
+  check_out:{
+    type:Date,
+    required:true,
   }
 },
 {timestamps:true})

@@ -2,10 +2,20 @@ const express = require('express');
 const router = express.Router();
 
 
-const {getOrders,updateOrder,getOrdersId} = require('../controllers/order');
+const {getOrders,
+  getOrdersId,
+  createOrder,
+  updateOrder,
+  deleteOrder,
+  getPastOrders,
+  getCurrentOrders} = require('../controllers/order');
+  
+router.route('/').get(getOrders).post(createOrder);
+router.route('/:id').patch(updateOrder).delete(deleteOrder);
 
-router.route('/').get(getOrders)
-router.route('/:id').get(getOrdersId);
-router.route('/update/:id').patch(updateOrder);
+// id => user
+router.route('/past/:id').get(getPastOrders);
+router.route('/current/:id').get(getCurrentOrders);
+router.route('/user/:id').get(getOrdersId);
 
 module.exports = router;

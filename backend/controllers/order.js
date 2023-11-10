@@ -3,33 +3,108 @@ const Order = require('../models/Order');
 
 const getOrders = async (req,res) => {
   const orders = await Order.find();
-  res.status(200).json(orders);
+  return res.status(200).json(orders);
 }
 
 
 const getOrdersId = async (req,res) => {
   const {id} = req.params;
   const orders = await Order.find({userId:id});
-  res.status(200).json(orders);
+  return res.status(200).json(orders);
 }
 
+const getCurrentTime = () => {
+  const currentUTCDate = new Date();
+
+// Adjust the date to IST (UTC+5:30)
+  const currentISTDate = new Date(currentUTCDate.getTime() + 330 * 60000);
+
+  return currentISTDate;
+}
+
+const getPastOrders = async(req,res) => {
+  const {id} = req.params;
+  // const currentTime = getCurrentTime();
+  const currentUTCDate = new Date();
+
+  // Adjust the date to IST (UTC+5:30)
+  const currentISTDate = new Date(currentUTCDate.getTime() + 330 * 60000);
+
+  const orders = await Order.find({userId:id, check_out: { $lt: currentISTDate}});
+
+  return res.status(200).json(orders);
+}
+
+
+const getCurrentOrders = async(req,res) => {
+  const {id} = req.params;
+  // const currentTime = getCurrentTime();
+  const currentUTCDate = new Date();
+
+  // Adjust the date to IST (UTC+5:30)
+  const currentISTDate = new Date(currentUTCDate.getTime() + 330 * 60000);
+
+  const orders = await Order.find({userId:id, check_out: { $gt: currentISTDate}});
+
+  return res.status(200).json(orders);
+}
+
+const createOrder = async(req,res) => {
+  try {
+    // req.body.createdBy = req.user.userId; 
+    const {userId,propertyId,status,amenities,guest,accomodation,check_in,check_out} = req.body;
+  
+    if(!userId || !propertyId || !status || !amenities || !guest || !accomodation || !check_in || !check_out) {
+      console.log(req.body);
+      return res.status(401).send("Please fill the missing fields");
+    }
+  
+    const order = await Order.create({...req.body});
+    return res.status(201).json(order);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 const updateOrder = async (req,res) => {
-  const {id} = req.params;
-  console.log(req.body);
-  const order = await Order.findOneAndUpdate({_id:id},req.body,{
-    new:true,
-  });
-  if(!order) {
-    return res.status(404).json({msg:`No task with id : ${id}`});
+  try {
+    const {id:orderID} = req.params;
+    const order = await Order.findById({_id:orderID});
+    
+    if(!order) {
+      return res.status(404).json({msg:`No task with id : ${orderID}`});
+    }
+    
+    const updatedOrder = await Order.findOneAndUpdate({_id:orderID},req.body,{
+      new:true,
+      // runValidators:true,
+    });
+    
+    return res.status(201).json(updatedOrder);
+  } catch(error) {
+    console.log(error);
   }
-  return res.status(200).json(order);
 }
 
+
+const deleteOrder = async (req,res) => {
+  const {id:orderID} = req.params;
+  const order = await Order.findById({_id:orderID});
+  if(!order) {
+    return res.status(404).json({msg:`No task with id: ${orderID}`});
+  }
+
+  await Order.findByIdAndDelete({_id:orderID});
+  return res.status(200).json(order);  
+}
 
 
 module.exports = {
   getOrders,
   getOrdersId,
+  createOrder,
   updateOrder,
+  deleteOrder,
+  getPastOrders,
+  getCurrentOrders
 }

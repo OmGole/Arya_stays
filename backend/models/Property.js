@@ -35,12 +35,17 @@ const PropertySchema = new mongoose.Schema({
     maxlength:1000
   },
   card_description:[{
-    title:{type:String,
-    required:[true,'Please provide title'],
-    maxlength:10},
-    desc:{type:String,
+    title:{
+      type:String,
+      required:[true,'Please provide title'],
+      maxlength:10
+    },
+    desc:{
+      type:String,
       required:[true,'Please provide c description'],
-      maxlength:100}
+      maxlength:100
+    },
+    _id:false
   }],
   price:{
     type:Number,
@@ -48,8 +53,10 @@ const PropertySchema = new mongoose.Schema({
   },
   amenities:[
     {type:{type:String},
-    value:{type:String}}
-  ],
+    value:{type:String},
+    price:{type:Number},
+    _id:false
+  }],
   roomType:{
     type: String,
     enum : ['full-property','dorm-beds','private-rooms',],
@@ -63,7 +70,8 @@ const PropertySchema = new mongoose.Schema({
     url:{
       type:String,
       required:true
-    }
+    },
+    _id:false
   }],
   ats_image:[{
     public_id:{
@@ -73,7 +81,8 @@ const PropertySchema = new mongoose.Schema({
     url:{
       type:String,
       required:true
-    }
+    },
+    _id:false
   }],
   currentLocation_images:[{
     public_id:{
@@ -83,7 +92,8 @@ const PropertySchema = new mongoose.Schema({
     url:{
       type:String,
       required:true
-    }
+    },
+    _id:false
   }]
   // createdBy:{
   //   type:mongoose.Types.ObjectId,
