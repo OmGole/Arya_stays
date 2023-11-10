@@ -10,7 +10,7 @@ const express = require('express');
 const app = express();
 const fileUpload = require("express-fileupload");
 const propertyRoutes = require('./routes/property');
-const userRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 const orderRoutes = require('./routes/order');
 const cartRoutes = require('./routes/cart');
 const stripeRoutes = require('./routes/stripe');
@@ -40,7 +40,7 @@ app.use(cors({
 app.use(xss());
 
 app.use('/uploads', express.static('uploads'));
-app.use('/api/v1/auth', userRoutes);
+app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/property', propertyRoutes);
 app.use('/api/v1/cart',auth, cartRoutes); 
 app.use('/api/v1/order',auth, orderRoutes); 

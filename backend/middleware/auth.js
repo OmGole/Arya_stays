@@ -1,17 +1,26 @@
-const jwt = require('jsonwebtoken');
+const admin = require('firebase-admin');
 require('dotenv').config();
 
 const auth = async (req,res,next) => {
-  const authHeader = req.headers.authorization;
-  if(!authHeader || !authHeader.startsWith('Bearer')) {
-    throw new Error('Authentication Invalid');
-  }
-  const token = authHeader.split(' ')[1];
+  const idToken = req.header('Authorization')?.split('Bearer ')[1];
 
-  const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-  req.user = {userId:payload.userId, name:payload.name,role:payload.role};
-  next();
-} 
+  if (!idToken) {
+    // return res.status(401).json({ error: 'Unauthorized: No ID token provided' });
+    next(new Error('Unauthorized: Invalid ID token'));
+  }
+
+  admin.auth().verifyIdToken(idToken)
+    .then((decodedToken) => {
+      // Perform additional checks or operations if needed
+      req.user = decodedToken;
+      next();
+    })
+    .catch((error) => {
+      console.error('Error verifying Email/Password ID token:', error);
+      // return res.status(401).json({ error: 'Unauthorized: Invalid ID token' });
+      next(new Error('Unauthorized: Invalid ID token'));
+    });
+};
 
 const authAdmin = (req,res,next) => {
   if(req.user.role === "user") {

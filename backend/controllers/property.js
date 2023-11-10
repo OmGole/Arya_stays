@@ -99,7 +99,7 @@ const getSingleProperty = async (req,res) => {
 const updateProperty = async (req,res) => {
   try {
     const {id:propertyID} = req.params;
-  const currentProperty = await Property.findById({_id:propertyID});
+    const currentProperty = await Property.findById({_id:propertyID});
   if(req.body.image && req.body.image !== '') {
     const type = req.body.type;
     const imgs = currentProperty[type];
@@ -125,10 +125,12 @@ const updateProperty = async (req,res) => {
     new:true,
     // runValidators:true,
   });
+
   if(!property) {
     return res.status(404).json({msg:`No task with id : ${propertyID}`});
   }
-  return res.status(200).json({property});
+
+  return res.status(200).json(property);
   } catch(error) {
     console.log(error);
   }
@@ -156,7 +158,7 @@ const deleteProperty = async (req,res) => {
   });
 
   await Property.findByIdAndDelete({_id:propertyID});
-  res.status(200).json(property);  
+  return res.status(200).json(property);  
 }
 
 module.exports = {

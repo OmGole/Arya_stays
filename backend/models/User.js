@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema({
     type:String,
     required:[true,'Please provide name'],
     minlength:3,
-    maxlength:10
+    maxlength:20
   },
   email: {
     type:String,
@@ -19,10 +19,15 @@ const UserSchema = new mongoose.Schema({
     ],
     unique:true
   },
-  password: {
-    type: String,
-    required: [true, 'Please provide password'],
-    minlength: 3
+  phone: {
+    type: Number,
+    required: [true, 'Please provide phone number'],
+    minlength: 10
+  },
+  age: {
+    type: Number,
+    required: [true, 'Please provide age'],
+    minlength: 2
   },
   role:{
     type:String,
@@ -30,18 +35,18 @@ const UserSchema = new mongoose.Schema({
   }
 })
 
-UserSchema.pre('save',async function() {
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password,salt);
-})
+// UserSchema.pre('save',async function() {
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password,salt);
+// })
 
-UserSchema.methods.createJWT = function () {
-  return jwt.sign({userId: this._id, name:this.name,role:this.role},process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '1h' });
-}
+// UserSchema.methods.createJWT = function () {
+//   return jwt.sign({userId: this._id, name:this.name,role:this.role},process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '1h' });
+// }
 
-UserSchema.methods.comparePassword = async function(candidatePassword) {
- const isMatch = await bcrypt.compare(candidatePassword, this.password);
- return isMatch;
-}
+// UserSchema.methods.comparePassword = async function(candidatePassword) {
+//  const isMatch = await bcrypt.compare(candidatePassword, this.password);
+//  return isMatch;
+// }
 
 module.exports = mongoose.model('User',UserSchema);
