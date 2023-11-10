@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/Arya_stays/static/css/main.3b0f3229.css",
+    "main.js": "/Arya_stays/static/js/main.ad6c50b3.js",
+    "static/js/787.d0f48ecb.chunk.js": "/Arya_stays/static/js/787.d0f48ecb.chunk.js",
+    "static/media/homebg.png": "/Arya_stays/static/media/homebg.66ca234d3a18ba72ced3.png",
+    "static/media/aboutbg.png": "/Arya_stays/static/media/aboutbg.a6c909904f386dcd258e.png",
+    "static/media/DummyImgSqr.png": "/Arya_stays/static/media/DummyImgSqr.5254cc14b24a50854657.png",
+    "static/media/user1.png": "/Arya_stays/static/media/user1.557587208eb9e232f2ca.png",
+    "static/media/logo.png": "/Arya_stays/static/media/logo.a7231955b283b19a52d6.png",
+    "index.html": "/Arya_stays/index.html",
+    "main.3b0f3229.css.map": "/Arya_stays/static/css/main.3b0f3229.css.map",
+    "main.ad6c50b3.js.map": "/Arya_stays/static/js/main.ad6c50b3.js.map",
+    "787.d0f48ecb.chunk.js.map": "/Arya_stays/static/js/787.d0f48ecb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3b0f3229.css",
+    "static/js/main.ad6c50b3.js"
+  ]
+}
