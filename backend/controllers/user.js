@@ -64,7 +64,6 @@ const updateUser = async (req,res) => {
 
     const updatedUser = await User.findOneAndUpdate({_id:userID}, req.body, {
       new:true,
-      // runValidators:true,
     });
     
     return res.status(200).json(updatedUser);  
