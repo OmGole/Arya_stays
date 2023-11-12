@@ -26,13 +26,14 @@ const getPastOrders = async(req,res) => {
   const {id} = req.params;
   // const currentTime = getCurrentTime();
   const currentUTCDate = new Date();
-
+  
   // Adjust the date to IST (UTC+5:30)
   const currentISTDate = new Date(currentUTCDate.getTime() + 330 * 60000);
-
+  
   const orders = await Order.find({userId:id, check_out: { $lt: currentISTDate}});
+  console.log(orders);
 
-  return res.status(200).json(orders);
+  return res.status(201).json(orders);
 }
 
 
@@ -52,9 +53,9 @@ const getCurrentOrders = async(req,res) => {
 const createOrder = async(req,res) => {
   try {
     // req.body.createdBy = req.user.userId; 
-    const {userId,propertyId,status,amenities,guest,accomodation,check_in,check_out} = req.body;
+    const {userId,propertyId,amenities,guest,accomodation,check_in,check_out} = req.body;
   
-    if(!userId || !propertyId || !status || !amenities || !guest || !accomodation || !check_in || !check_out) {
+    if(!userId || !propertyId || !amenities || !guest || !accomodation || !check_in || !check_out) {
       console.log(req.body);
       return res.status(401).send("Please fill the missing fields");
     }
