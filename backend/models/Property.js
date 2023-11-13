@@ -11,10 +11,12 @@ const PropertySchema = new mongoose.Schema({
     required:[true,`Please provide location`],
     maxlength:30
   },
-  review:{
-    type:Number,
-    required:[true,'Please  provide review'],
-  },
+  reviews:[{
+    type:mongoose.Types.ObjectId,
+    ref:'Review',
+    required:true,
+    _id:false
+  }],
   maxGuests:{
     type:Number,
     required:[true,'Please  provide max allowed people'],
@@ -51,10 +53,10 @@ const PropertySchema = new mongoose.Schema({
     type:Number,
     required:[true,'Please  provide price'],
   },
-  amenities:[
-    {type:{type:String},
-    value:{type:String},
-    price:{type:Number},
+  amenities:[{
+    type:mongoose.Types.ObjectId,
+    ref:'Amenity',
+    required:true,
     _id:false
   }],
   roomType:{

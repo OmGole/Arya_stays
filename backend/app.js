@@ -12,21 +12,15 @@ const fileUpload = require("express-fileupload");
 const propertyRoutes = require('./routes/property');
 const userRoutes = require('./routes/user');
 const orderRoutes = require('./routes/order');
-const cartRoutes = require('./routes/cart');
-const stripeRoutes = require('./routes/stripe');
+const reviewRoutes = require('./routes/review');
+const amenityRoutes = require('./routes/amenity');
+const cardRoutes = require('./routes/card');
 const connectDB = require('./db/connect');
 const {auth} = require('./middleware/auth');
 
 const port =5000;
 const connectString = process.env.MONGO_URI;
-app.use(express.json({
-  verify: function (req, res, buf) {
-    const url = req.originalUrl;
-    if (url.includes('/webhook')) {
-       req.rawBody = buf.toString();
-    }
-  }
-}));
+app.use(express.json({limit: '50mb'}));
 app.use(fileUpload({useTempFiles: true}));
 app.set('trust proxy',1)
 app.use(rateLimiter({
@@ -42,8 +36,10 @@ app.use(xss());
 app.use('/uploads', express.static('uploads'));
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/property', propertyRoutes);
-app.use('/api/v1/cart', cartRoutes); 
 app.use('/api/v1/order', orderRoutes); 
+app.use('/api/v1/review', reviewRoutes); 
+app.use('/api/v1/amenity', amenityRoutes); 
+app.use('/api/v1/card', cardRoutes); 
 // app.use('/api/v1/stripe', stripeRoutes);
 
 const startServer = async () => {
