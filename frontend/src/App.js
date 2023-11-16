@@ -4,6 +4,7 @@ import Home from "./Pages/Home";
 import EditUser from "./Pages/EditUser";
 import Order from "./Pages/Order";
 import Amenity from "./Pages/Amenity";
+import Card from "./Pages/Card";
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
       {/* <User /> */}
       {/* <EditUser/> */}
       {/* <Order/> */}
-      <Amenity />
+      {/* <Amenity /> */}
+      <Card/>
     </div>
   );
 }
