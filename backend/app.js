@@ -15,6 +15,7 @@ const orderRoutes = require('./routes/order');
 const reviewRoutes = require('./routes/review');
 const amenityRoutes = require('./routes/amenity');
 const cardRoutes = require('./routes/card');
+const slideRoutes = require('./routes/slide');
 const connectDB = require('./db/connect');
 const {auth} = require('./middleware/auth');
 
@@ -40,6 +41,7 @@ app.use('/api/v1/order', orderRoutes);
 app.use('/api/v1/review', reviewRoutes); 
 app.use('/api/v1/amenity', amenityRoutes); 
 app.use('/api/v1/card', cardRoutes); 
+app.use('/api/v1/slide', slideRoutes); 
 // app.use('/api/v1/stripe', stripeRoutes);
 
 const startServer = async () => {

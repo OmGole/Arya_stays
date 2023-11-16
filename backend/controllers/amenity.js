@@ -40,30 +40,33 @@ const createAmenity = async(req,res) => {
 const updateAmenity = async (req,res) => {
   try {
     const {id:amenityID} = req.params;
-  const amenity = await Amenity.findById({_id:amenityID});
-  if(req.body.icon && req.body.icon !== '') {
-    const imgId = amenity.icon.public_id;
-    console.log(imgId);
-    await cloudinary.uploader.destroy(imgId);
+    const amenity = await Amenity.findById({_id:amenityID});
+    if(req.body.icon && req.body.icon !== '') {
+      const imgId = amenity.icon.public_id;
+      console.log(imgId);
+      await cloudinary.uploader.destroy(imgId);
 
-    const newImage = await cloudinary.uploader.upload(req.body.icon, {
-      folder:"amenities"
+      const newImage = await cloudinary.uploader.upload(req.body.icon, {
+        folder:"amenities"
+      });
+
+      req.body.icon = {
+        public_id : newImage.public_id,
+        url: newImage.secure_url
+      }
+    }
+    console.log(req.body);
+    const updatedAmenity = await Amenity.findOneAndUpdate({_id:amenityID},req.body,{
+      new:true,
     });
 
-    req.body.icon = {
-      public_id : newImage.public_id,
-      url: newImage.secure_url
+    if(!updatedAmenity) {
+      return res.status(404).json({msg:`No task with id : ${amenityID}`});
     }
-  }
-  const updatedAmenity = await Amenity.findOneAndUpdate({_id:amenityID},req.body,{
-    new:true,
-  });
 
-  if(!updatedAmenity) {
-    return res.status(404).json({msg:`No task with id : ${amenityID}`});
-  }
+    console.log(updatedAmenity);
 
-  return res.status(200).json(updatedAmenity);
+    return res.status(200).json(updatedAmenity);
   } catch(error) {
     console.log(error);
   }

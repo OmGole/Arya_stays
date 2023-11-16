@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const PropertySchema = new mongoose.Schema({
-  title : {
+  title: {
     type:String,
     required:[true,'Please provide title'],
     maxlength:40
@@ -36,17 +36,10 @@ const PropertySchema = new mongoose.Schema({
     required:[true,'Please provide s description'],
     maxlength:1000
   },
-  card_description:[{
-    title:{
-      type:String,
-      required:[true,'Please provide title'],
-      maxlength:10
-    },
-    desc:{
-      type:String,
-      required:[true,'Please provide c description'],
-      maxlength:100
-    },
+  cards:[{
+    type:mongoose.Types.ObjectId,
+    ref:'Card',
+    required:true,
     _id:false
   }],
   price:{
@@ -59,21 +52,16 @@ const PropertySchema = new mongoose.Schema({
     required:true,
     _id:false
   }],
-  roomType:{
+  slides:[{
+    type:mongoose.Types.ObjectId,
+    ref:'Slides',
+    required:true,
+    _id:false
+  }],
+  roomType:[{
     type: String,
     enum : ['full-property','dorm-beds','private-rooms',],
-    default: 'full-property'
-  },
-  surrounding_images:[{
-    public_id:{
-      type:String,
-      required:true
-    },
-    url:{
-      type:String,
-      required:true
-    },
-    _id:false
+    required:true
   }],
   ats_image:[{
     public_id:{

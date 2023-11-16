@@ -3,6 +3,7 @@ import User from "./Pages/User";
 import Home from "./Pages/Home";
 import EditUser from "./Pages/EditUser";
 import Order from "./Pages/Order";
+import Amenity from "./Pages/Amenity";
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       {/* <Home /> */}
       {/* <User /> */}
       {/* <EditUser/> */}
-      <Order/>
+      {/* <Order/> */}
+      <Amenity />
     </div>
   );
 }
