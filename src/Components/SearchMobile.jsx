@@ -53,71 +53,71 @@ export default function SearchMobile() {
 
   return (
     <div>
-        <div className='container md:hidden  pt-20 mx-auto '>
+        <div className='container md:hidden  pt-10 mx-auto '>
           <div className='flex flex-wrap border-2 mx-5  border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg'>
-            <div className="w-2/3 dropdown    py-2 ...">
+            <div className="w-2/3 dropdown    py-2  px-4 ...">
                 <Dropdown
                     inline
-                    label={ isChoose ? <div className='w-full text-sm'><h1>Classy 1 BHK, near Viviana Mall</h1><p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p></div> : <div className='py-2  text-lg   w-full'>Choose your stays</div> }
+                    label={ isChoose ? <div className='w-full text-sm text-start'><h1 className='font-medium'>Classy 1 BHK, near Viviana Mall</h1><p><i className='fa  fa-map-marker text-[#6ACDE9] mr-2'></i>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p></div> : <div className='py-2  text-lg   w-full font-medium'>Choose your stays</div> }
                 >
-              <Dropdown.Item onClick={change}><div>
+              <Dropdown.Item onClick={change}><div className='text-start'>
                     <h1>Classy 1 BHK, near Viviana Mall</h1>
                     <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
                 </div></Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={change}><div>
+              <Dropdown.Item onClick={change}><div className='text-start'>
                     <h1>Classy 1 BHK, near Viviana Mall</h1>
                     <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
                 </div></Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={change}><div>
+              <Dropdown.Item onClick={change}><div className='text-start'>
                     <h1>Classy 1 BHK, near Viviana Mall</h1>
                     <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
                 </div></Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={change}><div>
+              <Dropdown.Item onClick={change}><div className='text-start'>
                     <h1>Classy 1 BHK, near Viviana Mall</h1>
                     <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
                 </div></Dropdown.Item>
               <Dropdown.Divider />
-              <Dropdown.Item onClick={change}><div>
+              <Dropdown.Item onClick={change}><div className='text-start'>
                     <h1>Classy 1 BHK, near Viviana Mall</h1>
                     <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
                 </div></Dropdown.Item>
                 </Dropdown>
             </div>
-            <div className="w-1/3 dropdown pl-2  py-2 ...">
-            <Dropdown
-                arrowIcon={true}
-                dismissOnClick={false}
-                className='px-5 py-4'
-                inline
-                label={<div className='text-start  w-full'><div className='text-lg'>Guests</div>
-            <div className='text-[#F79489] text-sm'>{adultNumber} Adult, {childNumber} Child</div></div>}
-                
-            >
-                <div className='flex w-100 mb-2 justify-between'>
-                    <div><h1 className='font-bold text-base w-3/5'>Adults</h1><p className='text-gray-400'>Age 8+</p></div>
-                    <div className='w-2/5 justify-between  flex '><button className='border mr-2 rounded-full border-2' onClick={decrAdult}>-</button> {adultNumber}<button className='ml-2 border rounded-full' onClick={incrAdult}>+</button></div>
-                </div>
-                <Dropdown.Divider />
-                <div className='flex w-100 my-2 justify-between'>
-                        <div><h1 className='font-bold text-base w-3/5'>Child</h1><p className='text-gray-400'>Age 0 - 8</p></div>
-                        <div className='w-2/5 justify-between  flex'><button onClick={decrChild} className='border mr-2 rounded-full'>-</button> {childNumber}<button onClick={incrChild} className='ml-2 border rounded-full'>+</button></div>
-                </div>
-                <Dropdown.Divider />
-                <div><h1 className='text-green-500 font-bold w-64'>Charges are not applicable for children below 8</h1></div>
-                
-            </Dropdown>
+            <div className="w-1/3 dropdown pl-1  py-2 pr-1 ...">
+                <Dropdown
+                    arrowIcon={true}
+                    dismissOnClick={false}
+                    className='px-5 py-4'
+                    inline
+                    label={<div className='text-start  w-full'><div className='text-lg font-medium'>Guests</div>
+                <div className='text-[#F79489] text-sm'>{adultNumber} Adult, {childNumber} Child</div></div>}
+                    
+                >
+                    <div className='flex w-100 mb-2 justify-between'>
+                        <div><h1 className='font-bold text-base w-3/5'>Adults</h1><p className='text-gray-400'>Age 8+</p></div>
+                        <div className='w-2/5 justify-between  flex '><button className='border mr-2 rounded-full border-2' onClick={decrAdult}>-</button> {adultNumber}<button className='ml-2 border rounded-full' onClick={incrAdult}>+</button></div>
+                    </div>
+                    <Dropdown.Divider />
+                    <div className='flex w-100 my-2 justify-between'>
+                            <div><h1 className='font-bold text-base w-3/5'>Child</h1><p className='text-gray-400'>Age 0 - 8</p></div>
+                            <div className='w-2/5 justify-between  flex'><button onClick={decrChild} className='border mr-2 rounded-full'>-</button> {childNumber}<button onClick={incrChild} className='ml-2 border rounded-full'>+</button></div>
+                    </div>
+                    <Dropdown.Divider />
+                    <div><h1 className='text-green-500 font-bold w-64'>Charges are not applicable for children below 8</h1></div>
+                    
+                </Dropdown>
             </div>
           </div>
           <div className='flex flex-wrap border-2 mx-5 mt-2 border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg'>
             <div className="w-1/3 dropdown    py-2 ...">
-            <h1 className='pl-3 z-10'>Check In</h1>
+            <h1 className='pl-3  z-10 font-medium'>Check In</h1>
                 <Datepicker value={checkInDate} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
             </div>
-            <div className="w-1/3 dropdown pl-2  py-2 ...">
-            <h1 className='pl-3 z-10'>Check In</h1>
+            <div className="w-1/3 dropdown pl-0  py-2 ...">
+            <h1 className='pl-3 z-10 font-medium'>Check Out</h1>
                 <Datepicker value={checkOutDate} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date'/>
             </div>
             <div className="w-1/3 dropdown    ...">

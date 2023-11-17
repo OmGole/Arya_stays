@@ -56,43 +56,43 @@ export default function Search() {
     <div>
         <div className='container md:block hidden  pt-16 mx-auto '>
             <div className='flex flex-wrap border-2 mx-28  border-slate-300/50 custom-shadow content-center divide-x	  rounded-lg'>
-            <div class="lg:w-2/6 dropdown  px-9  py-2 ...">
+            <div class="lg:w-2/6 dropdown  px-5  py-2 ...">
             <Dropdown
                 inline
-                label={ isChoose ? <div className='w-full '><h1>Classy 1 BHK, near Viviana Mall</h1><p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p></div> : <div className='py-2  text-lg   w-full'>Choose your stays</div> }
+                label={ isChoose ? <div className='w-full text-start'><h1 className='font-medium text-lg'>Classy 1 BHK, near Viviana Mall</h1><p><i className='fa  fa-map-marker text-[#6ACDE9] mr-2'></i>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p></div> : <div className='py-2  text-lg   w-full'>Choose your stays</div> }
             >
-          <Dropdown.Item onClick={change}><div>
+          <Dropdown.Item onClick={change}><div className='text-start'>
                 <h1>Classy 1 BHK, near Viviana Mall</h1>
                 <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
             </div></Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={change}><div>
+          <Dropdown.Item onClick={change}><div className='text-start'>
                 <h1>Classy 1 BHK, near Viviana Mall</h1>
                 <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
             </div></Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={change}><div>
+          <Dropdown.Item onClick={change}><div className='text-start'>
                 <h1>Classy 1 BHK, near Viviana Mall</h1>
                 <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
             </div></Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={change}><div>
+          <Dropdown.Item onClick={change}><div className='text-start'>
                 <h1>Classy 1 BHK, near Viviana Mall</h1>
                 <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
             </div></Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={change}><div>
+          <Dropdown.Item onClick={change}><div className='text-start'>
                 <h1>Classy 1 BHK, near Viviana Mall</h1>
                 <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
             </div></Dropdown.Item>
         </Dropdown>
             </div>
             <div class="lg:w-1/6 h-full text-lg py-2 ...">
-                <h1 className='pl-3 z-10'>Check In</h1>
+                <h1 className='pl-3 z-10 font-medium'>Check In</h1>
                 <Datepicker value={checkInDate} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
             </div>
             <div class="lg:w-1/6 text-lg py-2 ...">
-                <h1 className='pl-3 z-10'>Check In</h1>
+                <h1 className='pl-3 z-10 font-medium'>Check Out</h1>
                 <Datepicker value={checkOutDate} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date'/>
             </div>
             <div class="lg:w-1/6 dropdown px-3 py-2 ...">
@@ -101,7 +101,7 @@ export default function Search() {
                 dismissOnClick={false}
                 className='px-5 py-4'
                 inline
-                label={<div className='text-start  w-full'><div className='text-xl'>Guests</div>
+                label={<div className='text-start  w-full'><div className='text-xl font-medium'>Guests</div>
             <div className='text-[#F79489]'>{adultNumber} Adult, {childNumber} Child</div></div>}
                 
             >

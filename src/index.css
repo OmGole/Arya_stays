@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer utilities{
+  .my-rotate-y-180 {
+    transform: rotateY(180deg),
+  }
+  .preserve-3d{
+    -webkit-transform: preserve-3d,
+  }
+  .perspective {
+    perspective: 1000px,
+  }
+  .backface-hidden{
+    -webkit-backface-visibility: hidden,
+  }
+}
 /* @layer components{
   .align:nth-child(even){
     @apply left-20;
@@ -56,6 +71,15 @@
   /* padding: 0; */
 }
 
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 .custom-date input{
   padding-top: 0%;
 }

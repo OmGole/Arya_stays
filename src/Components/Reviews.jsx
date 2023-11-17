@@ -5,7 +5,7 @@ export default function Reviews() {
     <div>
         <div className='flex items-center justify-center mt-8'>
             <div className='bg-[#F79489] w-52 h-1'> </div>
-            <div className='px-3 text-center md:text-4xl text-2xl font-medium'>Why our Guests <span className='text-[#F79489]'>Love</span> <span className='text-[#179FEB]'>Aarya Stays</span></div>
+            <div className='px-3 text-center lg:text-4xl md:tex-3xl text-2xl font-medium'>Why our Guests <span className='text-[#F79489]'>Love</span> <span className='text-[#179FEB]'>Aarya Stays</span></div>
             <div className='bg-[#F79489] w-52 h-1'> </div>
         </div>
         <div className='flex md:px-20 px-10 mt-6 flex-wrap md:space-x-4 md:space-y-0 space-y-2'>
