@@ -51,7 +51,7 @@ const updateSlide = async (req,res) => {
     const currentSlide = await Slide.findById({_id:slideID});
 
     if(!currentSlide) {
-      return res.status(404).json({msg:`No task with id : ${currentSlide}`});
+      return res.status(404).json({msg:`No slide with id : ${currentSlide}`});
     }
 
     if(req.body.image && req.body.image !== '') {

@@ -12,19 +12,24 @@ const getAllReviews = async (req,res) => {
 const createReview = async (req,res) => {
   try {
   // req.body.createdBy = req.user.userId; 
-  const {id:propertyId} = req.params;
-  const {userId, rating, description} = req.body;
+  const {userId, propertyId, rating, description} = req.body;
   
   if(!userId || !rating || !description) {
     console.log(req.body);
     return res.status(401).send("Please fill the missing fields");
   }
-
+  
   const review = await Review.create({...req.body});
-
+  
   const currentProperty = await Property.findById({_id:propertyId});
+  if(!currentProperty) {
+    return res.status(401).send("No property with given id");
+  }
+
+
   currentProperty.reviews.push(review);
   await currentProperty.save();
+
   
   return res.status(201).json(review);
   } catch (error) {

@@ -1,15 +1,14 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+
 
 const PropertySchema = new mongoose.Schema({
   title: {
     type:String,
-    required:[true,'Please provide title'],
-    maxlength:40
+    required:[true,'Please provide title']
   },
   location:{
     type:String,
     required:[true,`Please provide location`],
-    maxlength:30
   },
   reviews:[{
     type:mongoose.Types.ObjectId,
@@ -60,7 +59,7 @@ const PropertySchema = new mongoose.Schema({
   }],
   roomType:[{
     type: String,
-    enum : ['full-property','dorm-beds','private-rooms',],
+    enum : ['full-property','dorm-beds','private-rooms'],
     required:true
   }],
   ats_image:[{
@@ -84,12 +83,18 @@ const PropertySchema = new mongoose.Schema({
       required:true
     },
     _id:false
-  }]
+  }],
+  video:{
+    type:String,
+    required:[true,'Please provide r description'],
+  }
   // createdBy:{
   //   type:mongoose.Types.ObjectId,
   //   ref:'User',
   //   required:[true,'Please provide user']
   // },
 })
+
+
 
 module.exports = mongoose.model('Property',PropertySchema);

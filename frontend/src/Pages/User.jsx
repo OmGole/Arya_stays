@@ -50,7 +50,7 @@ const User = () => {
     <div>
       <input type="text" className='border-2 rounded-xl py-1 px-3  w-full' placeholder='Name' value={name} onChange={handleName}/>
       <input type="email" className='border-2 rounded-xl py-1 px-3  w-full' placeholder='Email' value={email} onChange={handleEmail}/>
-      <input type="text" className='border-2 rounded-xl py-1 px-3  w-full' placeholder='Name' value={phone} onChange={handlePhone}/>
+      <input type="text" className='border-2 rounded-xl py-1 px-3  w-full' placeholder='phone' value={phone} onChange={handlePhone}/>
       <input type="number" className='border-2 rounded-xl py-1 px-3  w-full' placeholder='Age' value={age} onChange={handleAge}/>
       <button onClick={handleCreateUser}>Create User</button>
       <button onClick={handleGetUser}>get user</button>

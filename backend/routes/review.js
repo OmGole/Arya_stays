@@ -8,7 +8,7 @@ const {
   getReviewsByReviewId
 } = require('../controllers/review');
 
-router.route('/').get(getAllReviews);
-router.route('/:id').post(createReview).get(getReviewsByReviewId);
+router.route('/').get(getAllReviews).post(createReview);
+router.route('/:id').get(getReviewsByReviewId);
 
 module.exports = router;

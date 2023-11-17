@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const OrderSchema = new mongoose.Schema({
   userId:{
     type:mongoose.Types.ObjectId,
@@ -16,12 +17,12 @@ const OrderSchema = new mongoose.Schema({
     enum : ['accepted','pending','rejected'],
     default:"pending"
   },
-  amenities:[
-    {type:{type:String},
-    value:{type:String},
-    price:{type:Number},
-    _id:false
-  }],
+  amenities:[{
+      type:mongoose.Types.ObjectId,
+      ref:'Amenity',
+      required:true,
+      _id:false
+    }],
   guest:{
     adult: {type: Number},
     children: {type: Number},
@@ -40,6 +41,7 @@ const OrderSchema = new mongoose.Schema({
   }
 },
 {timestamps:true})
+
 
 
 module.exports = mongoose.model('Order',OrderSchema);

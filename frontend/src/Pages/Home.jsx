@@ -9,11 +9,12 @@ import Reviews from '../Components/Reviews'
 import Query from '../Components/Query'
 import About from '../Components/About'
 import FooterC from '../Components/FooterC'
+import Property from '../Pages/Property'
 
 export default function Home() {
   return (
     <>    
-    <Navbar/>
+    {/* <Navbar/>
     <Social/>
     <Banner/>
     <Search/>
@@ -22,7 +23,8 @@ export default function Home() {
     <Reviews/>
     <Query/>
     <About/>
-    <FooterC/>
+    <FooterC/> */}
+    <Property/>
     </>
 
   )

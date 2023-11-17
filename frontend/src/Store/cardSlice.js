@@ -49,7 +49,7 @@ export const editCard = createAsyncThunk(
 );
 
 export const createCard = createAsyncThunk(
-  'amenity/createNewCard',
+  'card/createNewCard',
   async (newCard, {rejectWithValue}) => {
     try {
       console.log(newCard);

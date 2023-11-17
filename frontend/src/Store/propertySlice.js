@@ -10,11 +10,11 @@ const initialState = {
   error:'',
 };
 
-export const getPastOrders = createAsyncThunk(
-  'order/fetchPastOrders',
+export const getAllProperties = createAsyncThunk(
+  'property/fetchAllproperties',
   async (id, {rejectWithValue}) => {
     try {
-      const response = await api.get(`/api/v1/order/past/${id}`);
+      const response = await api.get(`/api/v1/property`);
       return response.data;  
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -22,11 +22,11 @@ export const getPastOrders = createAsyncThunk(
   }
 );
 
-export const getCurrentOrders = createAsyncThunk(
-  'order/fetchCurrentOrders',
+export const getPropertyById = createAsyncThunk(
+  'property/fetchPropertyById',
   async (id, {rejectWithValue}) => {
     try {
-      const response = await api.get(`/api/v1/order/current/${id}`);
+      const response = await api.get(`/api/v1/property/${id}`);
       return response.data;  
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -34,11 +34,11 @@ export const getCurrentOrders = createAsyncThunk(
   }
 );
 
-export const editOrder = createAsyncThunk(
-  'order/changeOrder',
-  async (updatedOrder, {rejectWithValue}) => {
+export const editProperty = createAsyncThunk(
+  'property/changeProperty',
+  async (updatedProperty, {rejectWithValue}) => {
     try {
-    const response = await api.patch(`/api/v1/order/${updatedOrder.id}`,updatedOrder.newOrder);
+    const response = await api.patch(`/api/v1/property/${updatedProperty.id}`,updatedProperty.newProperty);
     return response.data;  
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -47,11 +47,11 @@ export const editOrder = createAsyncThunk(
   }
 );
 
-export const createOrder = createAsyncThunk(
-  'order/createNewOrder',
-  async (newOrder, {rejectWithValue}) => {
+export const createProperty = createAsyncThunk(
+  'property/createNewProperty',
+  async (newProperty, {rejectWithValue}) => {
     try {
-      const response = await api.post(`/api/v1/order`, newOrder);
+      const response = await api.post(`/api/v1/property`, newProperty);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -59,11 +59,11 @@ export const createOrder = createAsyncThunk(
   }
 );
 
-export const deleteOrder = createAsyncThunk(
-  'order/removeOrder',
+export const deleteProperty = createAsyncThunk(
+  'property/removeProperty',
   async (id, {rejectWithValue}) => {
     try {
-      const response = await api.delete(`/api/v1/order/${id}`);
+      const response = await api.delete(`/api/v1/property/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -72,64 +72,64 @@ export const deleteOrder = createAsyncThunk(
 );
 
 
-export const orderSlice = createSlice({
-  name: 'order',
+export const propertySlice = createSlice({
+  name: 'property',
   initialState,
   reducers: {},
 
   extraReducers:  {
-    [getPastOrders.fulfilled] : (state, { payload }) => {
+    [getAllProperties.fulfilled] : (state, { payload }) => {
       console.log("helo");
       console.log(payload);
-      state.past = payload;
+      state.allProperties = payload;
       state.error = '';
     },
-    [getPastOrders.rejected] : (state, { payload }) => {
+    [getAllProperties.rejected] : (state, { payload }) => {
       console.log(payload);
-      state.past = {};
+      state.allProperties = {};
       state.error = payload;
     },
-    [getCurrentOrders.fulfilled] : (state, { payload }) => {
+    [getPropertyById.fulfilled] : (state, { payload }) => {
       console.log(payload);
-      state.current = payload;
+      state.propertyById = payload;
       state.error = '';
     },
-    [getCurrentOrders.rejected] : (state, { payload }) => {
+    [getPropertyById.rejected] : (state, { payload }) => {
       console.log(payload);
-      state.current = {};
+      state.propertyById = {};
       state.error = payload;
     },
-    [createOrder.fulfilled] : (state, { payload }) => {
+    [editProperty.fulfilled] : (state, { payload }) => {
       console.log(payload);
-      state.createOrder = payload;
+      state.updatedProperty = payload;
       state.error = '';
     },
-    [createOrder.rejected] : (state, { payload }) => {
+    [editProperty.rejected] : (state, { payload }) => {
       console.log(payload);
-      state.createdOrder = {};
+      state.updatedProperty = {};
       state.error = payload;
     },
-    [editOrder.fulfilled] : (state,{ payload }) => {
+    [createProperty.fulfilled] : (state,{ payload }) => {
       console.log(payload);
-      state.updatedOrder = payload;
+      state.createdProperty = payload;
       state.error = '';
     },
-    [editOrder.rejected] : (state, { payload }) => {
+    [createProperty.rejected] : (state, { payload }) => {
       console.log(payload);
-      state.updatedOrder = {};
+      state.createdProperty = {};
       state.error = payload;
     },
-    [deleteOrder.fulfilled] : (state,{ payload }) => {
+    [deleteProperty.fulfilled] : (state,{ payload }) => {
       console.log(payload);
-      state.deletedOrder = payload;
+      state.deletedProperty = payload;
       state.error = '';
     },
-    [deleteOrder.rejected] : (state, { payload }) => {
+    [deleteProperty.rejected] : (state, { payload }) => {
       console.log(payload);
-      state.deletedOrder = {};
+      state.deletedProperty = {};
       state.error = payload;
     },
   },
 });
 
-export default orderSlice.reducer;
+export default propertySlice.reducer;

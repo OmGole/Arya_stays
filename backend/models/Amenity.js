@@ -32,4 +32,7 @@ const AmenitySchema = new mongoose.Schema({
 })
 
 
+
+
+
 module.exports = mongoose.model('Amenity',AmenitySchema);

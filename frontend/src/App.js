@@ -5,6 +5,8 @@ import EditUser from "./Pages/EditUser";
 import Order from "./Pages/Order";
 import Amenity from "./Pages/Amenity";
 import Card from "./Pages/Card";
+import Slider from "./Pages/Slider";
+import Review from "./Pages/Review";
 
 function App() {
   return (
@@ -18,7 +20,10 @@ function App() {
       {/* <EditUser/> */}
       {/* <Order/> */}
       {/* <Amenity /> */}
-      <Card/>
+      {/* <Card/> */}
+      {/* <Slider/> */}
+      <Review/>
+
     </div>
   );
 }

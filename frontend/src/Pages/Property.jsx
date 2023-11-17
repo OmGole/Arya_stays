@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllProperties } from '../Store/propertySlice';
+import { createOrder, editOrder, deleteOrder, getPastOrders, getCurrentOrders } from '../Store/orderSlice';
 
+
+const userId = "4eb6e7e7e9b7f4194e000001";
+const propertyId = "654e3ff06aba79004485fd2c";
 const Property = () => {
   const dispatch = useDispatch();
-  const order = useSelector(state => state.order);
+  const properties = useSelector(state => state.property);
 
   const [accomodation,setAccomodation] = useState("");
   const [status,setStatus] = useState();
@@ -100,12 +106,16 @@ const Property = () => {
   }
 
   useEffect(() => {
-    console.log(order);
-  }, [order]);
+    dispatch(getAllProperties());
+  }, []);
+
+  useEffect(() => {
+    console.log(properties)
+  }, [properties]);
 
   return (
     <div>
-      <input type="date" className='border-2 rounded-xl py-1 px-3  w-full' placeholder='check_in' value={check_in} onChange={handleCheckIn}/>
+      {/* <input type="date" className='border-2 rounded-xl py-1 px-3  w-full' placeholder='check_in' value={check_in} onChange={handleCheckIn}/>
       <input type="date" className='border-2 rounded-xl py-1 px-3  w-full' placeholder='check_out' value={check_out} onChange={handleCheckOut}/>
       <input type="text" className='border-2 rounded-xl py-1 px-3  w-full' placeholder='Accomodation' value={accomodation} onChange={handleAccomodation}/>
       <div>
@@ -137,7 +147,7 @@ const Property = () => {
       <hr />
       <div>
         <button onClick={handleCurrentOrders}>Get Current Order</button>    
-      </div>
+      </div> */}
     </div>
   )
 }
