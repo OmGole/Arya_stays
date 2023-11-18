@@ -1,6 +1,6 @@
-const { crossOriginResourcePolicy } = require('helmet');
 const Slide = require('../models/Slide');
 const cloudinary = require('../utils/cloudinary');
+const Property = require('../models/Property');
 
 const getSlides = async (req,res) => {
   const slides = await Slide.find();
@@ -17,11 +17,17 @@ const getSlideById = async (req,res) => {
 const createSlide = async(req,res) => {
   try {
     // req.body.createdBy = req.user.userId; 
-    const {images, description} = req.body;
+    const {propertyId, images, description} = req.body;
   
-    if(!images || images.length == 0  || !description) {
+    if(!propertyId ||  !images || images.length == 0  || !description) {
       console.log(req.body);
       return res.status(401).send("Please fill the missing fields");
+    }
+
+    const property = await Property.findOne({_id:propertyId});
+
+    if(!property) {
+      return res.status(404).json({msg:`No property with id: ${propertyId}`});
     }
 
 
@@ -39,6 +45,9 @@ const createSlide = async(req,res) => {
     req.body.images = uploadedImages;
 
     const slide = await Slide.create({...req.body});
+    property.slides.push(slide);
+    await property.save();
+    
     return res.status(201).json(slide);
   } catch (error) {
     console.log(error);

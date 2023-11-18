@@ -41,7 +41,7 @@ const Slider = () => {
 
   const handleCreateSlide = (e) => {
     e.preventDefault();
-    const newSlide = {images,description}
+    const newSlide = {propertyId:"655860b944bdfab5ced86d9a", images, description}
     console.log(newSlide);
     dispatch(createSlide(newSlide));
   }

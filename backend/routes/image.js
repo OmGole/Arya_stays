@@ -10,7 +10,7 @@ const {
   createImage
 } = require('../controllers/image');
 
-router.route('/').get(getAllImages).post(createImage);
+router.route('/').post(createImage).get(getAllImages);
 router.route('/:id').get(getSingleImage).patch(updateImage).delete(deleteImage);
 
 module.exports = router;

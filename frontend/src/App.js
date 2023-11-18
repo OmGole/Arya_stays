@@ -7,6 +7,7 @@ import Amenity from "./Pages/Amenity";
 import Card from "./Pages/Card";
 import Slider from "./Pages/Slider";
 import Review from "./Pages/Review";
+import Image from "./Pages/Image";
 
 function App() {
   return (
@@ -21,8 +22,9 @@ function App() {
       {/* <Order/> */}
       {/* <Amenity /> */}
       {/* <Card/> */}
-      {/* <Slider/> */}
-      <Review/>
+      <Slider/>
+      {/* <Review/> */}
+      {/* <Image/> */}
 
     </div>
   );

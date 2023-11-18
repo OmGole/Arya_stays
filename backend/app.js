@@ -37,13 +37,13 @@ app.use(xss());
 
 app.use('/uploads', express.static('uploads'));
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/image', imageRoutes); 
 app.use('/api/v1/property', propertyRoutes);
 app.use('/api/v1/order', orderRoutes); 
 app.use('/api/v1/review', reviewRoutes); 
 app.use('/api/v1/amenity', amenityRoutes); 
 app.use('/api/v1/card', cardRoutes); 
 app.use('/api/v1/slide', slideRoutes); 
-app.use('/api/v1/image', imageRoutes); 
 // app.use('/api/v1/stripe', stripeRoutes);
 
 const startServer = async () => {
