@@ -28,22 +28,6 @@ const createProperty = async (req,res) => {
     return res.status(401).send("Please fill the missing fields");
   }
 
-  const new_currentLocation_images = await Promise.all(currentLocation_images.map(async img => {
-    const result = await cloudinary.uploader.upload(img, {
-    folder:"propertys"
-    });
-    return {public_id:result.public_id,url:result.secure_url};
-  }));  
-
-  const new_ats_images = await Promise.all(ats_image.map(async img => {
-    const result = await cloudinary.uploader.upload(img, {
-    folder:"propertys"
-    });
-    return {public_id:result.public_id,url:result.secure_url};
-  })); 
-
-  req.body.currentLocation_images = new_currentLocation_images;
-  req.body.ats_image = new_ats_images;
 
   const property = await Property.create({...req.body});
   return res.status(201).json(property);
@@ -106,15 +90,6 @@ const deleteProperty = async (req,res) => {
     return res.status(404).json({msg:`No task with id: ${propertyID}`});
   }
 
-  const {currentLocation_images,ats_image} = property;
-  
-  currentLocation_images.map(async img => {
-    await cloudinary.uploader.destroy(img.public_id);
-  });
-  
-  ats_image.map(async img => {
-    await cloudinary.uploader.destroy(img.public_id);
-  });
 
   await Property.findByIdAndDelete({_id:propertyID});
   return res.status(200).json(property);  

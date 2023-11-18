@@ -63,25 +63,15 @@ const PropertySchema = new mongoose.Schema({
     required:true
   }],
   ats_image:[{
-    public_id:{
-      type:String,
-      required:true
-    },
-    url:{
-      type:String,
-      required:true
-    },
+    type:mongoose.Types.ObjectId,
+    ref:'Image',
+    required:true,
     _id:false
   }],
   currentLocation_images:[{
-    public_id:{
-      type:String,
-      required:true
-    },
-    url:{
-      type:String,
-      required:true
-    },
+    type:mongoose.Types.ObjectId,
+    ref:'Image',
+    required:true,
     _id:false
   }],
   video:{
