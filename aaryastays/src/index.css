@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer utilities{
+  .my-rotate-y-180 {
+    transform: rotateY(180deg),
+  }
+  .preserve-3d{
+    -webkit-transform: preserve-3d,
+  }
+  .perspective {
+    perspective: 1000px,
+  }
+  .backface-hidden{
+    -webkit-backface-visibility: hidden,
+  }
+}
+/* @layer components{
+  .align:nth-child(even){
+    @apply left-20;
+  }
+} */
+
+*{
+  /* font-family: 'Nunito Sans', sans-serif; */
+  scroll-behavior: smooth;
+}
+
+.icon-bar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  z-index: 20;
+}
+
+.icon-bar a {
+  display: block;
+  text-align: center;
+  padding: 16px;
+  transition: all 0.3s ease;
+  font-size: 20px;
+}
+
+.icon-bar a:hover {
+  background-color: #000;
+  color: white;
+}
+
+.facebook {
+  color: #81D8F1;
+  background: white;
+}
+
+.instagram {
+  color: #F79489;
+  background: white;
+}
+
+.dropdown button{
+  width:100%;
+}
+
+.custom-date .bg-gray-50{
+  background-color: white;
+  border:none;
+  outline: none;
+  /* padding: 0; */
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.custom-date input{
+  padding-top: 0%;
+}
+
+.custom-shadow{
+  box-shadow: 0px 0px 10px 0px rgba(110, 110, 110, 0.616);
+}
+
+.custom-shadow-mobile{
+  box-shadow: 0px 0px 2px 0px rgba(110, 110, 110, 0.484);
+}
+
+.img-border{
+  background:
+    /* linear-gradient(to right, black 4px, transparent 4px) 0 0, */
+    linear-gradient(to right, #FEDD89 10px, transparent 4px) 0 100%,
+    linear-gradient(to left, #FEDD89 10px, transparent 4px) 100% 0,
+    /* linear-gradient(to left, #FEDD89 4px, transparent 4px) 100% 100%, */
+    /* linear-gradient(to bottom, #FEDD89 4px, transparent 4px) 0 0, */
+    linear-gradient(to bottom, #FEDD89 10px, transparent 4px) 100% 0,
+    linear-gradient(to top, #FEDD89 10px, transparent 4px) 0 100%;
+    /* linear-gradient(to top, black 4px, transparent 4px) 100% 100%; */
+
+  background-repeat: no-repeat;
+  background-size: 50% 50%;
+}
+
+
+
+.custom-align-home:nth-child(1){
+  margin-top: 0;
+}
+
+
+.last-divider:last-child{
+  display: none;
+}
