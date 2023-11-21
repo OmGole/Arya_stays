@@ -3,6 +3,9 @@ import api from '../api/api.js';
 
 const initialState = {
   userDetails:{},
+  user:null,
+  isAuthenticated:false,
+  role:"",
   error:''
 };
 export const getUserById = createAsyncThunk(
@@ -46,7 +49,18 @@ export const createUser = createAsyncThunk(
 export const userSlice = createSlice({
   name: 'userDetails',
   initialState,
-  reducers: {},
+  reducers: {
+    login: (state,{ payload }) => {
+      state.user = payload;
+      state.isAuthenticated = true;
+    },
+    logout: (state) => {
+      state.userDetails = {};
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
+    }
+  },
 
   extraReducers:  {
     [getUserById.fulfilled] : (state, { payload }) => {
@@ -81,5 +95,7 @@ export const userSlice = createSlice({
     },
   },
 });
+
+export const { login, logout } = userSlice.actions;
 
 export default userSlice.reducer;

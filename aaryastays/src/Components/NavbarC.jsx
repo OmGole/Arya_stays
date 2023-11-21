@@ -5,10 +5,17 @@ import logo from '../Resources/logo.png'
 import user1 from '../Resources/user1.png'
 import { useState } from 'react';
 import { authentication } from '../firebase/config';
-import { GoogleAuthProvider, RecaptchaVerifier,signInWithPhoneNumber, signInWithPopup, OAuthProvider,signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { Link } from 'react-router-dom';
-export default function NavbarC() {
+import { GoogleAuthProvider, RecaptchaVerifier,signInWithPhoneNumber, signInWithPopup, OAuthProvider,signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import { logout, login } from '../Store/userSlice';
+import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
+export default function NavbarC() {
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
   const [openModal, setOpenModal] = useState(false);
   const [otpsent, setOtpSent] = useState(false);
   
@@ -17,7 +24,7 @@ export default function NavbarC() {
   const [phoneNumber,setPhoneNumber] = useState();
   
   const [OTP,setOTP] = useState();
-  const [user,setUser] = useState();
+  // const [user,setUser] = useState();
 
   const [showEmail,setShowEmail] = useState(false)
   const [emailAddress,setEmailAddress] = useState('')
@@ -68,8 +75,7 @@ export default function NavbarC() {
       confirmationResult.confirm(OTP).then((result) => {
         // User signed in successfully.
         const user = result.user;
-        console.log(user.providerData)
-        setUser(user);
+        console.log(user)
         // ...
       }).catch((error) => {
         // User couldn't sign in (bad verification code?)
@@ -80,8 +86,8 @@ export default function NavbarC() {
     const handleGoogleSignIn = () =>{
       const provider = new GoogleAuthProvider()
       signInWithPopup(authentication,provider).then((result)=>{
-    const user = result.user;
-    console.log(user)
+        const user = result.user;
+        console.log(user)
       }).catch((error) => {
         // Handle Errors here.
         console.log(error)
@@ -102,12 +108,7 @@ export default function NavbarC() {
     const handleRegister = () =>{
       if(password == confirmPassword){
         createUserWithEmailAndPassword(authentication,emailAddress,password).then((userCredential) => {
-          // Signed in
           const user = userCredential.user;
-          console.log(user.providerData[0].providerId);
-        localStorage.setItem('provider',user.providerData[0].providerId)
-          alert("Successfully Registered")
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -123,9 +124,6 @@ export default function NavbarC() {
       signInWithEmailAndPassword(authentication,emailAddress,password).then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log(user.providerData[0].providerId);
-        localStorage.setItem('provider',user.providerData[0].providerId)
-        alert("Successfully Logged in")
         
         // ...
       })
@@ -135,6 +133,49 @@ export default function NavbarC() {
       });
     }
 
+    const handleSignOut = () => {
+      signOut(authentication).then(() => {
+        dispatch(logout());
+        navigate('/');
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
+
+    // useEffect(() => {
+    //   onAuthStateChanged(authentication, (user) => {
+    //     if (user) {
+    //       // User is signed in, see docs for a list of available properties
+    //       // https://firebase.google.com/docs/reference/js/firebase.User
+    //       const uid = user.uid;
+          
+    //     } else {
+    //       // User is signed out
+    //       // ...
+    //     }
+    //   });
+    // },[])
+
+    useEffect(() =>{
+      const unlisten = onAuthStateChanged(authentication,
+         user => {
+          if (user) {
+            const userData = {
+              token:user.accessToken,
+              uid:user.uid,
+              provider:user.providerData[0].providerId
+            }
+            dispatch(login(userData));
+            setOpenModal(false);
+          } else {
+            dispatch(logout());
+          }
+         });
+      return () => {
+          unlisten();
+      }
+   }, []);
+    
 
   // const [isChooseCountry,SetisChooseCountry] =useState(false);
 
@@ -145,26 +186,36 @@ export default function NavbarC() {
         <img src={logo} className="mr-3 h-6 sm:h-9" alt="Aarya Stays Logo" />
       </Navbar.Brand>
       <div className="flex md:order-2">
-        <Dropdown
+        {!(user && user.user) ? <Dropdown
           arrowIcon={false}
           inline
-          dismissOnClick={false}
+          dismissOnClick={true}
           label={
             <Avatar alt="User settings" img={user1} rounded />
           }
         >
-          <Dropdown.Header>
-            <span className="block text-sm">Bonnie Green</span>
-            <span className="block truncate text-sm font-medium">name@flowbite.com</span>
-          </Dropdown.Header>
-          <Dropdown.Item onClick={() => setOpenModal(true)}>Login</Dropdown.Item>
-          
-          <Dropdown.Item>Sign Up</Dropdown.Item>
-          <Link to='/profile'><Dropdown.Item>Settings</Dropdown.Item></Link>
-          <Dropdown.Item>Contact</Dropdown.Item>
+          <Dropdown.Item onClick={() => setOpenModal(true)}>Login/Register</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item>Sign out</Dropdown.Item>
-        </Dropdown>
+          <Dropdown.Item onClick={() => handleSignOut()}>Sign out</Dropdown.Item>
+          <Dropdown.Divider />
+          <Link /><Dropdown.Item> Contact</Dropdown.Item>
+        </Dropdown> : <Dropdown
+          arrowIcon={false}
+          inline
+          dismissOnClick={true}
+          label={
+            <Avatar alt="User settings" img={user1} rounded />
+          }
+        >
+          <Link to="/profile"><Dropdown.Item >
+ My Profile</Dropdown.Item></Link> 
+          <Dropdown.Divider />
+          <Link to="/orders"><Dropdown.Item >My Booking</Dropdown.Item></Link> 
+          <Dropdown.Divider />
+          <Link to="/orders"><Dropdown.Item> My WishList</Dropdown.Item></Link> 
+          <Dropdown.Divider />
+          <Dropdown.Item onClick={() => handleSignOut()}>Sign out</Dropdown.Item>
+        </Dropdown>}
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>

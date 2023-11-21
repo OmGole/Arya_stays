@@ -18,28 +18,29 @@ const cardRoutes = require('./routes/card');
 const slideRoutes = require('./routes/slide');
 const imageRoutes = require('./routes/image');
 const connectDB = require('./db/connect');
-const {auth} = require('./middleware/auth');
+const {auth, authCheck} = require('./middleware/auth');
 
 const port =5000;
 const connectString = process.env.MONGO_URI;
 app.use(express.json({limit: '50mb'}));
 app.use(fileUpload({useTempFiles: true}));
-app.set('trust proxy',1)
-app.use(rateLimiter({
-  windowMs:15*60*1000,
-  max:100,
-}));
-app.use(helmet());
-app.use(cors({
-  origin:process.env.CLIENT_URL, 
-}));
-app.use(xss());
+// app.set('trust proxy',1)
+// app.use(rateLimiter({
+//   windowMs:15*60*1000,
+//   max:100,
+// }));
+// app.use(helmet());
+// app.use(cors({
+//   origin:process.env.CLIENT_URL, 
+// }));
+app.use(cors());
+// app.use(xss());
 
 app.use('/uploads', express.static('uploads'));
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/image', imageRoutes); 
 app.use('/api/v1/property', propertyRoutes);
-app.use('/api/v1/order', orderRoutes); 
+app.use('/api/v1/order', authCheck, orderRoutes); 
 app.use('/api/v1/review', reviewRoutes); 
 app.use('/api/v1/amenity', amenityRoutes); 
 app.use('/api/v1/card', cardRoutes); 

@@ -1,4 +1,4 @@
-const admin = require('firebase-admin');
+const admin = require('../config/firebase-config');
 require('dotenv').config();
 
 const authCheck = async (req,res,next) => {
@@ -6,13 +6,14 @@ const authCheck = async (req,res,next) => {
 
   if (!idToken) {
     // return res.status(401).json({ error: 'Unauthorized: No ID token provided' });
-    next(new Error('Unauthorized: Invalid ID token'));
+    next(new Error('No token added to the header'));
   }
-
+  // console.log(idToken);
   admin.auth().verifyIdToken(idToken)
     .then((decodedToken) => {
       // Perform additional checks or operations if needed
       req.user = decodedToken;
+      console.log(decodedToken);
       next();
     })
     .catch((error) => {
