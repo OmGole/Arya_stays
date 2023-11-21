@@ -72,6 +72,15 @@
   /* padding: 0; */
 }
 
+.custom-date2 .bg-gray-50{
+  background-color: #6ACDE9 !important;
+  color: white;
+  font-size: large;
+  border:none;
+  outline: none;
+  /* padding: 0; */
+}
+
 input[type=number] {
   -moz-appearance: textfield;
 }

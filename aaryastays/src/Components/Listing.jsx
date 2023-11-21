@@ -12,13 +12,13 @@ export default function Listing({properties}) {
         <div className='mt-5  px-3 text-center md:text-4xl text-xl font-medium'>"Make choosing <span className='text-[#179FEB]'>Aarya Stays,</span> <span className='text-[#F79489]'>the best decision of your vaccation</span>"</div>
       </div>
 
-        {properties?.map((item, index) => (
+        {properties?.map((property, index) => (
         <div className='w-100 md:h-56 h-96 even:bg-[#FABEB7] odd:bg-[#D1EDF5] md:mt-40 md:mt-32 mt-36  relative'>
         <div className={`md:px-0 px-10   md:w-2/3  absolute -top-32 ${
               index % 2 === 0 ?   'md:left-20':'md:right-20'
             }`}>
           <div className='md:w-full p-3 bg-white  custom-shadow rounded'>
-            <div><HomeCard property={item}/></div>
+            <div><HomeCard property={property}/></div>
           </div>
         </div>
       </div>

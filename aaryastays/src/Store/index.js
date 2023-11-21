@@ -6,6 +6,7 @@ import cardReducer from "./cardSlice.js";
 import propertyReducer from "./propertySlice.js";
 import imageReducer from "./imageSlice.js";
 import slideReducer from "./slideSlice.js";
+import currentOrderReducer from "./currentOrderSlice.js";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     property: propertyReducer,
     image: imageReducer,
     slide: slideReducer,
+    currentOrder: currentOrderReducer,
   },
 });

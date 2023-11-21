@@ -5,7 +5,7 @@ import logo from '../Resources/logo.png'
 import user1 from '../Resources/user1.png'
 import { useState } from 'react';
 import { authentication } from '../firebase/config';
-import { GoogleAuthProvider, RecaptchaVerifier,signInWithPhoneNumber, signInWithPopup, OAuthProvider,signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { GoogleAuthProvider, RecaptchaVerifier,signInWithPhoneNumber, signInWithPopup, OAuthProvider,signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 export default function NavbarC() {
 
@@ -26,8 +26,19 @@ export default function NavbarC() {
   const [isRegestering,setIsRegestering] = useState(false)
 
   useEffect(()=>{
-    console.log(phoneNumber)
-  },[phoneNumber])
+    // onAuthStateChanged(authentication, (user) => {
+    //   if (user) {
+    //     // User is signed in, see docs for a list of available properties
+    //     // https://firebase.google.com/docs/reference/js/auth.user
+    //     const uid = user.uid;
+    //     console.log(user)
+    //     // ...
+    //   } else {
+    //     // User is signed out
+    //     // ...
+    //   }
+    // });
+  },[])
 
   const generateRecaptcha = () =>{
     window.recaptchaVerifier = new RecaptchaVerifier(authentication, 'recaptcha-container', {

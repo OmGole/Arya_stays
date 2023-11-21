@@ -13,29 +13,61 @@ import DormRoom from '../Resources/Dormroom.png'
 import { Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux'
+import api from '../api/api';
 import { useSelector } from 'react-redux'
 import { getImageById } from '../Store/imageSlice';
+import { HashLink } from 'react-router-hash-link';
 
 export default function HomeCard1({property}) {
 
-  const dispatch = useDispatch();
-  // const image = useSelector(state => state.image.imageById);
 
   const [slideImage,setSlideImage] = useState([])
+  const [essentialAmenities, setEssentialAmenities] = useState([]);
+  const [extraAmenities, setExtraAmenities] = useState([]);
   
-
+  console.log(property)
   useEffect(() => {
-    const uniqueImages = new Set();
-    property.currentLocation_images.forEach((id)=>{
-      dispatch(getImageById(id)).then((data)=>{
-        uniqueImages.add(data.payload.url);
-        setSlideImage(prev=>[...prev,data.payload.url])
-      })
-    })
-    const uniqueImageArray = [...uniqueImages];
-    // console.log(uniqueImageArray)
-  setSlideImage(uniqueImageArray);
-  },[dispatch]);
+    getSlideImage();
+    getAmenities();
+  },[property]);
+
+  const getSlideImage = async()=>{
+    try{
+      console.log("hello2")
+      const new_slide_images = await Promise.all(property.currentLocation_images.map(async (id,index) => {
+        if(index!=2){
+            const result = await api.get(`/api/v1/image/${id}`);
+            return result.data.url;
+        }
+      }));
+      console.log(new_slide_images)
+      setSlideImage(new_slide_images)
+
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  const getAmenities = async()=>{
+    try{
+      // console.log("hello")
+      const new_amenities = await Promise.all(property.amenities.map(async (id,index) => {
+        
+            const result = await api.get(`/api/v1/amenity/${id}`);
+            return result.data;
+        }
+      ));
+      console.log(new_amenities)
+      // setAmenities(new_amenities)
+      const essential = new_amenities.filter(amenity => amenity.type === 'essential');
+      const extra = new_amenities.filter(amenity => amenity.type === 'extra');
+      setEssentialAmenities(essential);
+      setExtraAmenities(extra);
+
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   useEffect(()=>{
     console.log(slideImage)
@@ -46,10 +78,13 @@ export default function HomeCard1({property}) {
           <Link to={`/property/${property._id}`}><h1 className='font-medium md:text-3xl text-xl'>{property.title}</h1></Link>
           <span className='text-lg text-[#8E8E8E]'><i className='fa  fa-map-marker text-[#6ACDE9] text-xl'></i> {property.location}</span>
           <div className=' mt-2 md:flex hidden'>
-            <div className='bg-[#E0F4FA] rounded-full mr-1 px-4 py-1 flex items-center'><img className='' src={Meals} alt='meal'></img> Meals</div>
-            <div className='bg-[#E0F4FA] rounded-full mx-1 px-4 py-1 flex items-center'><img src={Parking} alt='parking'></img> Parking</div>
-            <div className='bg-[#E0F4FA] rounded-full mx-1 px-4 py-1 flex items-center'><img src={Wifi} alt='wifi'></img> Wifi</div>
-            <div className='bg-[#E0F4FA] rounded-full mx-1 px-4 py-2 flex items-center'><img src={Chef} alt='chef'></img> Chef</div>
+            {essentialAmenities?.map((item,index)=>{
+              if(index < 3){
+                return (<div className='bg-[#E0F4FA] rounded-full mr-1 px-4 py-1 flex items-center'><img src={item.icon.url} className='w-[1.2rem] mx-1' alt='meal'></img>{item.title}</div>)
+              }
+              })}
+              <HashLink smooth to={`/property/${property._id}#amenites`}><div className='bg-[#E0F4FA] rounded-full mr-1 px-4 py-1 flex items-center'>More</div></HashLink>
+            
           </div>
           <h1 className='text-[#F79489] font-medium text-xl mt-2 md:block hidden'>Room types</h1>
           <div className='flex my-1'>
