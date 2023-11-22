@@ -1,11 +1,5 @@
-import { Card } from 'flowbite-react'
 import React, { useState } from 'react'
-import HouseRules from '../Resources/HouseRules.png'
-
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
-import {getSingleCard} from '../Store/cardSlice'
 import api from '../api/api';
 
 export default function IndividualCard({id}) {

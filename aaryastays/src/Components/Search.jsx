@@ -3,7 +3,13 @@ import { Datepicker } from 'flowbite-react';
 import { useState } from 'react';
 import { Dropdown } from 'flowbite-react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateOrder } from '../Store/currentOrderSlice';
+
 export default function Search({dropdownArray}) {
+
+    const dispatch = useDispatch();
+    const currOrder = useSelector(state => state.currentOrder.currentOrder)
 
     const [selectedTitle,setSelectedTitle] = useState('');
     const [selectedLoc, setSelectedLoc] = useState('');
@@ -12,47 +18,64 @@ export default function Search({dropdownArray}) {
 
     console.log(dropdownArray)
    const changeDropdown = (title,loc,id)=>{
-        // add param1:title, param2:loc
-        // and set it
         setSelectedLoc(loc)
         setSelectedTitle(title)
+        dispatch(updateOrder({key:'Title',value:title}))
+        dispatch(updateOrder({key:'Location',value:loc}))
+        dispatch(updateOrder({key:'Id',value:id}))
         setSelectedId(id)
         SetisChoose(true);
+        
    }
    //set date using useeffect
     const [checkInDate,setCheckInDate] = useState();  
     const [checkOutDate,setCheckOutDate] = useState(); 
     useEffect(()=>{
         setCheckInDate(new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
+        dispatch(updateOrder({key:'CheckInDate',value:new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear()}))
         setCheckOutDate((new Date().getDate()+1)+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
+        dispatch(updateOrder({key:'CheckOutDate',value:(new Date().getDate()+1)+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear()}))
+        dispatch(updateOrder({key:'adultNumber',value:2}))
+        dispatch(updateOrder({key:'childNumber',value:1}))
     },[]) 
 
+    useEffect(()=>{
+        console.log(currOrder)
+    },[currOrder])
+
     const handleCheckIn = (date) => {
+        console.log(typeof date)
         setCheckInDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
+        dispatch(updateOrder({key:'CheckInDate',value:date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear()}))
     };
 
     const handleCheckOut = (date) => {
         setCheckOutDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
+        dispatch(updateOrder({key:'CheckOutDate', value:date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear()}))
     };
    
 
    const [adultNumber,setAdultNumber] = useState(2);
    const incrAdult = () =>{
          setAdultNumber(adultNumber+1);
+         dispatch(updateOrder({key:'adultNumber',value:adultNumber+1}))
    }
    const decrAdult = ()=>{
     if (adultNumber>0){
            setAdultNumber(adultNumber-1)
+           dispatch(updateOrder({key:'adultNumber',value:adultNumber-1}))
        }
    }
 
    const [childNumber,setChildNumber] = useState(1);
    const incrChild = () =>{
     setChildNumber(childNumber+1);
+    dispatch(updateOrder({key:'childNumber',value:childNumber+1}))
    }
    const decrChild = ()=>{
     if(childNumber > 0){
         setChildNumber(childNumber-1)
+        dispatch(updateOrder({key:'childNumber',value:childNumber-1}))
     }
    }
 

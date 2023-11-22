@@ -18,11 +18,21 @@ const OrderSchema = new mongoose.Schema({
     default:"pending"
   },
   amenities:[{
+    id:{
       type:mongoose.Types.ObjectId,
       ref:'Amenity',
+      required:true
+    },
+    qty:{
+      type:Number,
       required:true,
-      _id:false
-    }],
+    },
+    price: {
+      type:Number,
+      required:true
+    },
+    _id:false
+  }],
   guest:{
     adult: {type: Number},
     children: {type: Number},

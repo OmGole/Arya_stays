@@ -1,73 +1,126 @@
-import React from 'react'
-import { Carousel } from 'flowbite-react';
-import sl1 from '../Resources/sl1.png';
-import sl2 from '../Resources/sl2.png';
-import sl3 from '../Resources/sl3.png';
+import React, { useState, useEffect, useRef } from "react";
+import { Carousel } from "flowbite-react";
+import api from "../api/api";
+import DummyImgSqr from '../Resources/DummyImgSqr.png'
+
+export default function Slide2({slides}) {
+  const [slideDetails,setSlideDetails] = useState([]);
+  const parentRef = useRef(null);
+    const childRef = useRef(null);
+  
+    useEffect(() => {
+      const parentHeight = parentRef;
+      console.log("parent",parentHeight)
+      // childRef.current.style.height = `${parentHeight}px`;
+      // console.log("child",childRef.current.style.height)
+    }, []); 
+  
 
 
-export default function Slide() {
+  const getSlideDetails = async()=>{
+    
+    try{
+      const slideDetails = await Promise.all(slides.map(async (id,index) => {
+            const result = await api.get(`/api/v1/slide/${id}`);
+            return result.data[0];
+      }));
+      console.log(slideDetails)
+      setSlideDetails(slideDetails)
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    getSlideDetails();
+  },[slides]);
+
+
+
+
   return (
-    <div>
-        <div className="h-96 sm:h-96 xl:h-96 2xl:h-96">
-      <Carousel className='bg-slate-100'>
-        <div className=" h-full  dark:text-white">
-            <div className='flex '>
-                <div className='w-1/3  justify-center '>
-                    <img src={sl1} className='h-1/2'/>
-                </div>
-                <div className='w-1/3  justify-center  '>
-                <img src={sl2} className='h-1/2'/>
-                </div>
-                <div className='w-1/3  justify-center  '>
-                <img src={sl3} className='h-1/2'/>
-                </div>
+        <Carousel className="h-[700px]" ref={parentRef} slide={false} indicators={false}>
+          {slideDetails.map(slide => {
+            return (<div className="dark:text-white ">
+            <div className="flex justify-between mb-10">
+              {slide.images.map((img, index) => {
+                if (index == 1) {
+                  return <img src={img.url} className="block" alt="Image 1" />;
+                  }
+      
+                  return (
+                    <img src={img.url} className="hidden sm:block" alt="Image 2" />
+                  );
+                })}
+            </div>
+            <div className="border-[#179FEB] border-2 p-5 lg:text-lg">
+              <p className="mb-5">{slide.description}</p>
+            </div>
+          </div>)
+          })} 
 
-            </div>
-            <div>
-                <p>Step out to explore some of Alibaug’s beloved spots such as The Deli (750 m), Cafe Bohemyan Blue (1.3 km), Kiki’s Restaurant (6.6 km), Suju’s Artcafe (3.7 km), and The Backyard Cafe (8.9 km). Explore the coastal beauty of Alibaug at Khimi Beach (3.5 km), Thal Beach (8 km), and Alibaug Beach (11 km).</p>
-                <p>Take a trekking towards the forest, walk down to the water falls and enjoy to the fullest. And also you can watch birds, animals while on trekking. Take a trekking towards the forest, walk down to the water falls and enjoy to the fullest. And also you can watch birds, animals while on trekking.</p>
-            </div>
-            
-        </div>
-        <div className=" h-3/4 dark:text-white">
-            <div className='flex flex-wrap h-3/4'>
-                <div className='flex-1 flex justify-end h-3/4'>
-                <img src={sl1} className='h-3/4' />
+          {/* <div className="h-3/4 dark:text-white">
+            <div className="flex flex-wrap h-3/4">
+              <div className="flex">
+                <div className="w-full sm:w-1/3 justify-center">
+    
+                  <img
+                    src={sl1}
+                    className="w-full h-auto sm:h-1/2"
+                    alt="Image 1"
+                  />
                 </div>
-                <div className='flex-1 flex justify-center h-3/4 '>
-                <img src={sl1} className='h-3/4'/>
+                <div className="w-full sm:w-1/3 justify-center">
+         
+                  <img
+                    src={sl2}
+                    className="w-full h-auto sm:h-1/2 hidden sm:block"
+                    alt="Image 2"
+                  />
                 </div>
-                <div className='flex-1 flex justify-start h-3/4 '>
-                <img src={sl1} className='h-3/4'/>
-                </div>
+                <div className="w-full sm:w-1/3 justify-center">
+           
+                  <img
+                    src={sl3}
+                    className="w-full h-auto sm:h-1/2 hidden sm:block"
+                    alt="Image 3"
+                  />
 
+                </div>
+              </div>
             </div>
-            <div className='md:mx-20'>
-                <p>Step out to explore some of Alibaug’s beloved spots such as The Deli (750 m), Cafe Bohemyan Blue (1.3 km), Kiki’s Restaurant (6.6 km), Suju’s Artcafe (3.7 km), and The Backyard Cafe (8.9 km). Explore the coastal beauty of Alibaug at Khimi Beach (3.5 km), Thal Beach (8 km), and Alibaug Beach (11 km).</p>
-            </div>
-            
-        </div>
-        <div className=" h-full  dark:text-white">
-            <div className='flex flex-wrap'>
-                <div className='flex-1'>
-                    IMG1
+          </div>
+          <div className="h-full dark:text-white">
+            <div className="flex flex-wrap">
+              <div className="flex">
+                <div className="w-full sm:w-1/3 justify-center">
+              
+                  <img
+                    src={sl1}
+                    className="w-full h-auto sm:h-1/2"
+                    alt="Image 1"
+                  />
                 </div>
-                <div className='flex-1'>
-                    IMG2
-                </div>
-                <div className='flex-1'>
-                    IMG3
-                </div>
+                <div className="w-full sm:w-1/3 justify-center">
+                
+                  <img
+                    src={sl2}
+                    className="w-full h-auto sm:h-1/2 hidden sm:block"
+                    alt="Image 2"
+                  />
 
+                </div>
+                <div className="w-full sm:w-1/3 justify-center">
+               
+                  <img
+                    src={sl3}
+                    className="w-full h-auto sm:h-1/2 hidden sm:block"
+                    alt="Image 3"
+                  />
+                </div>
+              </div>
             </div>
-            <div>
-                <p>Step out to explore some of Alibaug’s beloved spots such as The Deli (750 m), Cafe Bohemyan Blue (1.3 km), Kiki’s Restaurant (6.6 km), Suju’s Artcafe (3.7 km), and The Backyard Cafe (8.9 km). Explore the coastal beauty of Alibaug at Khimi Beach (3.5 km), Thal Beach (8 km), and Alibaug Beach (11 km).</p>
-                <p>Take a trekking towards the forest, walk down to the water falls and enjoy to the fullest. And also you can watch birds, animals while on trekking. Take a trekking towards the forest, walk down to the water falls and enjoy to the fullest. And also you can watch birds, animals while on trekking.</p>
-            </div>
-            
-        </div>
-      </Carousel>
-    </div>
-    </div>
-  )
+          </div> */}
+        </Carousel>
+  );
 }

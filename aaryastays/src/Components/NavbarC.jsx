@@ -8,8 +8,8 @@ import { authentication } from '../firebase/config';
 import { GoogleAuthProvider, RecaptchaVerifier,signInWithPhoneNumber, signInWithPopup, OAuthProvider,signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout, login } from '../Store/userSlice';
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 export default function NavbarC() {
   const navigate = useNavigate();
@@ -33,8 +33,19 @@ export default function NavbarC() {
   const [isRegestering,setIsRegestering] = useState(false)
 
   useEffect(()=>{
-    console.log(phoneNumber)
-  },[phoneNumber])
+    // onAuthStateChanged(authentication, (user) => {
+    //   if (user) {
+    //     // User is signed in, see docs for a list of available properties
+    //     // https://firebase.google.com/docs/reference/js/auth.user
+    //     const uid = user.uid;
+    //     console.log(user)
+    //     // ...
+    //   } else {
+    //     // User is signed out
+    //     // ...
+    //   }
+    // });
+  },[])
 
   const generateRecaptcha = () =>{
     window.recaptchaVerifier = new RecaptchaVerifier(authentication, 'recaptcha-container', {
