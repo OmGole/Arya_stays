@@ -105,8 +105,8 @@ export default function SearchMobile({dropdownArray}) {
                     dismissOnClick={false}
                     className='px-5 py-4'
                     inline
-                    label={<div className='text-start  w-full'><div className='text-md font-medium'>Guests</div>
-                <div className='text-[#F79489] text-sm'>{adultNumber} Adult, {childNumber} Child</div></div>}
+                    label={<div className='text-start  w-full'><div className='text-lg font-medium'>Guests</div>
+                <div className='text-[#F79489] text-[13px]'>{adultNumber} Adult, {childNumber} Child</div></div>}
                     
                 >
                     <div className='flex w-100 mb-2 justify-between'>
