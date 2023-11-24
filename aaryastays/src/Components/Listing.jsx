@@ -8,7 +8,7 @@ export default function Listing({properties}) {
   return (
     <div className='text-black'>
       <div className='container   md:py-16 py-10 mx-auto   mx-auto '>
-        <div className=' text-center md:text-3xl text-2xl font-bold'>&#129668 Our Magical Stays</div>
+        <div className=' text-center md:text-3xl text-2xl font-bold'>🪄 Our Magical Stays</div>
         <div className='mt-5  px-3 text-center md:text-4xl text-xl font-medium'>"Make choosing <span className='text-[#179FEB]'>Aarya Stays,</span> <span className='text-[#F79489]'>the best decision of your vaccation</span>"</div>
       </div>
 

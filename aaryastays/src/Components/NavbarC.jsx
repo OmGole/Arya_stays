@@ -192,17 +192,18 @@ export default function NavbarC() {
 
   return (
     <>
-    <Navbar fluid rounded className='md:mx-20 mx-8'>
+    <Navbar fluid rounded className='md:mx-20 mx-8 md:sticky md:top-3 md:z-50'>
       <Navbar.Brand href="#">
-        <img src={logo} className="mr-3 h-6 sm:h-9" alt="Aarya Stays Logo" />
+        <img src={logo} className="mr-3 h-9 sm:h-9" alt="Aarya Stays Logo" />
       </Navbar.Brand>
-      <div className="flex md:order-2">
+      <div className="flex md:order-2 space-x-3 ">
         {!(user && user.user) ? <Dropdown
           arrowIcon={false}
           inline
           dismissOnClick={true}
+          className='mr-2'
           label={
-            <Avatar alt="User settings" img={user1} rounded />
+            <Avatar alt="User settings" className='mr-2' img={user1} rounded />
           }
         >
           <Dropdown.Item onClick={() => setOpenModal(true)}>Login/Register</Dropdown.Item>
