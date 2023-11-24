@@ -82,7 +82,7 @@ export default function SearchMobile({dropdownArray}) {
     <div>
         <div className='container md:hidden  pt-10 mx-auto '>
           <div className='flex flex-wrap border-2 mx-5  border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg'>
-            <div className="w-2/3 dropdown    py-2  px-4 ...">
+            <div className="w-2/3 dropdown flex items-center   py-2  px-4 ...">
                 <Dropdown
                     inline
                     label={ isChoose ? <div className='w-full text-sm text-start'><h1 className='font-medium'>{selectedTitle}</h1><p><i className='fa  fa-map-marker text-[#6ACDE9] mr-2'></i>{selectedLoc}</p></div> : <div className='py-2  text-lg   w-full font-medium'>Choose your stays</div> }
@@ -105,7 +105,7 @@ export default function SearchMobile({dropdownArray}) {
                     dismissOnClick={false}
                     className='px-5 py-4'
                     inline
-                    label={<div className='text-start  w-full'><div className='text-lg font-medium'>Guests</div>
+                    label={<div className='text-start  w-full'><div className='text-md font-medium'>Guests</div>
                 <div className='text-[#F79489] text-sm'>{adultNumber} Adult, {childNumber} Child</div></div>}
                     
                 >
