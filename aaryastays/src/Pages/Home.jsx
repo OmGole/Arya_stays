@@ -44,7 +44,7 @@ export default function Home() {
     <Social/>
     <Banner/>
     <Search dropdownArray={dropdownArray}/>
-    <SearchMobile />
+    <SearchMobile dropdownArray={dropdownArray} />
     <Listing properties={properties}/>
     <Reviews/>
     <Query/>

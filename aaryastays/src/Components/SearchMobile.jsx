@@ -3,87 +3,100 @@ import React, { useEffect } from 'react';
 import { Datepicker } from 'flowbite-react';
 import { useState } from 'react';
 import { Dropdown } from 'flowbite-react';
-export default function SearchMobile() {
-  const [selectedTitle,setSelectedTitle] = useState('');
-  const [selectedLoc, setSelectedLoc] = useState('');
- const [isChoose,SetisChoose] =useState(false);
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateOrder } from '../Store/currentOrderSlice';
+export default function SearchMobile({dropdownArray}) {
+    const dispatch = useDispatch();
+    const currOrder = useSelector(state => state.currentOrder.currentOrder)
 
+    const [selectedTitle,setSelectedTitle] = useState('');
+    const [selectedLoc, setSelectedLoc] = useState('');
+    const [selectedId,setSelectedId] = useState('');
+   const [isChoose,SetisChoose] =useState(false);
 
- const change = ()=>{
-      // add param1:title, param2:loc
-      // and set it
-      SetisChoose(true);
- }
- //set date using useeffect
-  const [checkInDate,setCheckInDate] = useState();  
-  const [checkOutDate,setCheckOutDate] = useState(); 
-  useEffect(()=>{
-      setCheckInDate(new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
-      setCheckOutDate((new Date().getDate()+1)+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
-  },[]) 
+    console.log(dropdownArray)
+   const changeDropdown = (title,loc,id)=>{
+        setSelectedLoc(loc)
+        setSelectedTitle(title)
+        dispatch(updateOrder({key:'Title',value:title}))
+        dispatch(updateOrder({key:'Location',value:loc}))
+        dispatch(updateOrder({key:'Id',value:id}))
+        setSelectedId(id)
+        SetisChoose(true);
+        
+   }
+   //set date using useeffect
+    const [checkInDate,setCheckInDate] = useState();  
+    const [checkOutDate,setCheckOutDate] = useState(); 
+    useEffect(()=>{
+        setCheckInDate(new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
+        dispatch(updateOrder({key:'CheckInDate',value:new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear()}))
+        setCheckOutDate((new Date().getDate()+1)+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
+        dispatch(updateOrder({key:'CheckOutDate',value:(new Date().getDate()+1)+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear()}))
+        dispatch(updateOrder({key:'adultNumber',value:2}))
+        dispatch(updateOrder({key:'childNumber',value:1}))
+    },[]) 
 
-  const handleCheckIn = (date) => {
-      setCheckInDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
-  };
+    useEffect(()=>{
+        console.log(currOrder)
+    },[currOrder])
 
-  const handleCheckOut = (date) => {
-      setCheckOutDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
-  };
- 
+    const handleCheckIn = (date) => {
+        console.log(typeof date)
+        setCheckInDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
+        dispatch(updateOrder({key:'CheckInDate',value:date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear()}))
+    };
 
- const [adultNumber,setAdultNumber] = useState(2);
- const incrAdult = () =>{
-       setAdultNumber(adultNumber+1);
- }
- const decrAdult = ()=>{
-  if (adultNumber>0){
-         setAdultNumber(adultNumber-1)
-     }
- }
+    const handleCheckOut = (date) => {
+        setCheckOutDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
+        dispatch(updateOrder({key:'CheckOutDate', value:date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear()}))
+    };
+   
 
- const [childNumber,setChildNumber] = useState(1);
- const incrChild = () =>{
-  setChildNumber(childNumber+1);
- }
- const decrChild = ()=>{
-  if(childNumber > 0){
-      setChildNumber(childNumber-1)
-  }
- }
+   const [adultNumber,setAdultNumber] = useState(2);
+   const incrAdult = () =>{
+         setAdultNumber(adultNumber+1);
+         dispatch(updateOrder({key:'adultNumber',value:adultNumber+1}))
+   }
+   const decrAdult = ()=>{
+    if (adultNumber>0){
+           setAdultNumber(adultNumber-1)
+           dispatch(updateOrder({key:'adultNumber',value:adultNumber-1}))
+       }
+   }
+
+   const [childNumber,setChildNumber] = useState(1);
+   const incrChild = () =>{
+    setChildNumber(childNumber+1);
+    dispatch(updateOrder({key:'childNumber',value:childNumber+1}))
+   }
+   const decrChild = ()=>{
+    if(childNumber > 0){
+        setChildNumber(childNumber-1)
+        dispatch(updateOrder({key:'childNumber',value:childNumber-1}))
+    }
+   }
 
   return (
     <div>
         <div className='container md:hidden  pt-10 mx-auto '>
           <div className='flex flex-wrap border-2 mx-5  border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg'>
-            <div className="w-2/3 dropdown    py-2  px-4 ...">
+            <div className="w-2/3 dropdown flex items-center   py-2  px-4 ...">
                 <Dropdown
                     inline
-                    label={ isChoose ? <div className='w-full text-sm text-start'><h1 className='font-medium'>Classy 1 BHK, near Viviana Mall</h1><p><i className='fa  fa-map-marker text-[#6ACDE9] mr-2'></i>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p></div> : <div className='py-2  text-lg   w-full font-medium'>Choose your stays</div> }
+                    label={ isChoose ? <div className='w-full text-sm text-start'><h1 className='font-medium'>{selectedTitle}</h1><p><i className='fa  fa-map-marker text-[#6ACDE9] mr-2'></i>{selectedLoc}</p></div> : <div className='py-2  text-lg   w-full font-medium'>Choose your stays</div> }
                 >
-              <Dropdown.Item onClick={change}><div className='text-start'>
-                    <h1>Classy 1 BHK, near Viviana Mall</h1>
-                    <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
-                </div></Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={change}><div className='text-start'>
-                    <h1>Classy 1 BHK, near Viviana Mall</h1>
-                    <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
-                </div></Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={change}><div className='text-start'>
-                    <h1>Classy 1 BHK, near Viviana Mall</h1>
-                    <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
-                </div></Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={change}><div className='text-start'>
-                    <h1>Classy 1 BHK, near Viviana Mall</h1>
-                    <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
-                </div></Dropdown.Item>
-              <Dropdown.Divider />
-              <Dropdown.Item onClick={change}><div className='text-start'>
-                    <h1>Classy 1 BHK, near Viviana Mall</h1>
-                    <p>Casa Ultima, Behind Jupiter Hospital, Thane (W)</p>
-                </div></Dropdown.Item>
+              {dropdownArray.map(item=>{
+                    return(<>
+                    <Dropdown.Item onClick={()=>{changeDropdown(item.title,item.location,item.id)}}><div className='text-start'>
+                        <h1>{item.title}</h1>
+                        <p>{item.location}</p>
+                    </div></Dropdown.Item>
+                    <div className='last-divider'><Dropdown.Divider /></div>
+                    
+                    </>)
+                })}
                 </Dropdown>
             </div>
             <div className="w-1/3 dropdown pl-1  py-2 pr-1 ...">
@@ -93,7 +106,7 @@ export default function SearchMobile() {
                     className='px-5 py-4'
                     inline
                     label={<div className='text-start  w-full'><div className='text-lg font-medium'>Guests</div>
-                <div className='text-[#F79489] text-sm'>{adultNumber} Adult, {childNumber} Child</div></div>}
+                <div className='text-[#F79489] text-[13px]'>{adultNumber} Adult, {childNumber} Child</div></div>}
                     
                 >
                     <div className='flex w-100 mb-2 justify-between'>
@@ -121,7 +134,9 @@ export default function SearchMobile() {
                 <Datepicker value={checkOutDate} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date'/>
             </div>
             <div className="w-1/3 dropdown    ...">
-            <button className='w-full align-center bg-[#F79489] h-full text-xl font-bold rounded-lg text-white '><i class="fa fa-search"/></button>
+                <Link to={`/property/${selectedId}`}>
+                    <button className='w-full align-center bg-[#F79489] h-full text-xl font-bold rounded-lg text-white '><i class="fa fa-search"/></button>
+                </Link>
             </div>
           </div>
         </div>

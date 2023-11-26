@@ -5,7 +5,6 @@ import PrivateRoom from '../Resources/privateroom.png'
 import DormRoom from '../Resources/Dormroom.png'
 import { Link } from 'react-router-dom';
 import api from '../api/api';
-import { HashLink } from 'react-router-hash-link';
 
 export default function HomeCard1({property}) {
 
@@ -62,9 +61,11 @@ export default function HomeCard1({property}) {
     console.log(slideImage)
   },[slideImage])
   return (
+    <Link to={`/property/${property._id}`}>
     <div className='flex  md:flex-row  flex-col-reverse custom-align-home mt-20 pb-2   '>
+      
         <div className='md:w-2/3 md:pl-10 pl-1  pt-2 '>
-          <Link to={`/property/${property._id}`}><h1 className='font-medium md:text-3xl text-xl'>{property.title}</h1></Link>
+          <h1 className='font-medium md:text-3xl text-xl'>{property.title}</h1>
           <span className='text-lg text-[#8E8E8E]'><i className='fa  fa-map-marker text-[#6ACDE9] text-xl'></i> {property.location}</span>
           <div className=' mt-2 md:flex hidden'>
             {essentialAmenities?.map((item,index)=>{
@@ -72,7 +73,7 @@ export default function HomeCard1({property}) {
                 return (<div className='bg-[#E0F4FA] rounded-full mr-1 px-4 py-1 flex items-center'><img src={item.icon.url} className='w-[1.2rem] mx-1' alt='meal'></img>{item.title}</div>)
               }
               })}
-              <HashLink smooth to={`/property/${property._id}#amenites`}><div className='bg-[#E0F4FA] rounded-full mr-1 px-4 py-1 flex items-center'>More</div></HashLink>
+              <div className='bg-[#E0F4FA] rounded-full mr-1 px-4 py-1 flex items-center'>More</div>
             
           </div>
           <h1 className='text-[#F79489] font-medium text-xl mt-2 md:block hidden'>Room types</h1>
@@ -97,6 +98,8 @@ export default function HomeCard1({property}) {
             })}
           </Carousel>
         </div>  
+        
       </div>
+      </Link>
   )
 }

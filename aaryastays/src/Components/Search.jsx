@@ -84,9 +84,10 @@ export default function Search({dropdownArray}) {
     <div>
         <div className='container md:block hidden  pt-16 mx-auto '>
             <div className='flex flex-wrap border-2 mx-28  border-slate-300/50 custom-shadow content-center divide-x	  rounded-lg'>
-            <div class="lg:w-2/6 dropdown  px-5  py-2 ...">
+            <div class="lg:w-2/6 flex items-center  dropdown  px-5  py-2 ...">
             <Dropdown
                 inline
+                className='mt-2'
                 label={ isChoose ? <div className='w-full text-start'><h1 className='font-medium text-lg'>{selectedTitle}</h1><p><i className='fa  fa-map-marker text-[#6ACDE9] mr-2'></i>{selectedLoc}</p></div> : <div className='py-2  text-lg   w-full'>Choose your stays</div> }
             >
                 {dropdownArray.map(item=>{
@@ -122,7 +123,7 @@ export default function Search({dropdownArray}) {
             </div></Dropdown.Item> */}
         </Dropdown>
             </div>
-            <div class="lg:w-1/6 h-full text-lg py-2 ...">
+            <div class="lg:w-1/6 h-full items-center text-lg py-2 ...">
                 <h1 className='pl-3 z-10 font-medium'>Check In</h1>
                 <Datepicker value={checkInDate} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
             </div>
