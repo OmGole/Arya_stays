@@ -13,6 +13,12 @@ const getOrdersId = async (req,res) => {
   return res.status(200).json(orders);
 }
 
+const getSingleOrderById = async (req,res) => {
+  const {id} = req.params;
+  const orders = await Order.find({_id:id});
+  return res.status(200).json(orders);
+}
+
 const getCurrentTime = () => {
   const currentUTCDate = new Date();
 
@@ -107,5 +113,6 @@ module.exports = {
   updateOrder,
   deleteOrder,
   getPastOrders,
-  getCurrentOrders
+  getCurrentOrders,
+  getSingleOrderById
 }

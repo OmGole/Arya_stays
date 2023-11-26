@@ -48,6 +48,11 @@ const OrderSchema = new mongoose.Schema({
   check_out:{
     type:Date,
     required:true,
+  },
+  reviewed:{
+    type:Boolean,
+    required:true,
+    default:false
   }
 },
 {timestamps:true})

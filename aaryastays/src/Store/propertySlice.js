@@ -80,53 +80,42 @@ export const propertySlice = createSlice({
 
   extraReducers: {
     [getAllProperties.fulfilled]: (state, { payload }) => {
-      console.log("helo");
-      console.log(payload);
       state.allProperties = payload;
       state.error = "";
     },
     [getAllProperties.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.allProperties = {};
       state.error = payload;
     },
     [getPropertyById.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.propertyById = payload;
       state.error = "";
     },
     [getPropertyById.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.propertyById = {};
       state.error = payload;
     },
     [editProperty.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.updatedProperty = payload;
       state.error = "";
     },
     [editProperty.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.updatedProperty = {};
       state.error = payload;
     },
     [createProperty.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.createdProperty = payload;
       state.error = "";
     },
     [createProperty.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.createdProperty = {};
       state.error = payload;
     },
     [deleteProperty.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.deletedProperty = payload;
       state.error = "";
     },
     [deleteProperty.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.deletedProperty = {};
       state.error = payload;
     },

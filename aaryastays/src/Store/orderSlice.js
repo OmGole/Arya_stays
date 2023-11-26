@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../api/api.js';
 
 const initialState = {
+  allOrders:[],
   createdOrder:{},
   updatedOrder:{},
   deletedOrder:{},
@@ -10,6 +11,18 @@ const initialState = {
   past:[],
   error:''
 };
+
+export const allOrders = createAsyncThunk(
+  'order/fetchAllOrders',
+  async (id, {rejectWithValue}) => {
+    try {
+      const response = await api.get(`/api/v1/order`);
+      return response.data;  
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const getPastOrders = createAsyncThunk(
   'order/fetchPastOrders',
@@ -79,6 +92,17 @@ export const orderSlice = createSlice({
   reducers: {},
 
   extraReducers:  {
+    [allOrders.fulfilled] : (state, { payload }) => {
+      console.log("helo");
+      console.log(payload);
+      state.allOrders = payload;
+      state.error = '';
+    },
+    [allOrders.rejected] : (state, { payload }) => {
+      console.log(payload);
+      state.allOrders = {};
+      state.error = payload;
+    },
     [getPastOrders.fulfilled] : (state, { payload }) => {
       console.log("helo");
       console.log(payload);

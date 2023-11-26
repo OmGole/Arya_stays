@@ -8,10 +8,11 @@ const {getOrders,
   updateOrder,
   deleteOrder,
   getPastOrders,
+  getSingleOrderById,
   getCurrentOrders} = require('../controllers/order');
   
 router.route('/').get(getOrders).post(createOrder);
-router.route('/:id').patch(updateOrder).delete(deleteOrder);
+router.route('/:id').get(getSingleOrderById).patch(updateOrder).delete(deleteOrder);
 
 // id => user
 router.route('/past/:id').get(getPastOrders);
