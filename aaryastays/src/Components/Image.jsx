@@ -61,7 +61,7 @@ const Image = ({ id, file }) => {
                 </button>
               </li>
             </ul>
-          </div>
+    </div>
   )
 }
 

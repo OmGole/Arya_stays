@@ -17,6 +17,7 @@ const reviewRoutes = require('./routes/review');
 const amenityRoutes = require('./routes/amenity');
 const cardRoutes = require('./routes/card');
 const slideRoutes = require('./routes/slide');
+const eventRoutes = require('./routes/event');
 const imageRoutes = require('./routes/image');
 const connectDB = require('./db/connect');
 const {auth, authCheck} = require('./middleware/auth');
@@ -49,6 +50,7 @@ app.use('/api/v1/review', reviewRoutes);
 app.use('/api/v1/amenity', amenityRoutes); 
 app.use('/api/v1/card', cardRoutes); 
 app.use('/api/v1/slide', slideRoutes); 
+app.use('/api/v1/event', eventRoutes); 
 
 const startServer = async () => {
   try {

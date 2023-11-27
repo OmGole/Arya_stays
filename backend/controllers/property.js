@@ -1,5 +1,8 @@
 const Property = require('../models/Property');
 const cloudinary = require('../utils/cloudinary');
+const {
+  deleteSlide,
+} = require('../controllers/slide');
 
 const getAllPropertys = async (req,res) => {
   const propertys = await Property.find();
@@ -89,7 +92,6 @@ const deleteProperty = async (req,res) => {
   if(!property) {
     return res.status(404).json({msg:`No task with id: ${propertyID}`});
   }
-
 
   await Property.findByIdAndDelete({_id:propertyID});
   return res.status(200).json(property);  

@@ -7,6 +7,7 @@ import propertyReducer from "./propertySlice.js";
 import imageReducer from "./imageSlice.js";
 import slideReducer from "./slideSlice.js";
 import currentOrderReducer from "./currentOrderSlice.js";
+import eventReducer from "./eventSlice.js";
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     image: imageReducer,
     slide: slideReducer,
     currentOrder: currentOrderReducer,
+    event:eventReducer
   },
 });

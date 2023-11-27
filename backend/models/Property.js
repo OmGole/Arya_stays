@@ -70,7 +70,12 @@ const PropertySchema = new mongoose.Schema({
   video:{
     type:String,
     required:[true,'Please provide r description'],
-  }
+  },
+  events:[{
+    type:mongoose.Types.ObjectId,
+    ref:'Event',
+    _id:false
+  }]
   // createdBy:{
   //   type:mongoose.Types.ObjectId,
   //   ref:'User',

@@ -9,6 +9,7 @@ import Image from "../Components/Image";
 import { createImage } from "../Store/imageSlice";
 import DashBoardSlide from "../Components/DashBoardSlide";
 import { createSlide } from "../Store/slideSlice";
+import DashBoardCalender from "../Components/DashBoardCalender";
 
 const DashBoardEditProperty = () => {
   const { id } = useParams();
@@ -670,6 +671,9 @@ const DashBoardEditProperty = () => {
           ) : (
             <h2 className="basis-3/4 text-l font-semibold">No Slides Added.</h2>
           )}
+        </div>
+        <div>
+          <DashBoardCalender property={property} />
         </div>
       </div>
     </div>

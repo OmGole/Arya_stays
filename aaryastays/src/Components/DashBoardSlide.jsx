@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../api/api";
 import { BiTrash } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
-import { editSlide } from "../Store/slideSlice";
+import { deleteSlide, editSlide } from "../Store/slideSlice";
 import { useDispatch } from "react-redux";
 
 const DashBoardSlide = ({ id }) => {
@@ -69,6 +69,8 @@ const DashBoardSlide = ({ id }) => {
 
   const handleSlideDelete = (e) => {
     e.preventDefault();
+    console.log(id);
+    dispatch(deleteSlide(id));
   }
 
   useEffect(() => {
