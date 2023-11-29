@@ -7,10 +7,10 @@ export default function Reviews() {
     
   return (
     <div className=''>
-        <div className='flex items-center justify-center mt-8'>
-            <div className='bg-[#F79489] w-52 h-1'> </div>
-            <div className='px-3 text-center lg:text-4xl md:tex-3xl text-2xl font-medium'>Why our Guests <span className='text-[#F79489]'>Love</span> <span className='text-[#179FEB]'>Aarya Stays</span></div>
-            <div className='bg-[#F79489] w-52 h-1'> </div>
+        <div className='flex items-center justify-center mt-8 '>
+            <div className='bg-[#F79489] md:w-52 w-40 h-1'> </div>
+            <div className='px-3 text-center lg:text-4xl md:tex-3xl text-xl font-medium'>Why our Guests <span className='text-[#F79489]'>Love</span> <span className='text-[#179FEB]'>Aarya Stays</span></div>
+            <div className='bg-[#F79489] md:w-52 w-40 h-1'> </div>
         </div>
         <div className=' md:px-20 px-10 mt-6 flex-wrap md:space-x-4 md:space-y-0 space-y-2 hidden md:flex'>
             <div className='md:flex-1 border-2 rounded-t-3xl rounded-bl-3xl border-[#6ACDE9] md:p-10 p-6'>

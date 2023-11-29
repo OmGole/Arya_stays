@@ -1,104 +1,152 @@
-const Order = require('../models/Order');
+const Order = require("../models/Order");
 
-
-const getOrders = async (req,res) => {
+const getOrders = async (req, res) => {
   const orders = await Order.find();
   return res.status(200).json(orders);
-}
+};
 
-
-const getOrdersId = async (req,res) => {
-  const {id} = req.params;
-  const orders = await Order.find({userId:id});
+const getOrdersId = async (req, res) => {
+  const { id } = req.params;
+  const orders = await Order.find({ userId: id });
   return res.status(200).json(orders);
-}
+};
+
+const getSingleOrderById = async (req, res) => {
+  const { id } = req.params;
+  const orders = await Order.find({ _id: id });
+  return res.status(200).json(orders);
+};
 
 const getCurrentTime = () => {
   const currentUTCDate = new Date();
 
-// Adjust the date to IST (UTC+5:30)
+  // Adjust the date to IST (UTC+5:30)
   const currentISTDate = new Date(currentUTCDate.getTime() + 330 * 60000);
 
   return currentISTDate;
-}
+};
 
-const getPastOrders = async(req,res) => {
-  const {id} = req.params;
+const getPastOrders = async (req, res) => {
+  const { id } = req.params;
   // const currentTime = getCurrentTime();
   const currentUTCDate = new Date();
-  
+
   // Adjust the date to IST (UTC+5:30)
   const currentISTDate = new Date(currentUTCDate.getTime() + 330 * 60000);
-  
-  const orders = await Order.find({userId:id, check_out: { $lt: currentISTDate}});
+
+  const orders = await Order.find({
+    userId: id,
+    check_out: { $lt: currentISTDate },
+  });
   console.log(orders);
 
   return res.status(201).json(orders);
-}
+};
 
-
-const getCurrentOrders = async(req,res) => {
-  const {id} = req.params;
+const getCurrentOrders = async (req, res) => {
+  const { id } = req.params;
   // const currentTime = getCurrentTime();
   const currentUTCDate = new Date();
 
   // Adjust the date to IST (UTC+5:30)
   const currentISTDate = new Date(currentUTCDate.getTime() + 330 * 60000);
 
-  const orders = await Order.find({userId:id, check_out: { $gt: currentISTDate}});
+  const orders = await Order.find({
+    userId: id,
+    check_out: { $gt: currentISTDate },
+  });
 
   return res.status(200).json(orders);
-}
+};
 
-const createOrder = async(req,res) => {
+const createOrder = async (req, res) => {
   try {
-    // req.body.createdBy = req.user.userId; 
-    const {userId,propertyId,amenities,guest,accomodation,check_in,check_out} = req.body;
-  
-    if(!userId || !propertyId || !amenities || !guest || !accomodation || !check_in || !check_out) {
+    // req.body.createdBy = req.user.userId;
+    const {
+      userId,
+      propertyId,
+      amenities,
+      guest,
+      accomodation,
+      check_in,
+      check_out,
+    } = req.body;
+
+    if (
+      !userId ||
+      !propertyId ||
+      !amenities ||
+      !guest ||
+      !accomodation ||
+      !check_in ||
+      !check_out
+    ) {
       console.log(req.body);
       return res.status(401).send("Please fill the missing fields");
     }
-  
-    const order = await Order.create({...req.body});
+
+    const order = await Order.create({ ...req.body });
     return res.status(201).json(order);
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-const updateOrder = async (req,res) => {
+const updateOrder = async (req, res) => {
   try {
-    const {id:orderID} = req.params;
-    const order = await Order.findById({_id:orderID});
-    
-    if(!order) {
-      return res.status(404).json({msg:`No task with id : ${orderID}`});
+    const { id: orderID } = req.params;
+    const order = await Order.findById({ _id: orderID });
+
+    if (!order) {
+      return res.status(404).json({ msg: `No task with id : ${orderID}` });
     }
-    
-    const updatedOrder = await Order.findOneAndUpdate({_id:orderID},req.body,{
-      new:true,
-      // runValidators:true,
-    });
-    
+
+    const updatedOrder = await Order.findOneAndUpdate(
+      { _id: orderID },
+      req.body,
+      {
+        new: true,
+        // runValidators:true,
+      }
+    );
+
     return res.status(201).json(updatedOrder);
-  } catch(error) {
+  } catch (error) {
     console.log(error);
   }
-}
+};
 
+const updateReviewed = async (req, res) => {
+  try {
+    const { id: orderID } = req.params;
+    const order = await Order.findById({ _id: orderID });
 
-const deleteOrder = async (req,res) => {
-  const {id:orderID} = req.params;
-  const order = await Order.findById({_id:orderID});
-  if(!order) {
-    return res.status(404).json({msg:`No task with id: ${orderID}`});
+    if (!order) {
+      return res.status(404).json({ msg: `No task with id : ${orderID}` });
+    }
+
+    const updatedOrder = await Order.findOneAndUpdate(
+      { _id: orderID },
+      { reviewed: true },
+      { new: true }
+    );
+
+    return res.status(201).json(updatedOrder);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteOrder = async (req, res) => {
+  const { id: orderID } = req.params;
+  const order = await Order.findById({ _id: orderID });
+  if (!order) {
+    return res.status(404).json({ msg: `No task with id: ${orderID}` });
   }
 
-  await Order.findByIdAndDelete({_id:orderID});
-  return res.status(200).json(order);  
-}
-
+  await Order.findByIdAndDelete({ _id: orderID });
+  return res.status(200).json(order);
+};
 
 module.exports = {
   getOrders,
@@ -107,5 +155,7 @@ module.exports = {
   updateOrder,
   deleteOrder,
   getPastOrders,
-  getCurrentOrders
-}
+  getCurrentOrders,
+  getSingleOrderById,
+  updateReviewed,
+};

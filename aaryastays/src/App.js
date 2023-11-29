@@ -5,6 +5,8 @@ import Profile from "./Pages/Profile";
 import Individual from "./Pages/Individual";
 import Orders from "./Pages/Orders";
 import Booking from "./Pages/Booking";
+import IndividualOrder from "./Pages/IndividualOrder";
+import Gallery from "./Pages/Gallery";
 function App() {
   return (
     <div className="App">
@@ -18,6 +20,8 @@ function App() {
         <Route path="/property/:id" element={<Individual />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/booking" element={<Booking />} />
+        <Route path="/booking/:validity/:id" element={<IndividualOrder />} />
+        <Route path="/gallery/:id" element={<Gallery />} />
       </Routes>
       {/* <Home /> */}
     </div>

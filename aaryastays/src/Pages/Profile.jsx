@@ -92,38 +92,38 @@ export default function Profile() {
   return (
     <div>
         <NavbarC/>
-        <div className='w-full flex flex-wrap px-12 flex-col mt-4 md:flex-row'>
-            <div className='md:w-2/3 px-10 '>
+        <div className='w-full flex flex-wrap px-12 flex-col my-10 md:flex-row'>
+            <div className='md:w-2/3 md:px-10 '>
                 <h1 className='text-xl font-bold'>Personal Info</h1>
                 <div className='flex justify-between mt-4'>
                     
                     <Label htmlFor="">Name</Label>
-                    <button onClick={changeEditName} className='text-red-500 underline'>Edit</button>
+                    <button onClick={changeEditName} className='text-red-500 text-sm underline'>Edit</button>
                 </div>
                 <TextInput type="text" id="" placeholder="Your Name" disabled={editName} value={name} onChange={(e) => setName(e.target.value)}/>
                 <div className='flex justify-between mt-4'>
                     
                     <Label htmlFor="">Email Id</Label>
-                    <button onClick={changeEditEmail} className='text-red-500 underline'>Edit</button>
+                    <button onClick={changeEditEmail} className='text-red-500 text-sm underline'>Edit</button>
                 </div>
                 <TextInput type="email" id="" placeholder="Your Email Id" disabled={editEmail} value={email} onChange={(e) => setEmail(e.target.value)}/>
                 <div className='flex justify-between mt-4'>
                     
                     <Label htmlFor="">Phone Number</Label>
-                    <button onClick={changeEditNumber} className='text-red-500 underline'>Edit</button>
+                    <button onClick={changeEditNumber} className='text-red-500 text-sm underline'>Edit</button>
                 </div>
                 <TextInput type="number" id="" placeholder="Your Phone Number" disabled={editNumber} value={number} onChange={(e) => setNumber(e.target.value)}/>
                 <div className='flex justify-between mt-4'>
                     
                     <Label htmlFor="">Age</Label>
-                    <button onClick={changeEditAge} className='text-red-500 underline'>Edit</button>
+                    <button onClick={changeEditAge} className='text-red-500 text-sm underline'>Edit</button>
                 </div>
                 <TextInput type="number" id="" placeholder="Age" disabled={editAge} value={age} onChange={(e) => setAge(e.target.value)}/>
                 
                 <h1 className='font-medium text-green-600 my-4'>Tip: Add above details for faster Web Check-In</h1>
                 <Button color="success" onClick={saveChanges} disabled={editName && editEmail && editNumber && editAge} >Save</Button>
             </div>
-            <div className='md:w-1/3  rounded-lg border-2 border-slate-200'>
+            <div className='md:w-1/3 hidden md:block rounded-lg border-2 border-slate-200'>
                 {/* <h1 className="text-4xl font-bold">Profile</h1> */}
             </div>
         </div>

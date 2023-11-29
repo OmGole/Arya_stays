@@ -5,11 +5,13 @@ import { Dropdown } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateOrder } from '../Store/currentOrderSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Search({dropdownArray}) {
 
     const dispatch = useDispatch();
     const currOrder = useSelector(state => state.currentOrder.currentOrder)
+    let navigate = useNavigate(); 
 
     const [selectedTitle,setSelectedTitle] = useState('');
     const [selectedLoc, setSelectedLoc] = useState('');
@@ -31,10 +33,17 @@ export default function Search({dropdownArray}) {
     const [checkInDate,setCheckInDate] = useState();  
     const [checkOutDate,setCheckOutDate] = useState(); 
     useEffect(()=>{
-        setCheckInDate(new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
-        dispatch(updateOrder({key:'CheckInDate',value:new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear()}))
-        setCheckOutDate((new Date().getDate()+1)+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
-        dispatch(updateOrder({key:'CheckOutDate',value:(new Date().getDate()+1)+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear()}))
+        // console.log
+        // const currentDate = new Date();
+        const checkin = new Date();
+        checkin.setDate(new Date().getDate()+2);
+        const checkout = new Date();
+        checkout.setDate(new Date().getDate()+3);
+
+        setCheckInDate(`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`);
+        dispatch(updateOrder({key:'CheckInDate',value:`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`}))
+        setCheckOutDate(`${checkout.getDate()}/${checkout.getMonth() + 1}/${checkout.getFullYear()}`);
+        dispatch(updateOrder({key:'CheckOutDate',value:`${checkout.getDate()}/${checkout.getMonth() + 1}/${checkout.getFullYear()}`}))
         dispatch(updateOrder({key:'adultNumber',value:2}))
         dispatch(updateOrder({key:'childNumber',value:1}))
     },[]) 
@@ -76,6 +85,14 @@ export default function Search({dropdownArray}) {
     if(childNumber > 0){
         setChildNumber(childNumber-1)
         dispatch(updateOrder({key:'childNumber',value:childNumber-1}))
+    }
+   }
+
+   const redirectToIndividualPage = ()=>{
+    if(selectedId){
+        navigate('/property/'+selectedId)
+    }else{
+        alert('Please select a property')
     }
    }
 
@@ -125,11 +142,12 @@ export default function Search({dropdownArray}) {
             </div>
             <div class="lg:w-1/6 h-full items-center text-lg py-2 ...">
                 <h1 className='pl-3 z-10 font-medium'>Check In</h1>
-                <Datepicker value={checkInDate} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
+                {/* new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear() */}
+                <Datepicker value={checkInDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+2)} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
             </div>
             <div class="lg:w-1/6 text-lg py-2 ...">
                 <h1 className='pl-3 z-10 font-medium'>Check Out</h1>
-                <Datepicker value={checkOutDate} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date'/>
+                <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+3)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date'/>
             </div>
             <div class="lg:w-1/6 dropdown px-3 py-2 ...">
             <Dropdown
@@ -156,9 +174,9 @@ export default function Search({dropdownArray}) {
             </Dropdown>
             </div>
             <div class="lg:w-1/6 ...">
-                <Link to={`/property/${selectedId}`}>
-                <button className='w-full align-center bg-[#F79489] h-full text-xl font-bold rounded-lg text-white py-2 px-3'>Search</button>
-                </Link>
+                {/* <Link to={`/property/${selectedId}`}> */}
+                <button onClick={()=>{redirectToIndividualPage()}} className='w-full align-center bg-[#F79489] h-full text-xl font-bold rounded-lg text-white py-2 px-3'>Search</button>
+                {/* </Link> */}
                 
             </div>
         </div>

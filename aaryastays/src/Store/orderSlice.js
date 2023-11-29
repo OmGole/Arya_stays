@@ -1,22 +1,23 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import api from '../api/api.js';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import api from "../api/api.js";
 
 const initialState = {
-  createdOrder:{},
-  updatedOrder:{},
-  deletedOrder:{},
-  ordersByUserId:[],
-  current:[],
-  past:[],
-  error:''
+  createdOrder: {},
+  updatedOrder: {},
+  deletedOrder: {},
+  ordersByUserId: [],
+  orderById: {},
+  current: [],
+  past: [],
+  error: "",
 };
 
 export const getPastOrders = createAsyncThunk(
-  'order/fetchPastOrders',
-  async (id, {rejectWithValue}) => {
+  "order/fetchPastOrders",
+  async (id, { rejectWithValue }) => {
     try {
       const response = await api.get(`/api/v1/order/past/${id}`);
-      return response.data;  
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -24,11 +25,23 @@ export const getPastOrders = createAsyncThunk(
 );
 
 export const getCurrentOrders = createAsyncThunk(
-  'order/fetchCurrentOrders',
-  async (id, {rejectWithValue}) => {
+  "order/fetchCurrentOrders",
+  async (id, { rejectWithValue }) => {
     try {
       const response = await api.get(`/api/v1/order/current/${id}`);
-      return response.data;  
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getOrderById = createAsyncThunk(
+  "order/fetchOrderById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/api/v1/order/${id}`);
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -36,21 +49,23 @@ export const getCurrentOrders = createAsyncThunk(
 );
 
 export const editOrder = createAsyncThunk(
-  'order/changeOrder',
-  async (updatedOrder, {rejectWithValue}) => {
+  "order/changeOrder",
+  async (updatedOrder, { rejectWithValue }) => {
     try {
-    const response = await api.patch(`/api/v1/order/${updatedOrder.id}`,updatedOrder.newOrder);
-    return response.data;  
+      const response = await api.patch(
+        `/api/v1/order/${updatedOrder.id}`,
+        updatedOrder.newOrder
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
-    
   }
 );
 
 export const createOrder = createAsyncThunk(
-  'order/createNewOrder',
-  async (newOrder, {rejectWithValue}) => {
+  "order/createNewOrder",
+  async (newOrder, { rejectWithValue }) => {
     try {
       const response = await api.post(`/api/v1/order`, newOrder);
       return response.data;
@@ -61,8 +76,8 @@ export const createOrder = createAsyncThunk(
 );
 
 export const deleteOrder = createAsyncThunk(
-  'order/removeOrder',
-  async (id, {rejectWithValue}) => {
+  "order/removeOrder",
+  async (id, { rejectWithValue }) => {
     try {
       const response = await api.delete(`/api/v1/order/${id}`);
       return response.data;
@@ -72,60 +87,69 @@ export const deleteOrder = createAsyncThunk(
   }
 );
 
-
 export const orderSlice = createSlice({
-  name: 'order',
+  name: "order",
   initialState,
   reducers: {},
 
-  extraReducers:  {
-    [getPastOrders.fulfilled] : (state, { payload }) => {
+  extraReducers: {
+    [getPastOrders.fulfilled]: (state, { payload }) => {
       console.log("helo");
       console.log(payload);
       state.past = payload;
-      state.error = '';
+      state.error = "";
     },
-    [getPastOrders.rejected] : (state, { payload }) => {
+    [getPastOrders.rejected]: (state, { payload }) => {
       console.log(payload);
       state.past = {};
       state.error = payload;
     },
-    [getCurrentOrders.fulfilled] : (state, { payload }) => {
+    [getCurrentOrders.fulfilled]: (state, { payload }) => {
       console.log(payload);
       state.current = payload;
-      state.error = '';
+      state.error = "";
     },
-    [getCurrentOrders.rejected] : (state, { payload }) => {
+    [getCurrentOrders.rejected]: (state, { payload }) => {
       console.log(payload);
       state.current = {};
       state.error = payload;
     },
-    [createOrder.fulfilled] : (state, { payload }) => {
+    [getOrderById.fulfilled]: (state, { payload }) => {
+      console.log(payload);
+      state.current = payload;
+      state.error = "";
+    },
+    [getOrderById.rejected]: (state, { payload }) => {
+      console.log(payload);
+      state.current = {};
+      state.error = payload;
+    },
+    [createOrder.fulfilled]: (state, { payload }) => {
       console.log(payload);
       state.createOrder = payload;
-      state.error = '';
+      state.error = "";
     },
-    [createOrder.rejected] : (state, { payload }) => {
+    [createOrder.rejected]: (state, { payload }) => {
       console.log(payload);
       state.createdOrder = {};
       state.error = payload;
     },
-    [editOrder.fulfilled] : (state,{ payload }) => {
+    [editOrder.fulfilled]: (state, { payload }) => {
       console.log(payload);
       state.updatedOrder = payload;
-      state.error = '';
+      state.error = "";
     },
-    [editOrder.rejected] : (state, { payload }) => {
+    [editOrder.rejected]: (state, { payload }) => {
       console.log(payload);
       state.updatedOrder = {};
       state.error = payload;
     },
-    [deleteOrder.fulfilled] : (state,{ payload }) => {
+    [deleteOrder.fulfilled]: (state, { payload }) => {
       console.log(payload);
       state.deletedOrder = payload;
-      state.error = '';
+      state.error = "";
     },
-    [deleteOrder.rejected] : (state, { payload }) => {
+    [deleteOrder.rejected]: (state, { payload }) => {
       console.log(payload);
       state.deletedOrder = {};
       state.error = payload;

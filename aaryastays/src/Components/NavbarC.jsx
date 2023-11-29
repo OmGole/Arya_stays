@@ -186,6 +186,16 @@ export default function NavbarC() {
           unlisten();
       }
    }, []);
+
+  //  const navigate = useNavigate();
+   const navigateToOrders = () =>{
+      
+      navigate('/orders', { state: { id: 1 } });
+   }
+
+   const navigateToWishlist = () =>{
+    navigate('/orders', { state: { id: 3 } });
+   }
     
 
   // const [isChooseCountry,SetisChooseCountry] =useState(false);
@@ -222,9 +232,9 @@ export default function NavbarC() {
           <Link to="/profile"><Dropdown.Item >
  My Profile</Dropdown.Item></Link> 
           <Dropdown.Divider />
-          <Link to="/orders"><Dropdown.Item >My Booking</Dropdown.Item></Link> 
+          <Dropdown.Item onClick={()=>{ navigateToOrders()}}>My Booking</Dropdown.Item>
           <Dropdown.Divider />
-          <Link to="/orders"><Dropdown.Item> My WishList</Dropdown.Item></Link> 
+          <Dropdown.Item onClick={()=>{navigateToWishlist()}}> My WishList</Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item onClick={() => handleSignOut()}>Sign out</Dropdown.Item>
         </Dropdown>}

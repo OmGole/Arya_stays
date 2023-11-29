@@ -1,42 +1,48 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
+require("dotenv").config();
+const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  _id:{
-    type:String,
-    ref:'User',
-    required:true,
+  _id: {
+    type: String,
+    ref: "User",
+    required: true,
   },
-  name:{
-    type:String,
-    required:[true,'Please provide name'],
-    minlength:3,
-    maxlength:20
+  name: {
+    type: String,
+    required: [true, "Please provide name"],
+    minlength: 3,
+    maxlength: 20,
   },
   email: {
-    type:String,
-    required:[true,'Please provide email'],
+    type: String,
+    required: [true, "Please provide email"],
     match: [
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      'Please provide a valid email',
+      "Please provide a valid email",
     ],
-    unique:true
+    unique: true,
   },
   phone: {
     type: Number,
-    required: [true, 'Please provide phone number'],
-    minlength: 10
+    required: [true, "Please provide phone number"],
+    minlength: 10,
   },
   age: {
     type: Number,
-    required: [true, 'Please provide age'],
-    minlength: 2
+    required: [true, "Please provide age"],
+    minlength: 2,
   },
-  role:{
-    type:String,
-    default:"user"
-  }
-})
+  role: {
+    type: String,
+    default: "user",
+  },
+  wishlist: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Property",
+    },
+  ],
+});
 
 // UserSchema.pre('save',async function() {
 //   const salt = await bcrypt.genSalt(10);
@@ -52,4 +58,4 @@ const UserSchema = new mongoose.Schema({
 //  return isMatch;
 // }
 
-module.exports = mongoose.model('User',UserSchema);
+module.exports = mongoose.model("User", UserSchema);
