@@ -16,7 +16,8 @@ const SlideSchema = new mongoose.Schema({
     type:String,
     required:[true,'Please provide description'],
   }
-})
+});
+
 
 
 module.exports = mongoose.model('Slide',SlideSchema);

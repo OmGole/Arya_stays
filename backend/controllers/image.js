@@ -98,10 +98,23 @@ const updateImage = async (req,res) => {
 
 const deleteImage = async (req,res) => {
   const {id:imageID} = req.params;
+  console.log(req.body);
+  const { propertyId, type } = req.body;
+  const property = await Property.findById({_id:propertyId});
+
+  if(!property) {
+    return res.status(404).json({msg:`No property with id: ${propertyId}`});
+  }
+
   const image = await Image.findById({_id:imageID});
   if(!image) {
-    return res.status(404).json({msg:`No task with id: ${imageID}`});
+    return res.status(404).json({msg:`No image with id: ${imageID}`});
   }
+
+  const newArray = property[type].filter(id => id != imageID);
+  property[type] = newArray;
+  await property.save();
+
 
   const imgId = image.public_id;
   await cloudinary.uploader.destroy(imgId);

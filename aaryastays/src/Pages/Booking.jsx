@@ -231,7 +231,7 @@ export default function Booking() {
                         </div>
                     </div>
                 </div>
-                <div className='md:w-1/3    rounded border-2 border-[#6ACDE9]'>
+                <div className='md:w-1/3 rounded border-2 border-[#6ACDE9]'>
                     <div className='p-4 border-b-2'>
                         <h1 className='text-xl text-[#949494] font-medium'>Price Details</h1>
                     </div>

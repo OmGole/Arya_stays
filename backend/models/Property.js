@@ -16,10 +16,6 @@ const PropertySchema = new mongoose.Schema({
     required:true,
     _id:false
   }],
-  maxGuests:{
-    type:Number,
-    required:[true,'Please  provide max allowed people'],
-  },
   location_description:{
     type:String,
     required:[true,'Please provide l description'],
@@ -54,7 +50,6 @@ const PropertySchema = new mongoose.Schema({
   slides:[{
     type:mongoose.Types.ObjectId,
     ref:'Slides',
-    required:true,
     _id:false
   }],
   roomType:[{
@@ -65,19 +60,22 @@ const PropertySchema = new mongoose.Schema({
   ats_image:[{
     type:mongoose.Types.ObjectId,
     ref:'Image',
-    required:true,
     _id:false
   }],
   currentLocation_images:[{
     type:mongoose.Types.ObjectId,
     ref:'Image',
-    required:true,
     _id:false
   }],
   video:{
     type:String,
     required:[true,'Please provide r description'],
-  }
+  },
+  events:[{
+    type:mongoose.Types.ObjectId,
+    ref:'Event',
+    _id:false
+  }]
   // createdBy:{
   //   type:mongoose.Types.ObjectId,
   //   ref:'User',

@@ -81,52 +81,42 @@ export const amenitySlice = createSlice({
 
   extraReducers:  {
     [getAllAmenity.fulfilled] : (state, { payload }) => {
-      console.log(payload);
       state.allAmenities = payload;
       state.error = '';
     },
     [getAllAmenity.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.allAmenities = {};
       state.error = payload;
     },
     [getSingleAmenity.fulfilled] : (state, { payload }) => {
-      console.log(payload);
       state.amenityById = payload;
       state.error = '';
     },
     [getSingleAmenity.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.amenityById = {};
       state.error = payload;
     },
     [createAmenity.fulfilled] : (state, { payload }) => {
-      console.log(payload);
       state.createdAmenity = payload;
       state.error = '';
     },
     [createAmenity.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.createdAmenity = {};
       state.error = payload;
     },
     [editAmenity.fulfilled] : (state,{ payload }) => {
-      console.log(payload);
       state.editAmenity = payload;
       state.error = '';
     },
     [editAmenity.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.editAmenity = {};
       state.error = payload;
     },
     [deleteAmenity.fulfilled] : (state,{ payload }) => {
-      console.log(payload);
       state.deletedAmenity = payload;
       state.error = '';
     },
     [deleteAmenity.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.deletedAmenity = {};
       state.error = payload;
     },

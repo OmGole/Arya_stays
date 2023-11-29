@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from "../api/api.js";
 
 const initialState = {
+  allOrders: [],
   createdOrder: {},
   updatedOrder: {},
   deletedOrder: {},
@@ -9,8 +10,21 @@ const initialState = {
   orderById: {},
   current: [],
   past: [],
+  deleteOrdersCount: 0,
   error: "",
 };
+
+export const allOrders = createAsyncThunk(
+  "order/fetchAllOrders",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/api/v1/order`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const getPastOrders = createAsyncThunk(
   "order/fetchPastOrders",
@@ -87,12 +101,35 @@ export const deleteOrder = createAsyncThunk(
   }
 );
 
+export const deleteOrdersByPropertyId = createAsyncThunk(
+  "order/removeOrdersByPropertyId",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/api/v1/order/property/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {},
 
   extraReducers: {
+    [allOrders.fulfilled]: (state, { payload }) => {
+      console.log("helo");
+      console.log(payload);
+      state.allOrders = payload;
+      state.error = "";
+    },
+    [allOrders.rejected]: (state, { payload }) => {
+      console.log(payload);
+      state.allOrders = {};
+      state.error = payload;
+    },
     [getPastOrders.fulfilled]: (state, { payload }) => {
       console.log("helo");
       console.log(payload);
@@ -152,6 +189,16 @@ export const orderSlice = createSlice({
     [deleteOrder.rejected]: (state, { payload }) => {
       console.log(payload);
       state.deletedOrder = {};
+      state.error = payload;
+    },
+    [deleteOrdersByPropertyId.fulfilled]: (state, { payload }) => {
+      console.log(payload);
+      state.deleteOrdersCount = payload;
+      state.error = "";
+    },
+    [deleteOrdersByPropertyId.rejected]: (state, { payload }) => {
+      console.log(payload);
+      state.deleteOrdersCount = 0;
       state.error = payload;
     },
   },

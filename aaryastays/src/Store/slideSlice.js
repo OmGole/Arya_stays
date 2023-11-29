@@ -63,9 +63,9 @@ export const createSlide = createAsyncThunk(
 
 export const deleteSlide = createAsyncThunk(
   'slide/removeSlide',
-  async (id, {rejectWithValue}) => {
+  async (data, {rejectWithValue}) => {
     try {
-      const response = await api.delete(`/api/v1/slide/${id}`);
+      const response = await api.delete(`/api/v1/slide/${data.id}`, {data: data.propertyDetails} );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

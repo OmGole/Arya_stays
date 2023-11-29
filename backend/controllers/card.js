@@ -78,6 +78,9 @@ const deleteCard = async (req,res) => {
     if(!card) {
       return res.status(404).json({msg:`No task with id: ${cardID}`});
     }
+
+    await Property.updateMany({}, {$pull: {cards: {$in: cardID}}});
+
     const imgId = card.icon.public_id;
     await cloudinary.uploader.destroy(imgId);
 
