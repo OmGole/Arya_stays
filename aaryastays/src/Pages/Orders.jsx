@@ -108,7 +108,7 @@ export default function Orders() {
 
       // useEffect(()=>{
         
-      // },[loading,user])
+      // },[loading,user])  
 
     
 
@@ -125,12 +125,12 @@ export default function Orders() {
                     <button onClick={()=>{setSelectedTab(2)}} className={`border-2 font-medium  py-3 px-8 rounded ${selectedTab==2? 'bg-[#F79489] border-[#FFD93D] text-white':'border-slate-200'}` }>Past Stays</button>
                 </div>
                 <div>
-                    <button onClick={()=>{setSelectedTab(3)}} className={`border-2 font-medium  py-3 px-8 rounded ${selectedTab==3? 'bg-[#F79489] border-[#FFD93D] text-white':'border-slate-200'}` }>Wishlist</button>
+                    <button onClick={()=>{setSelectedTab(3)}} className={`border-2 font-medium  py-3 px-8 rounded ${selectedTab==3? 'bg-[#F79489] border-[#FFD93D] text-white':'border-slate-200 h-full'}` }>Wishlist</button>
                 </div>
             </div>
 
 
-            <div>
+            <div className='my-2'>
                 { selectedTab == 1 ? (currentOrders.length > 0 ? currentOrders.map(order => <OrderCard order={order} validity='current'/>) : 
                 <>
                 <h1 className='md:text-3xl font-bold mt-20 underline underline-offset-8 decoration-1'>No Bookings yet!</h1>

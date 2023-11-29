@@ -77,9 +77,9 @@ export default function Individual() {
     });
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log(currOrder);
-  }, [currOrder]);
+  // useEffect(() => {
+  //   console.log(currOrder);
+  // }, [currOrder]);
 
   const getAmenities = async (prop) => {
     try {
@@ -110,25 +110,27 @@ export default function Individual() {
       qty: 1,
     };
     const arr = currOrder.amenities;
-
+    console.log(arr)
     const isNewObjArray = !arr.some((obj2) => obj2.id === obj.id);
     //add obj in arr
+    console.log(isNewObjArray)
     if (isNewObjArray) {
       dispatch(updateOrder({ key: "amenities", value: [...arr, obj] }));
+      setAddedOnDemand((prev) => new Set([...prev, item]));
     }
     // console.log(item)
-    setAddedOnDemand((prev) => new Set([...prev, item]));
+    
     setShowOnDemand(true);
   };
 
-  useEffect(() => {
-    // const arr =
-    console.log(
-      [...addedOnDemand].map((item, index) => {
-        return item.icon.url;
-      })
-    );
-  }, [addedOnDemand]);
+  // useEffect(() => {
+  //   // const arr =
+  //   console.log(
+  //     [...addedOnDemand].map((item, index) => {
+  //       return item.icon.url;
+  //     })
+  //   );
+  // }, [addedOnDemand]);
 
   const removeAddedItem = (item) => {
     const updatedValues = new Set(addedOnDemand);
@@ -745,7 +747,7 @@ export default function Individual() {
 
 {essentialAmenities?.map((item,index)=>{
                     return(
-                        <div onClick={()=>{showAmenitiesInfo(item)}} className='md:h-[8rem] md:w-[8rem]  h-[5rem] w-[5rem] mt-2'>
+                        <div onClick={()=>{showAmenitiesInfo(item)}} className='md:h-[8rem] md:w-[8rem] cursor-pointer h-[5rem] w-[5rem] mt-2'>
                             <div className='flex-1 h-full custom-shadow rounded grid  justify-items-center place-content-center'>
                                 <img src={item.icon.url} className='w-2/3 md:w-full text-center'/>
                             </div>
@@ -757,16 +759,17 @@ export default function Individual() {
         </div>
 
         <h1 className="text-2xl font-medium mt-10">On Demand Service</h1>
+        <h1 className="text-lg text-green-600">Click on services to add them</h1>
         <div className="flex flex-wrap gap-10  mt-4">
           {extraAmenities?.map((item, index) => {
             return (
               <div
-                className="md:h-[8rem] md:w-[8rem]  h-[5rem] w-[5rem] mt-2"
+                className="md:h-[8rem] md:w-[8rem] cursor-pointer  h-[5rem] w-[5rem] mt-2"
                 onClick={() => {
                   addOnDemand(item);
                 }}
               >
-                <div className="flex-1 h-full custom-shadow rounded grid group-hover:hidden justify-items-center place-content-center">
+                <div className="flex-1 h-full custom-shadow2  rounded grid  justify-items-center place-content-center">
                   <img
                     src={item.icon.url}
                     className="w-2/3 md:w-full text-center"
@@ -841,7 +844,7 @@ export default function Individual() {
                   to the needs, we are transperant on pricing & the most
                   affordable brand for Homestays.
                 </p>
-                <button className="bg-[#F79489] w-full md:text-2xl text-xl py-1 rounded font-medium text-white my-4">
+                <button onClick={()=>{navigateToBook()}} className="bg-[#F79489] w-full md:text-2xl text-xl py-1 rounded font-medium text-white my-4">
                   Apply
                 </button>
               </div>
@@ -861,10 +864,16 @@ export default function Individual() {
       {/* <div className="w-100 md:mx-20 mx-10 rounded-lg overflow-auto">
         <Slide slides={property.slides} />
       </div> */}
-      <h1 className="lg:text-4xl md:tex-3xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
+      {/* <h1 className="lg:text-4xl md:tex-3xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
         Everything You Need To Know{" "}
         <span className="text-[#179FEB]">Before You Book</span>
-      </h1>
+      </h1>  */}
+
+      <div className='flex items-center justify-center my-8 '>
+            <div className='bg-[#F79489] md:w-52 w-40 h-1'> </div>
+            <div className='px-3 text-center lg:text-4xl md:tex-3xl text-xl font-medium'>Everything You Need To Know <span className='text-[#179FEB]'>Before You Book</span></div>
+            <div className='bg-[#F79489] md:w-52 w-40 h-1'> </div>
+        </div>
 
       <div className="md:mx-20 mx-4">
           

@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux'
 import { createUser, editUser, getUserById } from '../Store/userSlice';
 import { authentication } from '../firebase/config';
 import { useNavigate } from 'react-router-dom';
+import { Toast } from 'flowbite-react';
+import { HiCheck, HiExclamation, HiX } from 'react-icons/hi';
 
 export default function Profile() {
 
@@ -41,6 +43,7 @@ export default function Profile() {
         setEditEmail(false);
     }
 
+    const [success,setSuccess] = useState(false)
 
     const saveChanges = () =>{
         if(!name || !email || !number || !age) {
@@ -49,6 +52,7 @@ export default function Profile() {
             if(Object.keys(user.userDetails).length == 0) {
                 const userDetails ={_id:user.user.uid, name, email, phone: Number(number),age:Number(age)}
                 dispatch(createUser(userDetails));
+
             } else {
                 const updatedUser = {id:user.user.uid};
                 const newUser = {};
@@ -62,7 +66,7 @@ export default function Profile() {
                 dispatch(editUser(updatedUser));
             }
             // saveChanges; update user data using post request
-    
+           
             setEditName(true);
             setEditEmail(true);
             setEditNumber(true);
@@ -79,12 +83,11 @@ export default function Profile() {
         const unsubscribe = authentication.onAuthStateChanged(async (currentUser) => {
             if (currentUser) {
               setUser(currentUser);
-              setLoading(false); // User data is available, so set loading to false
+              setLoading(false); 
       
             } else {
               setUser(null);
-              setLoading(false); // User data is not available, set loading to false
-              // Reset wishlist if user is not available
+              setLoading(false); 
             }
           });
       
@@ -98,14 +101,16 @@ export default function Profile() {
             alert("you must me logged in")
             navigate('/')
         }
-    },[user, loading])
-    useEffect(() => {
         if(!loading && userget){
             dispatch(getUserById(userget.uid));
         }
-    },[])
+    },[userget, loading])
+    // useEffect(() => {
+        
+    // },[userget,loading])
 
     useEffect(() => {
+        // console.log(user.userDetails)
         if(Object.keys(user.userDetails).length > 0) {
             setName(user.userDetails.name);
             setEmail(user.userDetails.email);
@@ -122,6 +127,13 @@ export default function Profile() {
   return (
     <div>
         <NavbarC/>
+        {/* {success && <Toast>
+        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+          <HiCheck className="h-5 w-5" />
+        </div>
+        <div className="ml-3 text-sm font-normal">Item moved successfully.</div>
+        <Toast.Toggle />
+      </Toast>} */}
         <div className='w-full flex flex-wrap px-12 flex-col my-10 md:flex-row'>
             <div className='md:w-2/3 md:px-10 '>
                 <h1 className='text-xl font-bold'>Personal Info</h1>

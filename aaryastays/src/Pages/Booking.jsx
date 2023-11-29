@@ -35,30 +35,57 @@ export default function Booking() {
     const [user,setUser] = useState(null)
     let navigate = useNavigate(); 
 
+    useEffect(() => {
+        if (state) {
+          const { propertyDetails, stateCurrOrders } = state;
+          setStateCurrOrder(stateCurrOrders);
+          setProperty(propertyDetails);
+        } else {
+          navigate('/'); // Redirect to the home page if state is null
+        }
+      }, [state]);
+
+      useEffect(() => {
+        if (stateCurrOrder?.CheckInDate && stateCurrOrder?.CheckOutDate) {
+          const [day, month, year] = stateCurrOrder.CheckInDate.split('/').map(Number);
+          const checkInDate = new Date(year, month - 1, day);
+          const [day2, month2, year2] = stateCurrOrder.CheckOutDate.split('/').map(Number);
+          const checkOutDate = new Date(year2, month2 - 1, day2);
+          const differenceInTime = checkOutDate.getTime() - checkInDate.getTime();
+          const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
+          const numOfNights = Math.round(differenceInTime / oneDayInMilliseconds);
+          setNumberOfNights(numOfNights);
+        }
+      }, [stateCurrOrder, property]);
+
     // calculate nights
-    useEffect(()=>{
-        if (state === null) {
-            navigate('/');
-          }else{
-            const{propertyDetails,stateCurrOrders} = state
-        setStateCurrOrder(stateCurrOrders)
-        setProperty(propertyDetails)
-        const [day, month, year] = stateCurrOrder.CheckInDate.split('/').map(Number);
-        const checkInDate = new Date(year, month - 1, day);
-        const [day2, month2, year2] = stateCurrOrder.CheckOutDate.split('/').map(Number);
-        const checkOutDate = new Date(year2, month2 - 1, day2); // Replace this with your check-out date
-        const differenceInTime = checkOutDate.getTime() - checkInDate.getTime();
-        const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
-        const numOfNights = Math.round(differenceInTime / oneDayInMilliseconds);
-        setNumberOfNights(numOfNights)
-          }
-    },[])
-    useEffect(()=>{
+    // useEffect(()=>{
+    //     if (state === null) {
+    //         navigate('/');
+    //       }else{
+    //         console.log("hello")
+    //         console.log(state)
+    //         const{propertyDetails,stateCurrOrders} = state
+    //     setStateCurrOrder(stateCurrOrders)
+    //     setProperty(propertyDetails)
         
         
-        // console.log(state)
+    //       }
+    // },[])
+
+    
+    // useEffect(()=>{
         
-    },[])
+    //     const [day, month, year] = stateCurrOrder.CheckInDate.split('/').map(Number);
+    //     const checkInDate = new Date(year, month - 1, day);
+    //     const [day2, month2, year2] = stateCurrOrder.CheckOutDate.split('/').map(Number);
+    //     const checkOutDate = new Date(year2, month2 - 1, day2); // Replace this with your check-out date
+    //     const differenceInTime = checkOutDate.getTime() - checkInDate.getTime();
+    //     const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
+    //     const numOfNights = Math.round(differenceInTime / oneDayInMilliseconds);
+    //     setNumberOfNights(numOfNights)
+        
+    // },[stateCurrOrder,property])
 
     useEffect(() => {
         const unsubscribe = authentication.onAuthStateChanged(async (currentUser) => {
@@ -93,23 +120,29 @@ export default function Booking() {
     
     // calculate amenities price and amenity title
     useEffect(()=>{
-        if(state!= null){
-            const totalSum = stateCurrOrder.amenities.reduce((accumulator, amenity) => {
+        
+            const totalSum = stateCurrOrder?.amenities.reduce((accumulator, amenity) => {
                 return accumulator + (amenity.price * amenity.qty);
               }, 0);
             setAmenitiesPrice(totalSum)
             getAmenityTitle()
-        }
         
-    },[])
+        
+    },[stateCurrOrder])
 
     const getAmenityTitle = async()=>{
-        const amenitytitle = await Promise.all(stateCurrOrder.amenities.map(async (item,index) => {
-            const result = await api.get(`/api/v1/amenity/${item.id}`);
-            return result.data.title;
-        }
-        ));
-        setAmenityTitle(amenitytitle)
+        if (stateCurrOrder && stateCurrOrder.amenities && Array.isArray(stateCurrOrder.amenities)) {
+            const amenitytitle = await Promise.all(stateCurrOrder.amenities.map(async (item, index) => {
+              const result = await api.get(`/api/v1/amenity/${item.id}`);
+              return result.data.title;
+            }));
+            setAmenityTitle(amenitytitle);
+          } else {
+            // Handle the case where amenities array is undefined or not iterable
+            // For example, set amenityTitle to an empty array or handle it based on your requirements
+            setAmenityTitle([]);
+            // Or you can display a message or take appropriate action based on your logic
+          }
     }
 
     const WhatsappMessage = () =>{

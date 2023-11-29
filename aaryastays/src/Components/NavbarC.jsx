@@ -218,8 +218,8 @@ export default function NavbarC() {
         >
           <Dropdown.Item onClick={() => setOpenModal(true)}>Login/Register</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={() => handleSignOut()}>Sign out</Dropdown.Item>
-          <Dropdown.Divider />
+          {/* <Dropdown.Item onClick={() => handleSignOut()}>Sign out</Dropdown.Item>
+          <Dropdown.Divider /> */}
           <Link /><Dropdown.Item> Contact</Dropdown.Item>
         </Dropdown> : <Dropdown
           arrowIcon={false}

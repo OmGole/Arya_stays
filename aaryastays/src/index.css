@@ -61,6 +61,11 @@
   background: white;
 }
 
+.whatsapp {
+  color: rgb(40, 209, 38);
+  background: white;
+}
+
 .dropdown button{
   width:100%;
 }
@@ -96,8 +101,24 @@ input::-webkit-inner-spin-button {
   box-shadow: 0px 0px 10px 0px rgba(110, 110, 110, 0.616);
 }
 
+.custom-shadow2{
+  box-shadow: 0px 0px 10px 0px rgba(110, 110, 110, 0.616);
+}
+
+.custom-shadow2:hover{
+  box-shadow: 0px 0px 10px 0px rgba(230, 152, 152, 0.616);
+}
+
 .custom-shadow-mobile{
   box-shadow: 0px 0px 2px 0px rgba(110, 110, 110, 0.484);
+}
+
+@media (max-width: 767px) {
+  .mobile-svg {
+    /* background-color: rebeccapurple; */
+      width: 60px; /* Adjust the width for mobile */
+      height: 30px; /* Adjust the height for mobile */
+  }
 }
 
 .img-border{
@@ -178,7 +199,7 @@ h3{
 
 .heart-stroke {
   fill: none;
-  stroke: #ddd;
+  stroke: #ababab;
   stroke-width: 2px;
   opacity: 1;
   transform-origin: center center;

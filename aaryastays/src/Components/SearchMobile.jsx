@@ -124,12 +124,12 @@ export default function SearchMobile({dropdownArray}) {
                 <div className='text-[#F79489] text-[13px]'>{adultNumber} Adult, {childNumber} Child</div></div>}
                     
                 >
-                    <div className='flex w-100 mb-2 justify-between'>
+                    <div className='flex w-100 mb-2 justify-between items-center'>
                         <div><h1 className='font-bold text-base w-3/5'>Adults</h1><p className='text-gray-400'>Age 8+</p></div>
                         <div className='w-2/5 justify-between  flex '><button className='border mr-2 rounded-full border-2' onClick={decrAdult}>-</button> {adultNumber}<button className='ml-2 border rounded-full' onClick={incrAdult}>+</button></div>
                     </div>
                     <Dropdown.Divider />
-                    <div className='flex w-100 my-2 justify-between'>
+                    <div className='flex w-100 my-2 justify-between  items-center'>
                             <div><h1 className='font-bold text-base w-3/5'>Child</h1><p className='text-gray-400'>Age 0 - 8</p></div>
                             <div className='w-2/5 justify-between  flex'><button onClick={decrChild} className='border mr-2 rounded-full'>-</button> {childNumber}<button onClick={incrChild} className='ml-2 border rounded-full'>+</button></div>
                     </div>

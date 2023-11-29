@@ -153,10 +153,10 @@ export default function Search({dropdownArray}) {
             <Dropdown
                 arrowIcon={true}
                 dismissOnClick={false}
-                className='px-5 py-4'
+                className='px-5 py-4 mt-2'
                 inline
                 label={<div className='text-start  w-full'><div className='text-xl font-medium'>Guests</div>
-            <div className='text-[#F79489]'>{adultNumber} Adult, {childNumber} Child</div></div>}
+            <div className='text-[#F79489] mt-2'>{adultNumber} Adult, {childNumber} Child</div></div>}
                 
             >
                 <div className='flex w-100 mb-2 justify-between'>
