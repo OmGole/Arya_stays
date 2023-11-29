@@ -110,6 +110,12 @@ export default function Orders() {
         
       // },[loading,user])  
 
+
+      const contactUs = ()=>{
+        window.open("https://api.whatsapp.com/send?phone=919136886650&text=Hello%20I%20want%20to%20enquire", "_blank");
+      }
+
+
     
 
 
@@ -136,20 +142,20 @@ export default function Orders() {
                 <h1 className='md:text-3xl font-bold mt-20 underline underline-offset-8 decoration-1'>No Bookings yet!</h1>
                 <Link to="/"><button className='rounded-lg border-2 py-3 px-4 border-slate-800 mt-5 font-medium'> Make your 1st Booking</button></Link>
                 <hr className='my-4'></hr>
-                <h1 className='text-lg  font-medium mb-20'>Confused to find the Homestay? Contact Us</h1>
+                <h1 className='text-lg  font-medium mb-20'>Confused to find the Homestay? <span className='cursor-pointer underline decoration-1' onClick={()=>{contactUs()}}>Contact Us </span></h1>
                 </>):<></>}
                 { selectedTab == 2 ? (pastOrders.length > 0 ? pastOrders.map(order => <OrderCard order={order} validity='past'/>) : <>
                 <h1 className='md:text-3xl font-bold mt-20 underline underline-offset-8 decoration-1'>No Bookings yet!</h1>
                 <Link to="/"><button className='rounded-lg border-2 py-3 px-4 border-slate-800 mt-5 font-medium'> Make your 1st Booking</button></Link>
                 <hr className='my-4'></hr>
-                <h1 className='text-lg font-medium mb-20'>Confused to find the Homestay? Contact Us</h1>
+                <h1 className='text-lg font-medium mb-20'>Confused to find the Homestay? <span className='cursor-pointer underline decoration-1' onClick={()=>{contactUs()}}>Contact Us </span></h1>
                 </> ):<></>}
                 
                 { selectedTab == 3 ? (wishlistProperties.length > 0 ? wishlistProperties.map(prop => <WishListCard property={prop}/>) : <>
                 <h1 className='md:text-3xl font-bold mt-20 underline underline-offset-8 decoration-1'>No WishList yet!</h1>
                 <Link to="/"><button className='rounded-lg border-2 py-3 px-4 border-slate-800 mt-5 font-medium'> Add properties to your wishlist </button></Link>
                 <hr className='my-4'></hr>
-                <h1 className='text-lg font-medium mb-20'>Confused to find the Homestay? Contact Us</h1>
+                <h1 className='text-lg font-medium mb-20'>Confused to find the Homestay? <span className='cursor-pointer underline decoration-1' onClick={()=>{contactUs()}}>Contact Us </span></h1>
                 </> ):<></>}
                 {/* {selectedTab == 1 && currentOrders.map(order => <OrderCard order={order} validity='current'/>)}
                 {selectedTab == 2 && pastOrders.map(order => <OrderCard order={order} validity='past'/>)} */}
