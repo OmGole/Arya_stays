@@ -14,12 +14,18 @@ import emailjs from '@emailjs/browser'
 import { authentication } from '../firebase/config';
 
 
+
 export default function Booking() {
     const {state} = useLocation();
     const dispatch = useDispatch();
     const currOrder = useSelector(state => state.currentOrder.currentOrder);
-    const { property, stateCurrOrder } = state;
-    console.log(stateCurrOrder)
+    // if(state === null){
+    //     navigate('/')
+    // }
+    const [stateCurrOrder,setStateCurrOrder] = useState()
+    const [property,setProperty] = useState()
+    // const { property, stateCurrOrder } = state;
+    // console.log(stateCurrOrder)
     // const userId = useSelector(state => state.user.user.uid);
     const [slideImage,setSlideImage] = useState([])
     const [numberOfNights,setNumberOfNights] = useState()
@@ -31,6 +37,12 @@ export default function Booking() {
 
     // calculate nights
     useEffect(()=>{
+        if (state === null) {
+            navigate('/');
+          }else{
+            const{propertyDetails,stateCurrOrders} = state
+        setStateCurrOrder(stateCurrOrders)
+        setProperty(propertyDetails)
         const [day, month, year] = stateCurrOrder.CheckInDate.split('/').map(Number);
         const checkInDate = new Date(year, month - 1, day);
         const [day2, month2, year2] = stateCurrOrder.CheckOutDate.split('/').map(Number);
@@ -39,6 +51,13 @@ export default function Booking() {
         const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
         const numOfNights = Math.round(differenceInTime / oneDayInMilliseconds);
         setNumberOfNights(numOfNights)
+          }
+    },[])
+    useEffect(()=>{
+        
+        
+        // console.log(state)
+        
     },[])
 
     useEffect(() => {
@@ -74,11 +93,14 @@ export default function Booking() {
     
     // calculate amenities price and amenity title
     useEffect(()=>{
-        const totalSum = stateCurrOrder.amenities.reduce((accumulator, amenity) => {
-            return accumulator + (amenity.price * amenity.qty);
-          }, 0);
-        setAmenitiesPrice(totalSum)
-        getAmenityTitle()
+        if(state!= null){
+            const totalSum = stateCurrOrder.amenities.reduce((accumulator, amenity) => {
+                return accumulator + (amenity.price * amenity.qty);
+              }, 0);
+            setAmenitiesPrice(totalSum)
+            getAmenityTitle()
+        }
+        
     },[])
 
     const getAmenityTitle = async()=>{
@@ -93,7 +115,7 @@ export default function Booking() {
     const WhatsappMessage = () =>{
         console.log(amenityTitle);
 
-        let msg = 'Hello+I%27m+'+user.name+'%2C+I+would+like+to+enquire+about+following+property%0D%0AProperty+%3A+'+ currOrder.Title +'%0D%0ALocation+%3A+'+ currOrder.Location +'%0D%0ACheckInDate+%3A+'+ currOrder.CheckInDate + '%0D%0ACheckOutDate+%3A+'+ currOrder.CheckOutDate +'%0D%0ARoom+Type+%3A+'+ currOrder.RoomType +'%0D%0ANumber+of+Adult+%3A+'+ currOrder.adultNumber +'%0D%0ANumber+of+Child+%3A+'+ currOrder.childNumber +'%0D%0AAmenities+%3A+'+ amenityTitle;
+        let msg = 'Hello+I%27m+'+user.name+'%2C+I+would+like+to+enquire+about+following+property%0D%0AProperty+%3A+'+ stateCurrOrder.Title +'%0D%0ALocation+%3A+'+ stateCurrOrder.Location +'%0D%0ACheckInDate+%3A+'+ stateCurrOrder.CheckInDate + '%0D%0ACheckOutDate+%3A+'+ stateCurrOrder.CheckOutDate +'%0D%0ARoom+Type+%3A+'+ stateCurrOrder.RoomType +'%0D%0ANumber+of+Adult+%3A+'+ stateCurrOrder.adultNumber +'%0D%0ANumber+of+Child+%3A+'+ stateCurrOrder.childNumber +'%0D%0AAmenities+%3A+'+ amenityTitle;
 
 
         window.open('https://api.whatsapp.com/send?phone=919136886650&text='+msg, '_blank', 'noreferrer');
@@ -190,7 +212,9 @@ export default function Booking() {
         return outputDate;
       }
 
-
+      if(state === null){
+        navigate('/')
+    }
   return (
     <div>
         <NavbarC/>
@@ -234,14 +258,14 @@ export default function Booking() {
                         </div>
                     </div>
                     <div className='mt-4'>
-                        <h1 className='font-medium md:text-xl'>{stateCurrOrder.Title}</h1>
-                        <h1 className='text-lg'>{stateCurrOrder.Location}</h1>
-                        <h1 className='text-lg'>Type : {stateCurrOrder.RoomType}</h1>
-                        <h1 className='text-lg'>Total guest : {stateCurrOrder.adultNumber + stateCurrOrder.childNumber}</h1>
-                        <h1 className='text-lg'>Adult : {stateCurrOrder.adultNumber} Children : {stateCurrOrder.childNumber}</h1>
+                        <h1 className='font-medium md:text-xl'>{stateCurrOrder?.Title}</h1>
+                        <h1 className='text-lg'>{stateCurrOrder?.Location}</h1>
+                        <h1 className='text-lg'>Type : {stateCurrOrder?.RoomType}</h1>
+                        <h1 className='text-lg'>Total guest : {stateCurrOrder?.adultNumber + stateCurrOrder?.childNumber}</h1>
+                        <h1 className='text-lg'>Adult : {stateCurrOrder?.adultNumber} Children : {stateCurrOrder?.childNumber}</h1>
                         <div className='flex'>
-                            <div className='w-1/2 pr-2 py-2 text-white font-medium'><div className='bg-[#6ACDE9] md:text-xl p-4 rounded-lg '><h1 className=''>Check In Date</h1>{stateCurrOrder.CheckInDate}</div></div>
-                            <div className='w-1/2 pl-2 py-2 text-white font-medium'><div className='bg-[#6ACDE9] md:text-xl p-4 rounded-lg '><h1 className=''>Check Out Date</h1>{stateCurrOrder.CheckOutDate}</div></div>
+                            <div className='w-1/2 pr-2 py-2 text-white font-medium'><div className='bg-[#6ACDE9] md:text-xl p-4 rounded-lg '><h1 className=''>Check In Date</h1>{stateCurrOrder?.CheckInDate}</div></div>
+                            <div className='w-1/2 pl-2 py-2 text-white font-medium'><div className='bg-[#6ACDE9] md:text-xl p-4 rounded-lg '><h1 className=''>Check Out Date</h1>{stateCurrOrder?.CheckOutDate}</div></div>
                         </div>
                     </div>
                 </div>
@@ -250,16 +274,16 @@ export default function Booking() {
                         <h1 className='text-xl text-[#949494] font-medium'>Price Details</h1>
                     </div>
                     <div className='p-4 border-b-2 flex justify-between items-center'>
-                        <div><h1 className='text-lg font-medium'>Stay Amount</h1><h1>{stateCurrOrder.adultNumber} Adults x {numberOfNights} Nights</h1></div>
-                        <div><h1 className='text-[#268F43] font-bold'>RS {property.price}/-</h1></div>
+                        <div><h1 className='text-lg font-medium'>Stay Amount</h1><h1>{stateCurrOrder?.adultNumber} Adults x {numberOfNights} Nights</h1></div>
+                        <div><h1 className='text-[#268F43] font-bold'>RS {property?.price}/-</h1></div>
                     </div>
                     <div className='p-4 border-b-2 flex justify-between items-center'>
-                        <div><h1 className='text-lg font-medium'>Total Service Charges</h1><h1>( {stateCurrOrder.amenities.length} Items)</h1></div>
+                        <div><h1 className='text-lg font-medium'>Total Service Charges</h1><h1>( {stateCurrOrder?.amenities.length} Items)</h1></div>
                         <div><h1 className='text-[#268F43] font-bold'>RS {amenitiesPrice} /-</h1></div>
                     </div>
                     <div className='p-4 border-b-2 flex justify-between items-center'>
                         <div><h1 className='text-lg font-medium'>Amount to be Paid</h1></div>
-                        <div><h1 className='text-[#268F43] font-bold'>RS {property.price + amenitiesPrice}/-</h1></div>
+                        <div><h1 className='text-[#268F43] font-bold'>RS {property?.price + amenitiesPrice}/-</h1></div>
                     </div>
                     <div className='p-4 border-b-2'>
                     <button onClick={() => setOpenModal(true)} className=' bg-[#F79489] w-full md:text-xl text-xl py-2 rounded font-medium text-white'>Book Now</button>

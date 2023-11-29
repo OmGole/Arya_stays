@@ -5,7 +5,7 @@ import FooterC from '../Components/FooterC';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentOrders, getPastOrders } from '../Store/orderSlice';
 import OrderCard from '../Components/OrderCard';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import api from '../api/api';
 import { authentication } from '../firebase/config';
@@ -76,8 +76,11 @@ export default function Orders() {
         
       }
 
+      const navigate = useNavigate()
+
       useEffect(() => {
         if (!loading && user) {
+          console.log(user)
           if (selectedTab === 1) {
             dispatch(getCurrentOrders(user.uid));
           } else if (selectedTab === 2) {
@@ -95,7 +98,17 @@ export default function Orders() {
             fetchWishlist();
           }
         }
+        if(!loading && user === null){
+          alert("You must be Logged in")
+          navigate('/')
+        }
+        
+        
       }, [selectedTab, user, loading, dispatch]);
+
+      // useEffect(()=>{
+        
+      // },[loading,user])
 
     
 
@@ -131,7 +144,13 @@ export default function Orders() {
                 <hr className='my-4'></hr>
                 <h1 className='text-lg font-medium mb-20'>Confused to find the Homestay? Contact Us</h1>
                 </> ):<></>}
-                { selectedTab == 3 ? wishlistProperties.map(prop => <WishListCard property={prop}/>):<></>}
+                
+                { selectedTab == 3 ? (wishlistProperties.length > 0 ? wishlistProperties.map(prop => <WishListCard property={prop}/>) : <>
+                <h1 className='md:text-3xl font-bold mt-20 underline underline-offset-8 decoration-1'>No WishList yet!</h1>
+                <Link to="/"><button className='rounded-lg border-2 py-3 px-4 border-slate-800 mt-5 font-medium'> Add properties to your wishlist </button></Link>
+                <hr className='my-4'></hr>
+                <h1 className='text-lg font-medium mb-20'>Confused to find the Homestay? Contact Us</h1>
+                </> ):<></>}
                 {/* {selectedTab == 1 && currentOrders.map(order => <OrderCard order={order} validity='current'/>)}
                 {selectedTab == 2 && pastOrders.map(order => <OrderCard order={order} validity='past'/>)} */}
 

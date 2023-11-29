@@ -279,7 +279,7 @@ export default function Individual() {
   const [user,setUser] = useState(null)
   const navigateToBook = () =>{
     if(user){
-      navigate('/booking',{state:{property,stateCurrOrder:currOrder}})
+      navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder}})
     }else{
       alert("You must be logged in")
     }
@@ -344,7 +344,7 @@ export default function Individual() {
       <div ref={myRef}></div>
       {/* Search Components */}
       <div>
-      <div className="sticky top-5 z-50">
+      <div className="sticky top-5 z-20">
         <div className="container md:block hidden  pt-16 mx-auto ">
           <div className="flex flex-wrap border-2 mx-28  border-slate-300/50 custom-shadow content-center divide-x	  rounded-lg">
             <div class="lg:w-2/6 dropdown bg-white px-5  py-2 ...">
@@ -376,7 +376,7 @@ export default function Individual() {
               <Dropdown
                 arrowIcon={true}
                 dismissOnClick={false}
-                className="px-5 py-4"
+                className="px-5 py-4 z-50"
                 inline
                 label={
                   <div className="text-start  w-full">

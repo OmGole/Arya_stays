@@ -6,6 +6,8 @@ import FooterC from '../Components/FooterC';
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { createUser, editUser, getUserById } from '../Store/userSlice';
+import { authentication } from '../firebase/config';
+import { useNavigate } from 'react-router-dom';
 
 export default function Profile() {
 
@@ -71,8 +73,36 @@ export default function Profile() {
         
     }
 
+    const [userget,setUser] = useState(null)
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
-        dispatch(getUserById(user.user.uid));
+        const unsubscribe = authentication.onAuthStateChanged(async (currentUser) => {
+            if (currentUser) {
+              setUser(currentUser);
+              setLoading(false); // User data is available, so set loading to false
+      
+            } else {
+              setUser(null);
+              setLoading(false); // User data is not available, set loading to false
+              // Reset wishlist if user is not available
+            }
+          });
+      
+          return () => unsubscribe();
+    }, []);
+
+    const navigate = useNavigate()
+    useEffect(() => {
+        // console.log(user)
+        if(!loading && userget === null){
+            alert("you must me logged in")
+            navigate('/')
+        }
+    },[user, loading])
+    useEffect(() => {
+        if(!loading && userget){
+            dispatch(getUserById(userget.uid));
+        }
     },[])
 
     useEffect(() => {
