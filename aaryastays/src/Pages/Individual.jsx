@@ -28,16 +28,17 @@ export default function Individual() {
   const routeParams = useParams();
   const routeParamsID = routeParams.id;
   const [showOnDemand, setShowOnDemand] = useState(false);
-
+  
   const dispatch = useDispatch();
   const currOrder = useSelector((state) => state.currentOrder.currentOrder);
+  const [price, setPrice] = useState();
   const property = useSelector((state) => state.property.propertyById);
   const heading_img = useSelector((state) => state.image.headingImage);
   const [essentialAmenities, setEssentialAmenities] = useState([]);
   const [extraAmenities, setExtraAmenities] = useState([]);
   const [addedOnDemand, setAddedOnDemand] = useState(new Set());
   const [amenitiesPrice, setAmenitiesPrice] = useState();
-
+  const [allEvents, setAllEvents] = useState([]);
   const [headingImage, setHeadingImage] = useState("");
 
   useEffect(() => {
@@ -78,6 +79,7 @@ export default function Individual() {
       setPrice(data.payload.price);
       console.log(data.payload.amenities);
       getAmenities(data.payload.amenities);
+      getEvents(data.payload.events);
       dispatch(getHeadingImages(data.payload.currentLocation_images[0])).then(
         (data) => {
           setHeadingImage(data.payload.url);
@@ -87,8 +89,8 @@ export default function Individual() {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(currOrder);
-  }, [currOrder]);
+    overLap();
+  }, [allEvents]);
 
   const getAmenities = async (prop) => {
     try {
@@ -111,6 +113,29 @@ export default function Individual() {
       console.log(err);
     }
   };
+
+  const getEvents = async (events) => {
+    const fethcedEvents = await Promise.all(
+      events.map(async (id) => {
+        const result = await api.get(`/api/v1/event/${id}`);
+        return result.data;
+      })
+    );
+    setAllEvents(fethcedEvents);
+  }
+
+  const overLap = () => {
+    for (let i = 0; i < allEvents.length; i++) {
+      const d1 = new Date(allEvents[i].start);
+      const d2 = new Date();
+      const d3 = new Date(allEvents[i].end);
+      const d4 = d2;
+      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
+        setPrice(allEvents[i].title);
+        return;
+      }
+    } 
+  }
 
   const addOnDemand = (item) => {
     const obj = {
@@ -266,7 +291,6 @@ export default function Individual() {
     }
   };
 
-  const [price, setPrice] = useState(7000);
 
   const [roomType, setRoomType] = useState(currOrder.RoomType);
 

@@ -13,6 +13,7 @@ import { createSlide, deleteSlide } from "../Store/slideSlice";
 import DashBoardCalender from "../Components/DashBoardCalender";
 import { deleteEvent } from "../Store/eventSlice";
 import { deleteOrdersByPropertyId } from "../Store/orderSlice";
+import { deleteReview } from "../Store/reviewSlice";
 
 const DashBoardEditProperty = () => {
   const { id } = useParams();
@@ -248,10 +249,12 @@ const DashBoardEditProperty = () => {
 
     property.events.forEach(id => dispatch(deleteEvent(id)).then(data => console.log("events")));
 
+    property.reviews.forEach(id => dispatch(deleteReview(id)).then(data => console.log("events")));
+
     dispatch(deleteOrdersByPropertyId(id));
 
-
     dispatch(deleteProperty(property._id));
+
     navigate("/dashboard/property");
   }
 

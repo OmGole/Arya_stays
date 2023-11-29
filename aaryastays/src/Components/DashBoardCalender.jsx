@@ -8,7 +8,7 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Modal } from "flowbite-react";
 import { useDispatch } from "react-redux";
-import { createEvent, editEvent, getOverlap } from "../Store/eventSlice";
+import { createEvent, deleteEvent, editEvent } from "../Store/eventSlice";
 import api from "../api/api";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
@@ -79,14 +79,17 @@ function DashBoardCalender( { property } ) {
   function handleEditEvent(e) {
     e.preventDefault();
     const newEvent = {};
-    console.log(modalData);
     if (price) newEvent.title = Number(price);
 
     if (checkInDate) newEvent.start = checkInDate;
     else newEvent.start = modalData.start;
 
-    if (checkOutDate) newEvent.end = checkOutDate;
-    else newEvent.end = modalData.end;
+    if (checkOutDate) {
+      newEvent.end = checkOutDate;
+    } else {
+      newEvent.end = modalData.end;
+    } 
+
 
     for (let i = 0; i < allEvents.length; i++) {
       if(allEvents[i]._id == modalData._id) continue;
@@ -117,6 +120,19 @@ function DashBoardCalender( { property } ) {
     setAllEvents(events);
   }
 
+  const overLap = () => {
+    for (let i = 0; i < allEvents.length; i++) {
+      const d1 = new Date(allEvents[i].start);
+      const d2 = new Date();
+      const d3 = new Date(allEvents[i].end);
+      const d4 = d2;
+      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
+        setTodayPrice(allEvents[i].title);
+        return;
+      }
+    } 
+  }
+
 
   const handleCheckIn = (date) => {
     console.log(date);
@@ -125,8 +141,12 @@ function DashBoardCalender( { property } ) {
 
   const handleDeleteEvent = (e) => {
     e.preventDefault();
-
+    const propertyDetails = { propertyId:property._id, type:"events"}
+    const data = {id:modalData._id, propertyDetails};
+    console.log(data)
+    dispatch(deleteEvent(data));
     setOpenModal(false);
+    
   }
 
   const handleCheckOut = (date) => {
@@ -146,13 +166,7 @@ function DashBoardCalender( { property } ) {
   }, [openModal]);
 
   useEffect(() => {
-    dispatch(getOverlap()).then(data => {
-      if(data.payload.length != 0) {
-        setTodayPrice(data.payload[0].title);
-      } else {
-        setTodayPrice(property.price);
-      }
-    });
+    overLap();
   },[allEvents])
 
   useEffect(() => {

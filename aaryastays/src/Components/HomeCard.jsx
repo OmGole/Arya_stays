@@ -8,16 +8,21 @@ import api from '../api/api';
 
 export default function HomeCard1({property}) {
 
-
+  const [price,setPrice] = useState(property.price);
+  const [allEvents, setAllEvents] = useState([]);
   const [slideImage,setSlideImage] = useState([])
   const [essentialAmenities, setEssentialAmenities] = useState([]);
   const [extraAmenities, setExtraAmenities] = useState([]);
-  
-  console.log(property)
+
   useEffect(() => {
     getSlideImage();
     getAmenities();
+    getEvents();
   },[property]);
+
+  useEffect(() => {
+    overLap();
+  },[allEvents])
 
   const getSlideImage = async()=>{
     try{
@@ -35,6 +40,28 @@ export default function HomeCard1({property}) {
       console.log(err)
     }
   }
+  const getEvents = async (e) => {
+    const events = await Promise.all(
+      property.events.map(async (id) => {
+        const result = await api.get(`/api/v1/event/${id}`);
+        return result.data;
+      })
+    );
+    setAllEvents(events);
+  }
+
+  const overLap = () => {
+    for (let i = 0; i < allEvents.length; i++) {
+      const d1 = new Date(allEvents[i].start);
+      const d2 = new Date();
+      const d3 = new Date(allEvents[i].end);
+      const d4 = d2;
+      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
+        setPrice(allEvents[i].title);
+        return;
+      }
+    } 
+  }
 
   const getAmenities = async()=>{
     try{
@@ -45,7 +72,7 @@ export default function HomeCard1({property}) {
             return result.data;
         }
       ));
-      console.log(new_amenities)
+
       // setAmenities(new_amenities)
       const essential = new_amenities.filter(amenity => amenity.type === 'essential');
       const extra = new_amenities.filter(amenity => amenity.type === 'extra');
@@ -57,9 +84,7 @@ export default function HomeCard1({property}) {
     }
   }
 
-  useEffect(()=>{
-    console.log(slideImage)
-  },[slideImage])
+
   return (
     <Link to={`/property/${property._id}`}>
     <div className='flex  md:flex-row  flex-col-reverse custom-align-home mt-20 pb-2   '>
@@ -89,7 +114,7 @@ export default function HomeCard1({property}) {
               <div className='flex mx-1 px-2 items-center  text-sm'><img src={DormRoom} alt='dorm' className='mr-1'></img> Dorm Room</div> */}
           </div>
           <p className='md:pr-10 text-justify px-2 text-sm md:text-medium md:block hidden'>{property.room_description.substring(0,310)}</p>
-          <div className='mt-2'><b className=''>Starting from</b><span className='py-1 px-2 ml-2 border-2 rounded-lg border-green-500 text-green-500 font-medium'>Rs {property.price}/-</span></div>
+          <div className='mt-2'><b className=''>Starting from</b><span className='py-1 px-2 ml-2 border-2 rounded-lg border-green-500 text-green-500 font-medium'>Rs {price}/-</span></div>
         </div>
         <div className=' rounded p-2 img-border md:aspect-auto aspect-square bg-slate-100 w-80'>
           <Carousel>

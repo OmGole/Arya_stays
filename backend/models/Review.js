@@ -6,9 +6,9 @@ const ReviewSchema = new mongoose.Schema({
     ref:'User',
     required:true
   },
-  orderId:{
+  propertyId:{
     type:mongoose.Types.ObjectId,
-    ref:'Order',
+    ref:'Property',
     required:true
   },
   rating:{

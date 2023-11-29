@@ -7,6 +7,7 @@ import api from "../api/api";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css";
 import { DateRangePicker } from "react-date-range";
+import DashBoardNavbar from "../Components/DashBoardNavbar";
 
 function DashBoardOrders() {
   const order = useSelector((state) => state.order);
@@ -14,7 +15,7 @@ function DashBoardOrders() {
   const [search, setSearch] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [apply, setApply] = useState(true);
+  const [apply, setApply] = useState(false);
 
   useEffect(() => {
     dispatch(allOrders());
@@ -42,6 +43,7 @@ function DashBoardOrders() {
 
   return (
     <>
+    <DashBoardNavbar/>
       <div className="md:container mx-auto pt-5 md:px-10 px-6 mb-5">
         <div>
           <div className="md:container mx-auto relative">

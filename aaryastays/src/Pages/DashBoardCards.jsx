@@ -4,6 +4,7 @@ import { getAllCards } from "../Store/cardSlice";
 import DashBoardCardRow from "../Components/DashBoardCardRow";
 
 import AddCardModal from "../Components/AddCardModal";
+import DashBoardNavbar from "../Components/DashBoardNavbar";
 
 function DashBoardCards() {
   const cards = useSelector((state) => state.card);
@@ -17,6 +18,7 @@ function DashBoardCards() {
 
   return (
     <>
+      <DashBoardNavbar/>
       <div className="md:container mx-auto pt-5 md:px-10 px-6 mb-5">
         <div>
           <div className="md:container mx-auto relative">
