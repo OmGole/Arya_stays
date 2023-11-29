@@ -19,6 +19,8 @@ import { getSingleCard } from "../Store/cardSlice";
 import api from "../api/api";
 import ReactFlipCard from "reactjs-flip-card";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { authentication } from "../firebase/config";
 
 import { Dropdown, Datepicker, Modal } from "flowbite-react";
 import { updateOrder } from "../Store/currentOrderSlice";
@@ -259,6 +261,30 @@ export default function Individual() {
     setAmenitiesInfo(data);
   }
 
+  useEffect(() => {
+    const unsubscribe = authentication.onAuthStateChanged(async (currentUser) => {
+        if (currentUser) {
+          setUser(currentUser);
+        } else {
+          setUser(null);
+        }
+      });
+  
+      return () => unsubscribe();
+    
+  }, []);
+
+  let navigate = useNavigate(); 
+  
+  const [user,setUser] = useState(null)
+  const navigateToBook = () =>{
+    if(user){
+      navigate('/booking',{state:{property,stateCurrOrder:currOrder}})
+    }else{
+      alert("You must be logged in")
+    }
+
+  };
   //    Amenities Logic
 
   if (!property || !property.cards) {
@@ -825,11 +851,11 @@ export default function Individual() {
       )}
 
       <div id="amenites" className="md:mx-20 mx-4 w-100 mt-10 text-center">
-        <Link to="/booking" state={{property}}>
-          <button className=" bg-[#F79489] md:w-1/2 w-full md:text-3xl text-xl md:py-4 py-2 rounded font-medium text-white">
+        {/* <Link to="/booking" state={{property}}> */}
+          <button onClick={()=>{navigateToBook()}} className=" bg-[#F79489] md:w-1/2 w-full md:text-3xl text-xl md:py-4 py-2 rounded font-medium text-white">
             Book Now
           </button>
-        </Link>
+        {/* </Link> */}
       </div>
 
       {/* <div className="w-100 md:mx-20 mx-10 rounded-lg overflow-auto">
