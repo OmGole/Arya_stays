@@ -73,7 +73,7 @@ export default function HomeCard2({property, wishlist}) {
   const toggleClass = async () => {
     try {
       if (!user) {
-        alert('You must be logged in')
+        alert('You must be logged in and details must fill user details on profile page')
         return;
       }
       if (isInWishlist) {
