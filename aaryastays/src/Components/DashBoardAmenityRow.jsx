@@ -11,10 +11,11 @@ import { deleteAmenity } from "../Store/amenitySlice";
 function DashBoardAmenityRow({ amenity }) {
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState();
-  const handleDelete = () => {
+  const handleDelete = (e) => {
+    e.preventDefault();
     dispatch(deleteAmenity(amenity._id));
   };
-  console.log(amenity);
+
 
   return (
     <div className="md:flex text-center py-9 md:justify-center content-center items-center border-b-2 border-black">

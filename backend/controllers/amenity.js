@@ -1,4 +1,5 @@
 const Amenity = require('../models/Amenity');
+const Property = require('../models/Property');
 const cloudinary = require('../utils/cloudinary');
 
 const getAllAmenities = async (req,res) => {
@@ -81,6 +82,9 @@ const deleteAmenity = async (req,res) => {
     if(!amenity) {
       return res.status(404).json({msg:`No task with id: ${amenityID}`});
     }
+
+    await Property.updateMany({}, {$pull: {amenities: {$in: amenityID}}});
+
     const imgId = amenity.icon.public_id;
     await cloudinary.uploader.destroy(imgId);
 

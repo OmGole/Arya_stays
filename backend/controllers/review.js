@@ -43,9 +43,28 @@ const getReviewsByReviewId = async (req,res) => {
   return res.status(200).json(review);
 }
 
+const deleteReview = async (req,res) => {
+  try {
+    const {id:reviewId} = req.params;
+    const review = await Review.findById({_id:reviewId});
+
+    if(!review) {
+      return res.status(404).json({msg:`No review with id: ${reviewId}`});
+    }
+
+    await Review.findByIdAndDelete({_id:reviewId});
+    return res.status(200).json(review);  
+    } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
 module.exports = {
   getAllReviews,
   createReview,
-  getReviewsByReviewId
+  getReviewsByReviewId,
+  deleteReview
 }
 

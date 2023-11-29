@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { BiTrash } from "react-icons/bi";
 import { FaRegEdit } from "react-icons/fa";
 import api from '../api/api';
-import { editImage } from '../Store/imageSlice';
+import { deleteImage, editImage } from '../Store/imageSlice';
 import { useDispatch } from 'react-redux';
 
-const Image = ({ id, file }) => {
+const Image = ({ id, file,type, propertyId }) => {
   const dispatch = useDispatch();
   const [image,setImage] = useState();
 
@@ -40,6 +40,10 @@ const Image = ({ id, file }) => {
 
   const handleImageDelete = (e) => {
     e.preventDefault();
+    const propertyDetails = { propertyId, type}
+    const data = {id, propertyDetails};
+    console.log(data)
+    dispatch(deleteImage(data));
   }
 
 

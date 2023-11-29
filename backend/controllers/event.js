@@ -51,6 +51,21 @@ const getEvent = async (req,res) => {
   }  
 }
 
+const getOverlap = async (req,res) => {
+  try {
+    const today = new Date();
+    const event = await Event.find({start : { $lte : today} , end : { $gte: today }});
+
+    if(!event) {
+      return res.status(401).json({msg:`No event overlap use default price`});
+    }
+
+    return res.status(201).json(event);  
+  } catch (error) {
+    console.log(error);
+  }  
+}
+
 const updateEvent = async (req,res) => {
   try {
     const {id:eventID} = req.params;
@@ -86,4 +101,4 @@ const deleteEvent = async (req,res) => {
   }
 }
 
-module.exports = {getAllEvents,createEvent,getEvent,updateEvent,deleteEvent};
+module.exports = {getAllEvents,createEvent,getEvent,updateEvent,deleteEvent, getOverlap};

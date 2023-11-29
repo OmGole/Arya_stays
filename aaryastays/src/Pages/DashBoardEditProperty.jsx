@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAmenity } from "../Store/amenitySlice";
 import { getAllCards } from "../Store/cardSlice";
-import { editProperty, getPropertyById } from "../Store/propertySlice";
-import { useParams } from "react-router-dom";
+import { deleteProperty, editProperty, getPropertyById } from "../Store/propertySlice";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api";
+import { BiTrash } from "react-icons/bi";
 import Image from "../Components/Image";
-import { createImage } from "../Store/imageSlice";
+import { createImage, deleteImage } from "../Store/imageSlice";
 import DashBoardSlide from "../Components/DashBoardSlide";
-import { createSlide } from "../Store/slideSlice";
+import { createSlide, deleteSlide } from "../Store/slideSlice";
 import DashBoardCalender from "../Components/DashBoardCalender";
+import { deleteEvent } from "../Store/eventSlice";
+import { deleteOrdersByPropertyId } from "../Store/orderSlice";
 
 const DashBoardEditProperty = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const amenitiesList = useSelector((state) => state.amenity);
   const cardsList = useSelector((state) => state.card);
 
@@ -181,12 +185,12 @@ const DashBoardEditProperty = () => {
     e.preventDefault();
     let base64s = [];
     const files = e.target.files;
-    for(let i=0;i<files.length;i++) {
+    for (let i = 0; i < files.length; i++) {
       const base64 = await convertBase64(files[i]);
       base64s.push(base64);
     }
     setSlideImages(base64s);
-  }
+  };
 
   const handleSlideDescription = (e) => {
     setSlide_description(e.target.value);
@@ -216,9 +220,13 @@ const DashBoardEditProperty = () => {
 
   const handleAddSlide = (e) => {
     e.preventDefault();
-    const slide = {propertyId:id,images:slideImages,description:slide_description};
+    const slide = {
+      propertyId: id,
+      images: slideImages,
+      description: slide_description,
+    };
     dispatch(createSlide(slide));
-  }
+  };
 
   const handleAmenityChange = (event) => {
     console.log(amenities);
@@ -229,6 +237,23 @@ const DashBoardEditProperty = () => {
       setAmenities(amenities?.filter((item) => item !== value));
     }
   };
+
+  const handlePropertyDelete = (e) => {
+    e.preventDefault();
+    property.ats_image.forEach(id => dispatch(deleteImage(id)).then(data => console.log("ats")));
+
+    property.currentLocation_images.forEach(id => dispatch(deleteImage(id)).then(data => console.log("currentLocation_images")));
+
+    property.slides.forEach(id => dispatch(deleteSlide(id)).then(data => console.log("slides")));
+
+    property.events.forEach(id => dispatch(deleteEvent(id)).then(data => console.log("events")));
+
+    dispatch(deleteOrdersByPropertyId(id));
+
+
+    dispatch(deleteProperty(property._id));
+    navigate("/dashboard/property");
+  }
 
   const handleEditProperty = async (e) => {
     e.preventDefault();
@@ -287,16 +312,18 @@ const DashBoardEditProperty = () => {
     }
   }, [property]);
 
-  useEffect(() => {
-    console.log(cimage);
-  }, [cimage]);
 
   return (
     <div>
       <div className="bg-white px-8 py-5 rounded mx-auto box-border w-3/4">
-        <h2 className="text-3xl mb-3 text-center font-poppins">
-          Edit Property
-        </h2>
+        <div className="flex justify-between mb-10">
+          <h2 className="text-3xl text-center font-poppins">
+            Edit Property
+          </h2>
+          <button onClick={handlePropertyDelete}>
+            <BiTrash className="block bg-red-500 text-white p-3 text-5xl rounded-xl hover:bg-red-600 hover:cursor-pointer" />
+          </button>
+        </div>
         <form action="" className="font-montserrat text-sm">
           <div className="mb-3">
             <button
@@ -602,7 +629,7 @@ const DashBoardEditProperty = () => {
         <div class="grid grid-cols-3 gap-4">
           {property && property.currentLocation_images.length > 0 ? (
             property.currentLocation_images.map((id) => (
-              <Image id={id} file={cimage} />
+              <Image id={id} file={cimage} propertyId={property._id} type={"currentLocation_images"} />
             ))
           ) : (
             <h2 className="basis-3/4 text-l font-semibold">No Images Added.</h2>
@@ -632,7 +659,7 @@ const DashBoardEditProperty = () => {
         )}
         <div class="grid grid-cols-3 gap-4">
           {property && property.ats_image.length > 0 ? (
-            property.ats_image.map((id) => <Image id={id} file={aimage} />)
+            property.ats_image.map((id) => <Image id={id} file={aimage} propertyId={property._id} type={"ats_image"}/>)
           ) : (
             <h2 className="basis-3/4 text-l font-semibold">No Images Added.</h2>
           )}
@@ -643,7 +670,13 @@ const DashBoardEditProperty = () => {
         <div>
           <form action="" className="font-montserrat text-sm">
             <div className="mb-3">
-              <input type="file" multiple accept="image/" className="mr-5" onChange={handleSlideImages}/>
+              <input
+                type="file"
+                multiple
+                accept="image/"
+                className="mr-5"
+                onChange={handleSlideImages}
+              />
             </div>
             <div className="mb-3">
               <textarea
@@ -667,7 +700,7 @@ const DashBoardEditProperty = () => {
         </button>
         <div class="">
           {property && property.slides.length > 0 ? (
-            property.slides.map((id) => <DashBoardSlide id={id} />)
+            property.slides.map((id) => <DashBoardSlide id={id} propertyId={property._id} type={"slides"}/>)
           ) : (
             <h2 className="basis-3/4 text-l font-semibold">No Slides Added.</h2>
           )}

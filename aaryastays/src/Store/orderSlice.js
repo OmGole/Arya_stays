@@ -9,6 +9,7 @@ const initialState = {
   ordersByUserId:[],
   current:[],
   past:[],
+  deleteOrdersCount:0,
   error:''
 };
 
@@ -85,6 +86,18 @@ export const deleteOrder = createAsyncThunk(
   }
 );
 
+export const deleteOrdersByPropertyId = createAsyncThunk(
+  'order/removeOrdersByPropertyId',
+  async (id, {rejectWithValue}) => {
+    try {
+      const response = await api.delete(`/api/v1/order/property/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 
 export const orderSlice = createSlice({
   name: 'order',
@@ -152,6 +165,16 @@ export const orderSlice = createSlice({
     [deleteOrder.rejected] : (state, { payload }) => {
       console.log(payload);
       state.deletedOrder = {};
+      state.error = payload;
+    },
+    [deleteOrdersByPropertyId.fulfilled] : (state,{ payload }) => {
+      console.log(payload);
+      state.deleteOrdersCount = payload;
+      state.error = '';
+    },
+    [deleteOrdersByPropertyId.rejected] : (state, { payload }) => {
+      console.log(payload);
+      state.deleteOrdersCount = 0;
       state.error = payload;
     },
   },

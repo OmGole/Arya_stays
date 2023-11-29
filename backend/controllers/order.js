@@ -105,6 +105,17 @@ const deleteOrder = async (req,res) => {
   return res.status(200).json(order);  
 }
 
+const deleteOrdersByPropertyId = async (req,res) => {
+  const {id:propertyId} = req.params;
+  const orders = await Order.deleteMany({propertyId:propertyId});
+  
+  if(!orders) {
+    return res.status(404).json({msg:`No orders with proeprty id: ${propertyId}`});
+  }
+
+  return res.status(200).json(orders);  
+}
+
 
 module.exports = {
   getOrders,
@@ -114,5 +125,6 @@ module.exports = {
   deleteOrder,
   getPastOrders,
   getCurrentOrders,
-  getSingleOrderById
+  getSingleOrderById,
+  deleteOrdersByPropertyId
 }

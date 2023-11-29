@@ -12,6 +12,7 @@ const DashBoardSingleOrder = () => {
   const [property, setProperty] = useState();
   const [order, setOrder] = useState();
   const [user, setUser] = useState();
+  const [formattedAmenities, setFormattedAmenities] = useState();
 
   const formatDate = (isoDateString) => {
     const dateObject = new Date(isoDateString);
@@ -26,10 +27,12 @@ const DashBoardSingleOrder = () => {
     const newOrder = {status:"accepted"};
     updatedOrder.newOrder = newOrder;
     dispatch(editOrder(updatedOrder)).then((res) => setOrder(res.payload));
+    // whatsapp
   }
   
   const handleReject = () => {
     dispatch(deleteOrder(order._id));
+    // whatsapp
     navigate("/dashboard/order");
   }
 
@@ -45,18 +48,31 @@ const DashBoardSingleOrder = () => {
 
   const getOrder = async () => {
     const response = await api.get(`api/v1/order/${id}`);
+    console.log(response.data[0]);
     setOrder(response.data[0]);
+  }
+
+  const getFormatedAmenities = async () => {
+    const amenities = await Promise.all(
+      order.amenities.map(async (amenity) => {
+        const response = await api.get(`/api/v1/amenity/${amenity.id}`);
+        console.log(response.data);
+        const formatedAmenity =  { title: response.data.title, price: amenity.price, qty: amenity.qty};
+        return formatedAmenity;
+      })
+    );
+    setFormattedAmenities(amenities);
   }
 
   useEffect(()=>{
     getOrder();
-    
   },[]);
 
   useEffect(() => {
     if(order) {
       getUser();
       getProperty();
+      getFormatedAmenities();
 
       const totalSum = order.amenities.reduce((accumulator, amenity) => {
         return accumulator + (amenity.price * amenity.qty);
@@ -84,10 +100,13 @@ const DashBoardSingleOrder = () => {
             <h2>Guests : {`${order?.guest?.adult} adults and ${order?.guest?.children} children`}</h2>
           </div>
           <div className='mb-1 text-lg'>
-            <h2>Price : {property?.price + amenitiesPrice}</h2>
+            <h2>Price : ₹{property?.price}</h2>
           </div>
           <div className='mb-1 text-lg'>
-            <h2>Amenities : </h2>
+            <h2>Amenities : {formattedAmenities?.map(amenity => `${amenity.title}, Price: ₹${amenity.price}, qty: ${amenity.qty}`)}</h2>
+          </div>
+          <div className='mb-1 text-lg'>
+            <h2>Amenities Price : ₹{amenitiesPrice}</h2>
           </div>
           <div className='mb-1 text-lg'>
             <h2>Check In : {formatDate(order?.check_in)}</h2>

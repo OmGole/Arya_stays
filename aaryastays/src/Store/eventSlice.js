@@ -7,6 +7,7 @@ const initialState = {
   createdEvent: {},
   deletedEvent: {},
   updatedEvent: {},
+  overlap:{},
   error: "",
 };
 
@@ -16,6 +17,18 @@ export const getAllEvents = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await api.get(`/api/v1/event`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getOverlap = createAsyncThunk(
+  "event/fetchOverlappingEvent",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/api/v1/event/overlap`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -90,6 +103,16 @@ export const eventSlice = createSlice({
     [getAllEvents.rejected]: (state, { payload }) => {
       console.log(payload);
       state.allEvents = {};
+      state.error = payload;
+    },
+    [getOverlap.fulfilled]: (state, { payload }) => {
+      console.log(payload);
+      state.overlap = payload;
+      state.error = "";
+    },
+    [getOverlap.rejected]: (state, { payload }) => {
+      console.log(payload);
+      state.overlap = {};
       state.error = payload;
     },
     [getEventById.fulfilled]: (state, { payload }) => {

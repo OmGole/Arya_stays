@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DashBoardItems from "../Components/DashBoardOrderRow";
 import { useSelector, useDispatch } from "react-redux";
-import { allOrders } from "../Store/orderSlice";
-import DashBoardOrderRow from "../Components/DashBoardOrderRow";
 import DashBoardPropertyRow from "../Components/DashBoardPropertyRow";
 import { getAllProperties } from "../Store/propertySlice";
 import { Link } from "react-router-dom";
@@ -32,6 +29,9 @@ function DashBoardProperties() {
               <h2 className="text-center text-3xl mb-9">Properties</h2>
             </div>
             <div>
+            <input type="text" className='w-full border-2 rounded-xl py-1 px-5 font-montserrat mb-5' value={search} onChange={handleSearch} placeholder="Search by Property Name"/>
+            </div>
+            <div>
               <Link
                 className="block text-center w-full bg-[#F79489] text-white py-1 px-5 rounded-xl hover:bg-white hover:text-[#F79489] border-2 border-secondary transition duration-200 box-border text-l mb-5 font-poppins" to="/dashboard/property/add"
               >
@@ -59,7 +59,7 @@ function DashBoardProperties() {
           </div>
         </div>
         {properties &&
-          properties.allProperties.map((property) => <DashBoardPropertyRow property={property} />)}
+          properties.allProperties.map((property) => <DashBoardPropertyRow search={search} property={property} />)}
       </div>
     </>
   );

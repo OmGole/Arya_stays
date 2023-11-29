@@ -18,16 +18,6 @@ const SlideSchema = new mongoose.Schema({
   }
 });
 
-SlideSchema.pre('findOneAndDelete', function(next) {
-  const slide = this;
-  console.log(this._id);
-  mongoose.model("Property").updateOne(
-      { slides: { $in: [slide._id] } }, 
-      { $pull: { slides: slide._id } },  
-      { multi: true },
-      next);
-});
-
 
 
 module.exports = mongoose.model('Slide',SlideSchema);

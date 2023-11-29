@@ -5,7 +5,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { deleteSlide, editSlide } from "../Store/slideSlice";
 import { useDispatch } from "react-redux";
 
-const DashBoardSlide = ({ id }) => {
+const DashBoardSlide = ({ id, propertyId, type }) => {
   const dispatch = useDispatch();
   const [slide, setSlide] = useState();
   const [image, setImage] = useState();
@@ -62,15 +62,18 @@ const DashBoardSlide = ({ id }) => {
     dispatch(editSlide(updatedSlide));
   }
 
-  const handleImageDelete = (e) => {
-    e.preventDefault();
+  // const handleImageDelete = (e) => {
+  //   e.preventDefault();
     
-  }
+    
+  // }
 
   const handleSlideDelete = (e) => {
     e.preventDefault();
-    console.log(id);
-    dispatch(deleteSlide(id));
+    const propertyDetails = { propertyId, type}
+    const data = {id, propertyDetails};
+    console.log(data)
+    dispatch(deleteSlide(data));
   }
 
   useEffect(() => {
@@ -108,11 +111,11 @@ const DashBoardSlide = ({ id }) => {
                     <FaRegEdit className="block mx-auto bg-green-500 text-white p-3 text-5xl rounded-xl hover:bg-green-600 hover:cursor-pointer mb-5" />
                   </button>
                 </li>
-                <li class="">
+                {/* <li class="">
                   <button onClick={handleImageDelete}>
                     <BiTrash className="block mx-auto bg-red-500 text-white p-3 text-5xl rounded-xl hover:bg-red-600 hover:cursor-pointer" />
                   </button>
-                </li>
+                </li> */}
               </ul>
             </div>
           ))}

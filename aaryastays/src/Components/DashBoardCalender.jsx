@@ -8,7 +8,7 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Modal } from "flowbite-react";
 import { useDispatch } from "react-redux";
-import { createEvent, editEvent } from "../Store/eventSlice";
+import { createEvent, editEvent, getOverlap } from "../Store/eventSlice";
 import api from "../api/api";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
@@ -35,6 +35,7 @@ function DashBoardCalender( { property } ) {
   const [checkOutDate, setCheckOutDate] = useState();
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState();
+  const [todayPrice, setTodayPrice] = useState();
 
   function handleAddEvent() {
     if (!price || !checkInDate || !checkOutDate) {
@@ -117,7 +118,6 @@ function DashBoardCalender( { property } ) {
   }
 
 
-
   const handleCheckIn = (date) => {
     console.log(date);
     setCheckInDate(date);
@@ -143,7 +143,17 @@ function DashBoardCalender( { property } ) {
     setPrice();
     setCheckInDate();
     setCheckOutDate();
-  }, [openModal, allEvents]);
+  }, [openModal]);
+
+  useEffect(() => {
+    dispatch(getOverlap()).then(data => {
+      if(data.payload.length != 0) {
+        setTodayPrice(data.payload[0].title);
+      } else {
+        setTodayPrice(property.price);
+      }
+    });
+  },[allEvents])
 
   useEffect(() => {
     if(property) {
@@ -157,10 +167,14 @@ function DashBoardCalender( { property } ) {
       <div className="font-semibold text-2xl">
         <h1>Calendar:</h1>
       </div>
-      <div className="mt-6">
+      <div className="font-semibold mt-8 text-lg">
+        Today's Price: {todayPrice}
+      </div>
+      
+      <div className="my-8">
+      <div className="mb-2">
         <h2 className="text-xl">Add New Event</h2>
       </div>
-      <div>
         <input
           type="number"
           placeholder="Price"
@@ -199,7 +213,8 @@ function DashBoardCalender( { property } ) {
         startAccessor="start"
         endAccessor="end"
         onSelectEvent={(e) => handleSelect(e)}
-        style={{ height: 600, margin: "40px" }}
+        style={{ height: 600, marginTop: "100px" }}
+        views={['month','agenda']}
       />
       <Modal
         dismissible

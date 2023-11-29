@@ -107,11 +107,22 @@ const updateSlide = async (req,res) => {
 
 const deleteSlide = async (req,res) => {
   const {id:slideID} = req.params;
+  console.log(req.body);
+  const { propertyId, type } = req.body;
+  const property = await Property.findById({_id:propertyId});
+
+  if(!property) {
+    return res.status(404).json({msg:`No property with id: ${propertyId}`});
+  }
   const slide = await Slide.findById({_id:slideID});
 
   if(!slide) {
     return res.status(404).json({msg:`No task with id: ${slideID}`});
   }
+
+  const newArray = property[type].filter(id => id != slideID);
+  property[type] = newArray;
+  await property.save();
 
   slide.images.map(async img => {
     await cloudinary.uploader.destroy(img.public_id);
