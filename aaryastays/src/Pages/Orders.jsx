@@ -11,6 +11,7 @@ import api from '../api/api';
 import { authentication } from '../firebase/config';
 import {getPropertyById} from '../Store/propertySlice'
 import WishListCard from '../Components/WishListCard';
+import WishList2 from '../Components/WishList2';
 
 export default function Orders() {
 
@@ -143,7 +144,7 @@ export default function Orders() {
             </div>
 
 
-            <div className='my-2'>
+            <div className={` ${selectedTab == 3 ?'' :'my-2'}`}>
                 { selectedTab == 1 ? (currentOrders.length > 0 ? currentOrders.map(order => <OrderCard order={order} validity='current'/>) : 
                 <>
                 <h1 className='md:text-3xl font-bold mt-20 underline underline-offset-8 decoration-1'>No Bookings yet!</h1>
@@ -158,12 +159,18 @@ export default function Orders() {
                 <h1 className='text-lg font-medium mb-20'>Confused to find the Homestay? <span className='cursor-pointer underline decoration-1' onClick={()=>{contactUs()}}>Contact Us </span></h1>
                 </> ):<></>}
                 
-                { selectedTab == 3 ? (wishlistProperties.length > 0 ? wishlistProperties.map(prop => <WishListCard property={prop}/>) : <>
+                
+
+                {/* { selectedTab == 3 ? (wishlistProperties.length > 0 ? <div class="flex flex-wrap sm:m-4 mx-4 mb-10 mt-4">{wishlistProperties.map(prop => <WishListCard property={prop}/>)}</div>:<>
                 <h1 className='md:text-3xl font-bold mt-20 underline underline-offset-8 decoration-1'>No WishList yet!</h1>
                 <Link to="/"><button className='rounded-lg border-2 py-3 px-4 border-slate-800 mt-5 font-medium'> Add properties to your wishlist </button></Link>
                 <hr className='my-4'></hr>
                 <h1 className='text-lg font-medium mb-20'>Confused to find the Homestay? <span className='cursor-pointer underline decoration-1' onClick={()=>{contactUs()}}>Contact Us </span></h1>
-                </> ):<></>}
+                </>):<></>
+                } */}
+
+                { selectedTab == 3 ? <WishList2/>:<></>
+                }
                 {/* {selectedTab == 1 && currentOrders.map(order => <OrderCard order={order} validity='current'/>)}
                 {selectedTab == 2 && pastOrders.map(order => <OrderCard order={order} validity='past'/>)} */}
 

@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logout, login } from '../Store/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 export default function NavbarC() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ export default function NavbarC() {
   const [password,setPassword] = useState('')
   const [confirmPassword,setConfirmPassword] = useState('')
   const [isRegestering,setIsRegestering] = useState(false)
+  const [signoutConfirmation,setSignoutConfirmation] = useState(false)
   
 
   useEffect(()=>{
@@ -140,7 +142,7 @@ export default function NavbarC() {
       signInWithEmailAndPassword(authentication,emailAddress,password).then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        navigate('/profile')
+        navigate('/profile')  
         // ...
       })
       .catch((error) => {
@@ -241,7 +243,7 @@ export default function NavbarC() {
           <Dropdown.Divider />
           <Dropdown.Item onClick={()=>{navigateToWishlist()}}> My WishList</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={() => handleSignOut()}>Sign out</Dropdown.Item>
+          <Dropdown.Item onClick={() => setSignoutConfirmation(true)}>Sign out</Dropdown.Item>
         </Dropdown>}
         <Navbar.Toggle />
       </div>
@@ -309,6 +311,26 @@ export default function NavbarC() {
     </Modal.Footer> */}
     <div id="recaptcha-container"></div>
   </Modal>
+
+  <Modal show={signoutConfirmation} size="md" onClose={() => setSignoutConfirmation(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to Signout?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => {handleSignOut();setSignoutConfirmation(false)}}>
+                {"Yes, I'm sure"}
+              </Button>
+              <Button color="gray" onClick={() => setSignoutConfirmation(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
   </div>
   )
 }
