@@ -31,6 +31,7 @@ export default function NavbarC() {
   const [password,setPassword] = useState('')
   const [confirmPassword,setConfirmPassword] = useState('')
   const [isRegestering,setIsRegestering] = useState(false)
+  
 
   useEffect(()=>{
     // onAuthStateChanged(authentication, (user) => {
@@ -87,6 +88,7 @@ export default function NavbarC() {
         // User signed in successfully.
         const user = result.user;
         console.log(user)
+        navigate('/profile')
         // ...
       }).catch((error) => {
         // User couldn't sign in (bad verification code?)
@@ -99,6 +101,7 @@ export default function NavbarC() {
       signInWithPopup(authentication,provider).then((result)=>{
         const user = result.user;
         console.log(user)
+        navigate('/profile')
       }).catch((error) => {
         // Handle Errors here.
         console.log(error)
@@ -110,6 +113,7 @@ export default function NavbarC() {
       signInWithPopup(authentication,provider).then((result)=>{
         const user = result.user;
         console.log(user)
+        navigate('/profile')
       }).catch((error) => {
         // Handle Errors here.
         console.log(error)
@@ -120,6 +124,7 @@ export default function NavbarC() {
       if(password == confirmPassword){
         createUserWithEmailAndPassword(authentication,emailAddress,password).then((userCredential) => {
           const user = userCredential.user;
+          navigate('/profile')
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -135,7 +140,7 @@ export default function NavbarC() {
       signInWithEmailAndPassword(authentication,emailAddress,password).then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        
+        navigate('/profile')
         // ...
       })
       .catch((error) => {
