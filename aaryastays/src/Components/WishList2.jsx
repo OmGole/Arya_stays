@@ -206,8 +206,9 @@ export default function WishList2() {
                     </div>
                     <div className='mt-2'><b className=''>Starting from</b><span className='py-1 px-2 ml-2 border-2 rounded-lg border-green-500 text-green-500 font-medium'>Rs {item.price}/-</span></div>
                     
-                </div>
+                </div><Link to={`/property/${item._id}`}>
                 <button className={`w-full bg-[#F79489] py-4 text-xl text-white font-medium rounded-bl-xl `}>Book Now</button>
+                </Link>
                 </div>
             </div>
 
