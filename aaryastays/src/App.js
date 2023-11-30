@@ -13,6 +13,7 @@ import DashBoardProperties from "./Pages/DashBoardProperties";
 import DashBoardSingleProperty from "./Pages/DashBoardSingleProperty";
 import DashBoardAddProperty from "./Pages/DashBoardAddProperty";
 import DashBoardEditProperty from "./Pages/DashBoardEditProperty";
+import { ToastContainer } from "react-toastify";
 
 import IndividualOrder from "./Pages/IndividualOrder";
 import Gallery from "./Pages/Gallery";
@@ -50,6 +51,7 @@ function App() {
         <Route path="/gallery/:id" element={<Gallery />} />
       </Routes>
       {/* <Home /> */}
+      <ToastContainer />
     </div>
   );
 }

@@ -42,6 +42,7 @@ export default function Orders() {
       
               try {
                 const wishlistData = await api.get(`api/v1/user/wishlist/${currentUser.uid}`);
+                console.log(wishlistData.data)
                 setWishList(wishlistData.data)
                 getWishListProperty(wishlistData.data)
               } catch (error) {
@@ -63,13 +64,19 @@ export default function Orders() {
         if(wishlistData.length>0){
             const list = await Promise.all(
               wishlistData.map(async (item, index) => {
+                try{
                   const result = await api.get(`/api/v1/property/${item}`);
-                //   console.log(result.data)
+                  console.log(result.data)
                     return result.data; 
+                }catch(err){
+                  return null
+                }
+                  
                 })
             );
             // console.log(list[0])
-            setWishlistProperties(list)
+            const filteredList = list.filter((item) => item !== null);
+            setWishlistProperties(filteredList)
         }else{
             setWishlistProperties([])
         }
@@ -131,7 +138,7 @@ export default function Orders() {
                     <button onClick={()=>{setSelectedTab(2)}} className={`border-2 font-medium  py-3 px-8 rounded ${selectedTab==2? 'bg-[#F79489] border-[#FFD93D] text-white':'border-slate-200'}` }>Past Stays</button>
                 </div>
                 <div>
-                    <button onClick={()=>{setSelectedTab(3)}} className={`border-2 font-medium  py-3 px-8 rounded ${selectedTab==3? 'bg-[#F79489] border-[#FFD93D] text-white':'border-slate-200 h-full'}` }>Wishlist</button>
+                    <button onClick={()=>{setSelectedTab(3)}} className={`border-2 font-medium  py-3 px-8 rounded h-full ${selectedTab==3? 'bg-[#F79489] border-[#FFD93D] text-white':'border-slate-200 '}` }>Wishlist</button>
                 </div>
             </div>
 

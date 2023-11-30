@@ -7,6 +7,8 @@ import { useState, useEffect } from 'react';
 import api from '../api/api';
 import { authentication } from '../firebase/config';
 import { Carousel } from 'flowbite-react';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 export default function HomeCard2({property, wishlist}) {
     const [slideImage,setSlideImage] = useState([])
@@ -14,7 +16,8 @@ export default function HomeCard2({property, wishlist}) {
   const [extraAmenities, setExtraAmenities] = useState([]);
   const [user,setUser] = useState();
   const [isInWishlist, setIsInWishlist] = useState(wishlist.includes(property._id));
-
+  
+  // const notify = () => toast("Wow so easy!");
   
   useEffect(() => {
     getSlideImage();
@@ -77,13 +80,35 @@ export default function HomeCard2({property, wishlist}) {
         return;
       }
       if (isInWishlist) {
-        await api.patch(`api/v1/user/wishlist/remove/${user.uid}`, {
+         await api.patch(`api/v1/user/wishlist/remove/${user.uid}`, {
           propertyId: property._id 
         });
+        toast('💔 Removed from wishlist!', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar:true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          toastId:'removed'
+          });
       } else {
         await api.patch(`api/v1/user/wishlist/${user.uid}`, {
           propertyId: property._id,
         });
+        toast('❤️ Added to wishlist!', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar:true,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          toastId:'added'
+          });
       }
       setIsInWishlist(!isInWishlist);
     } catch (error) {
@@ -141,6 +166,7 @@ export default function HomeCard2({property, wishlist}) {
             })}
           </Carousel>
         </div>
+        
     </div>
   )
 }
