@@ -76,6 +76,10 @@
   outline: none !important;
 }
 
+.custom-date input{
+  padding-top: 0%;
+}
+
 /* .custom-date2 .bg-gray-50{
   background-color: #6ACDE9 !important;
   color: white;
@@ -116,7 +120,7 @@ input::-webkit-inner-spin-button {
 @media (max-width: 767px) {
   .mobile-svg {
     /* background-color: rebeccapurple; */
-      width: 60px; /* Adjust the width for mobile */
+      width: 45px; /* Adjust the width for mobile */
       height: 30px; /* Adjust the height for mobile */
   }
 }
@@ -199,7 +203,7 @@ h3{
 
 .heart-stroke {
   fill: none;
-  stroke: #ababab;
+  stroke: #e3765b;
   stroke-width: 2px;
   opacity: 1;
   transform-origin: center center;

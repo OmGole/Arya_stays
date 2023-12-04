@@ -149,9 +149,9 @@ export default function SearchMobile({dropdownArray}) {
                 <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+3)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date'/>
             </div>
             <div className="w-1/5 dropdown    ...">
-                <Link to={`/property/${selectedId}`}>
-                    <button className='w-full align-center bg-[#F79489] h-full text-xl font-bold rounded-lg text-white '><i class="fa fa-search"/></button>
-                </Link>
+                {/* <Link to={`/property/${selectedId}`}> */}
+                    <button onClick={()=>{redirectToIndividualPage()}} className='w-full align-center bg-[#F79489] h-full text-xl font-bold rounded-lg text-white '><i class="fa fa-search"/></button>
+                {/* </Link> */}
             </div>
           </div>
         </div>
