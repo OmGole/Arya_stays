@@ -30,15 +30,17 @@ export default function Booking() {
     const [numberOfNights,setNumberOfNights] = useState()
     const [amenitiesPrice,setAmenitiesPrice] = useState()
     const [openModal, setOpenModal] = useState(false);
+    const [price, setPrice] = useState();
     const [amenityTitle,setAmenityTitle] = useState([])
     const [user,setUser] = useState(null)
     let navigate = useNavigate(); 
 
     useEffect(() => {
         if (state) {
-          const { propertyDetails, stateCurrOrders } = state;
+          const { propertyDetails, stateCurrOrders, price } = state;
           setStateCurrOrder(stateCurrOrders);
           setProperty(propertyDetails);
+          setPrice(price);
         } else {
           navigate('/'); // Redirect to the home page if state is null
         }
@@ -307,7 +309,7 @@ export default function Booking() {
                     </div>
                     <div className='p-4 border-b-2 flex justify-between items-center'>
                         <div><h1 className='text-lg font-medium'>Stay Amount</h1><h1>{stateCurrOrder?.adultNumber} Adults x {numberOfNights} Nights</h1></div>
-                        <div><h1 className='text-[#268F43] font-bold'>RS {property?.price}/-</h1></div>
+                        <div><h1 className='text-[#268F43] font-bold'>RS {price}/-</h1></div>
                     </div>
                     <div className='p-4 border-b-2 flex justify-between items-center'>
                         <div><h1 className='text-lg font-medium'>Total Service Charges</h1><h1>( {stateCurrOrder?.amenities.length} Items)</h1></div>

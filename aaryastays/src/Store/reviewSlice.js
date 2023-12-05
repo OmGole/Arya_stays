@@ -31,7 +31,6 @@ export const postReview = createAsyncThunk(
   }
 );
 
-<<<<<<< HEAD
 export const deleteReview = createAsyncThunk(
   "review/removeReview",
   async (id, { rejectWithValue }) => {
@@ -114,65 +113,3 @@ export const reviewSlice = createSlice({
 });
 
 export default reviewSlice.reducer;
-=======
-export const reviewSlice = createSlice({
-  name: "review",
-  initialState,
-  reducers: {},
-
-  extraReducers: {
-    [postReview.fulfilled]: (state, { payload }) => {
-      console.log(payload);
-      state.createReview = payload;
-      state.error = "";
-    },
-    [postReview.rejected]: (state, { payload }) => {
-      console.log(payload);
-      state.createReview = {};
-      state.error = payload;
-    },
-    //     [getCurrentOrders.fulfilled] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.current = payload;
-    //       state.error = '';
-    //     },
-    //     [getCurrentOrders.rejected] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.current = {};
-    //       state.error = payload;
-    //     },
-    //     [createOrder.fulfilled] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.createOrder = payload;
-    //       state.error = '';
-    //     },
-    //     [createOrder.rejected] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.createdOrder = {};
-    //       state.error = payload;
-    //     },
-    //     [editOrder.fulfilled] : (state,{ payload }) => {
-    //       console.log(payload);
-    //       state.updatedOrder = payload;
-    //       state.error = '';
-    //     },
-    //     [editOrder.rejected] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.updatedOrder = {};
-    //       state.error = payload;
-    //     },
-    //     [deleteOrder.fulfilled] : (state,{ payload }) => {
-    //       console.log(payload);
-    //       state.deletedOrder = payload;
-    //       state.error = '';
-    //     },
-    //     [deleteOrder.rejected] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.deletedOrder = {};
-    //       state.error = payload;
-    //     },
-  },
-});
-
-export default reviewSlice.reducer;
->>>>>>> 76ad38a7c3a2103208d6f7cd17a1e73ae0e14981

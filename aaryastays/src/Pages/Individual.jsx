@@ -96,12 +96,12 @@ export default function Individual() {
   }, [allEvents, roomType]);
 
   useEffect(() => {
-    overLap();
-  },[filteredEvents, checkInDate]);
+    if(checkInDate) {
+      overLap();
+    }
+  }, [filteredEvents, checkInDate]);
 
-  useEffect(() => {
-    console.log(filteredEvents)
-  },[filteredEvents])
+
 
   const getAmenities = async (prop) => {
     try {
@@ -136,21 +136,26 @@ export default function Individual() {
   }
 
   const overLap = () => {
-    // const arr = checkInDate.split("/");
-    // const day = arr[0];
-    // const month = arr[1];
-    // const year = arr[2];
-    // for (let i = 0; i < allEvents.length; i++) {
-    //   const d1 = new Date(allEvents[i].start);
-    //   const d2 = new Date(year,month,day)
-    //   const d3 = new Date(allEvents[i].end);
-    //   const d4 = d2;
-    //   if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
-    //     console.log(d2)
-    //     setPrice(allEvents[i].title);
-    //     return;
-    //   }
-    // } 
+    const [day, month, year] = checkInDate.split("/");
+    console.log(filteredEvents)
+    for (let i = 0; i < filteredEvents.length; i++) {
+      const d1 = new Date(filteredEvents[i].start);
+
+      const d2 = new Date(year,month-1,day);
+      d2.setSeconds(d2.getSeconds() + 2);
+
+      const d3 = new Date(filteredEvents[i].end);
+
+      const d4 = new Date(year,month-1,day);
+      d4.setDate(d4.getDate() + 1);
+      d4.setSeconds(d4.getSeconds() - 2);
+      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
+        console.log(filteredEvents[i].title)
+        setPrice(filteredEvents[i].title);
+        return;
+      }
+    } 
+    setPrice(property.price);
     console.log(checkInDate);
   }
 
@@ -161,10 +166,8 @@ export default function Individual() {
       qty: 1,
     };
     const arr = currOrder.amenities;
-    console.log(arr)
     const isNewObjArray = !arr.some((obj2) => obj2.id === obj.id);
     //add obj in arr
-    console.log(isNewObjArray)
     if (isNewObjArray) {
       dispatch(updateOrder({ key: "amenities", value: [...arr, obj] }));
       setAddedOnDemand((prev) => new Set([...prev, item]));
@@ -320,7 +323,7 @@ export default function Individual() {
   const [user,setUser] = useState(null)
   const navigateToBook = () =>{
     if(user){
-      navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder}})
+      navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder,price}})
     }else{
       alert("You must be logged in")
     }
