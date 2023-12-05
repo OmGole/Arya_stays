@@ -13,11 +13,14 @@ import DashBoardProperties from "./Pages/DashBoardProperties";
 import DashBoardSingleProperty from "./Pages/DashBoardSingleProperty";
 import DashBoardAddProperty from "./Pages/DashBoardAddProperty";
 import DashBoardEditProperty from "./Pages/DashBoardEditProperty";
+import { ToastContainer } from "react-toastify";
 
+import IndividualOrder from "./Pages/IndividualOrder";
+import Gallery from "./Pages/Gallery";
 function App() {
   return (
     <div className="App">
-      <div className="text-center bg-[#B4E2EF] py-2 md:font-medium text-xs md:text-base">
+      <div className="text-center bg-[#B4E2EF] py-2 md:font-medium text-[10px] md:text-base">
         Book your comfortable rooms, before 48 hrs to 60 mins before the check
         In!
       </div>
@@ -29,17 +32,26 @@ function App() {
         <Route path="/booking" element={<Booking />} />
 
         {/* Orders */}
-        <Route path="/dashboard/order" element={<DashBoardOrders/>} />
-        <Route path="/dashboard/order/:id" element={<DashBoardSingleOrder/>} />
+        <Route path="/dashboard/order" element={<DashBoardOrders />} />
+        <Route path="/dashboard/order/:id" element={<DashBoardSingleOrder />} />
 
         {/* Amenities */}
-        <Route path="/dashboard/amenity" element={<DashBoardAmenities/>} />
-        <Route path="/dashboard/card" element={<DashBoardCards/>} />
-        <Route path="/dashboard/property" element={<DashBoardProperties/>} />
-        <Route path="/dashboard/property/add" element={<DashBoardAddProperty />} />
-        <Route path="/dashboard/property/:id" element={<DashBoardEditProperty />} />
+        <Route path="/dashboard/amenity" element={<DashBoardAmenities />} />
+        <Route path="/dashboard/card" element={<DashBoardCards />} />
+        <Route path="/dashboard/property" element={<DashBoardProperties />} />
+        <Route
+          path="/dashboard/property/add"
+          element={<DashBoardAddProperty />}
+        />
+        <Route
+          path="/dashboard/property/:id"
+          element={<DashBoardEditProperty />}
+        />
+        <Route path="/booking/:validity/:id" element={<IndividualOrder />} />
+        <Route path="/gallery/:id" element={<Gallery />} />
       </Routes>
       {/* <Home /> */}
+      <ToastContainer />
     </div>
   );
 }

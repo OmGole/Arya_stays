@@ -19,10 +19,13 @@ import { getSingleCard } from "../Store/cardSlice";
 import api from "../api/api";
 import ReactFlipCard from "reactjs-flip-card";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { authentication } from "../firebase/config";
 
-import { Dropdown, Datepicker } from "flowbite-react";
+import { Dropdown, Datepicker, Modal } from "flowbite-react";
 import { updateOrder } from "../Store/currentOrderSlice";
 import AddOn from "../Components/AddOn";
+import IndividualCard2 from "../Components/IndividualCard2";
 
 export default function Individual() {
   const routeParams = useParams();
@@ -48,31 +51,19 @@ export default function Individual() {
   useEffect(() => {
     dispatch(updateOrder({ key: "Id", value: routeParamsID }));
     if (!("CheckInDate" in currOrder)) {
-      dispatch(
-        updateOrder({
-          key: "CheckInDate",
-          value:
-            new Date().getDate() +
-            "/" +
-            (new Date().getMonth() + 1) +
-            "/" +
-            new Date().getFullYear(),
-        })
-      );
-      dispatch(
-        updateOrder({
-          key: "CheckOutDate",
-          value:
-            new Date().getDate() +
-            1 +
-            "/" +
-            (new Date().getMonth() + 1) +
-            "/" +
-            new Date().getFullYear(),
-        })
-      );
-      dispatch(updateOrder({ key: "adultNumber", value: 2 }));
-      dispatch(updateOrder({ key: "childNumber", value: 1 }));
+
+      const checkin = new Date();
+        checkin.setDate(new Date().getDate()+2);
+        const checkout = new Date();
+        checkout.setDate(new Date().getDate()+3);
+
+        setCheckInDate(`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`);
+        dispatch(updateOrder({key:'CheckInDate',value:`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`}))
+        setCheckOutDate(`${checkout.getDate()}/${checkout.getMonth() + 1}/${checkout.getFullYear()}`);
+        dispatch(updateOrder({key:'CheckOutDate',value:`${checkout.getDate()}/${checkout.getMonth() + 1}/${checkout.getFullYear()}`}))
+        dispatch(updateOrder({key:'adultNumber',value:2}))
+        dispatch(updateOrder({key:'childNumber',value:1}))
+      
     }
     dispatch(getPropertyById(routeParamsID)).then((data) => {
       dispatch(updateOrder({ key: "Title", value: data.payload.title }));
@@ -170,14 +161,16 @@ export default function Individual() {
       qty: 1,
     };
     const arr = currOrder.amenities;
-
+    console.log(arr)
     const isNewObjArray = !arr.some((obj2) => obj2.id === obj.id);
     //add obj in arr
+    console.log(isNewObjArray)
     if (isNewObjArray) {
       dispatch(updateOrder({ key: "amenities", value: [...arr, obj] }));
+      setAddedOnDemand((prev) => new Set([...prev, item]));
     }
     // console.log(item)
-    setAddedOnDemand((prev) => new Set([...prev, item]));
+    
     setShowOnDemand(true);
   };
 
@@ -197,24 +190,7 @@ export default function Individual() {
     }
   };
 
-  //ATS img logic
-
-  // const ats_img = useSelector(state => state.image.imageById);
-
-  // useEffect(() => {
-  //     console.log(property.ats_image)
-  //     dispatch(getImageById(property.ats_image[0]));
-  //     console.log(property)
-  // },[dispatch]);
-
-  // Card logic
-
-  // current location img
-
-  // useEffect(()=>{
-  //     console.log(property.currentLocation_images[0])
-  //     dispatch(getImageById(property.currentLocation_images[0]));
-  // },[dispatch])
+  
 
   // Search component logic
 
@@ -318,6 +294,38 @@ export default function Individual() {
 
   const executeScroll = () => myRef.current.scrollIntoView();
 
+  const [amenitesInfo,setAmenitiesInfo] = useState();
+  const [openModal, setOpenModal] = useState(false);
+
+  const showAmenitiesInfo = (data)=>{
+    setOpenModal(true);
+    setAmenitiesInfo(data);
+  } 
+
+  useEffect(() => {
+    const unsubscribe = authentication.onAuthStateChanged(async (currentUser) => {
+        if (currentUser) {
+          setUser(currentUser);
+        } else {
+          setUser(null);
+        }
+      });
+  
+      return () => unsubscribe();
+    
+  }, []);
+
+  let navigate = useNavigate(); 
+  
+  const [user,setUser] = useState(null)
+  const navigateToBook = () =>{
+    if(user){
+      navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder}})
+    }else{
+      alert("You must be logged in")
+    }
+
+  };
   //    Amenities Logic
 
   if (!property || !property.cards) {
@@ -338,11 +346,11 @@ export default function Individual() {
         </div>
       </div>
 
-      <h1 className="text-4xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
+      <h1 className="md:text-4xl text-xl text-center font-medium mt-10 mb-14 underline decoration-[#F79489] underline-offset-8 decoration-4">
         About the <span className="text-[#179FEB] font-bold">Space</span>
       </h1>
 
-      <div className="w-100 md:h-full h-96 even:bg-[#FABEB7] odd:bg-[#D1EDF5]  md:mt-20 mt-20  relative">
+      <div className="w-100 md:h-full h-96 even:bg-[#FABEB7] odd:bg-[#D1EDF5]  md:mt-20 mt-10  relative">
         <img src={aboutspace} className="object-  h-full  w-full" />
 
         <div className="absolute -bottom-32  w-4/5 md:h-56 mx-auto left-0 right-0 ml-auto mr-auto px-10 py-8 border-8 rounded border-[#B4E2EF] grid content-center text-center bg-white  ">
@@ -376,7 +384,8 @@ export default function Individual() {
       </div>
       <div ref={myRef}></div>
       {/* Search Components */}
-      <div className="sticky top-0 z-50">
+      <div>
+      <div className="sticky top-5 z-20">
         <div className="container md:block hidden  pt-16 mx-auto ">
           <div className="flex flex-wrap border-2 mx-28  border-slate-300/50 custom-shadow content-center divide-x	  rounded-lg">
             <div class="lg:w-2/6 dropdown bg-white px-5  py-2 ...">
@@ -393,7 +402,7 @@ export default function Individual() {
               <Datepicker
                 value={checkInDate}
                 onSelectedDateChanged={handleCheckIn}
-                className="p-0  custom-date"
+                className=" custom-date"
               />
             </div>
             <div class="lg:w-1/6 text-lg py-2 bg-white ...">
@@ -401,14 +410,14 @@ export default function Individual() {
               <Datepicker
                 value={checkOutDate}
                 onSelectedDateChanged={handleCheckOut}
-                className="p-0  custom-date"
+                className=" custom-date "
               />
             </div>
             <div class="lg:w-1/6 dropdown px-3 py-2 bg-white ...">
               <Dropdown
                 arrowIcon={true}
                 dismissOnClick={false}
-                className="px-5 py-4"
+                className="px-5 py-4 z-50"
                 inline
                 label={
                   <div className="text-start  w-full">
@@ -481,101 +490,53 @@ export default function Individual() {
           </div>
         </div>
       </div>
-      <div className="sticky top-0 z-50">
+      <div className="">
         <div className="container md:hidden  pt-5 mx-auto ">
           <div className="flex flex-wrap border-2 mx-5  border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg">
-            <div className="w-2/3 dropdown  bg-white  py-2  px-4 ...">
+            <div className="w-3/5 dropdown  bg-white  py-2  px-4 ...">
               <h1 className="text-lg font-medium">{property.title}</h1>
               <p className="text-sm">
                 <i className="fa  fa-map-marker text-[#6ACDE9] mr-2"></i>
                 {property.location}
               </p>
             </div>
-            <div className="w-1/3 dropdown pl-1 bg-white py-2 pr-1 ...">
+            <div className="w-2/5 dropdown pl-1 bg-white py-2 pr-1 ...">
               <Dropdown
                 arrowIcon={true}
                 dismissOnClick={false}
                 className="px-5 py-4"
                 inline
                 label={
-                  <div className="text-start  w-full">
-                    <div className="text-lg font-medium">Guests</div>
-                    <div className="text-[#F79489] text-sm">
-                      {adultNumber} Adult, {childNumber} Child
-                    </div>
-                  </div>
+                  <div className='text-start  w-full'><div className='text-[17px] font-medium'>Guests</div>
+                <div className='text-[#F79489] text-[13px]'>{adultNumber} Adult, {childNumber} Child</div></div>
                 }
               >
-                <div className="flex w-100 mb-2 justify-between">
-                  <div>
-                    <h1 className="font-bold text-base w-3/5">Adults</h1>
-                    <p className="text-gray-400">Age 8+</p>
-                  </div>
-                  <div className="w-2/5 justify-between  flex ">
-                    <button
-                      className="border mr-2 rounded-full border-2"
-                      onClick={decrAdult}
-                    >
-                      -
-                    </button>{" "}
-                    {adultNumber}
-                    <button
-                      className="ml-2 border rounded-full"
-                      onClick={incrAdult}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-                <Dropdown.Divider />
-                <div className="flex w-100 my-2 justify-between">
-                  <div>
-                    <h1 className="font-bold text-base w-3/5">Child</h1>
-                    <p className="text-gray-400">Age 0 - 8</p>
-                  </div>
-                  <div className="w-2/5 justify-between  flex">
-                    <button
-                      onClick={decrChild}
-                      className="border mr-2 rounded-full"
-                    >
-                      -
-                    </button>{" "}
-                    {childNumber}
-                    <button
-                      onClick={incrChild}
-                      className="ml-2 border rounded-full"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-                <Dropdown.Divider />
-                <div>
-                  <h1 className="text-green-500 font-bold w-64">
-                    Charges are not applicable for children below 8
-                  </h1>
-                </div>
+                <div className='flex w-100 mb-2 justify-between items-center'>
+                        <div><h1 className='font-bold text-base w-3/5'>Adults</h1><p className='text-gray-400'>Age 8+</p></div>
+                        <div className='w-2/5 justify-between  flex '><button className='border mr-2 rounded-full border-2' onClick={decrAdult}>-</button> {adultNumber}<button className='ml-2 border rounded-full' onClick={incrAdult}>+</button></div>
+                    </div>
+                    <Dropdown.Divider />
+                    <div className='flex w-100 my-2 justify-between  items-center'>
+                            <div><h1 className='font-bold text-base w-3/5'>Child</h1><p className='text-gray-400'>Age 0 - 8</p></div>
+                            <div className='w-2/5 justify-between  flex'><button onClick={decrChild} className='border mr-2 rounded-full'>-</button> {childNumber}<button onClick={incrChild} className='ml-2 border rounded-full'>+</button></div>
+                    </div>
+                    <Dropdown.Divider />
+                    <div><h1 className='text-green-500 font-bold w-64'>Charges are not applicable for children below 8</h1></div>
+                
+                
               </Dropdown>
             </div>
           </div>
-          <div className="flex flex-wrap border-2 mx-5 mt-1 border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg">
-            <div className="w-1/3 dropdown  bg-white  py-2 ...">
-              <h1 className="pl-3  z-10 font-medium">Check In</h1>
-              <Datepicker
-                value={checkInDate}
-                onSelectedDateChanged={handleCheckIn}
-                className="p-0  custom-date"
-              />
+          <div className="flex flex-wrap border-2 mx-5 mt-2 border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg">
+          <div className="w-2/5 dropdown    py-2 ...">
+                <h1 className='pl-3  z-10 font-medium'>Check In</h1>
+                <Datepicker value={checkInDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+2)} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
             </div>
-            <div className="w-1/3 dropdown pl-0 bg-white py-2 ...">
-              <h1 className="pl-3 z-10 font-medium">Check Out</h1>
-              <Datepicker
-                value={checkOutDate}
-                onSelectedDateChanged={handleCheckOut}
-                className="p-0  custom-date"
-              />
+            <div className="w-2/5 dropdown pl-0  py-2 ...">
+            <h1 className='pl-3 z-10 font-medium'>Check Out</h1>
+                <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+3)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date mobile-date'/>
             </div>
-            <div className="w-1/3 dropdown    ...">
+            <div className="w-1/5 dropdown    ...">
               <button
                 onClick={executeScroll}
                 className="w-full align-center bg-[#F79489] h-full text-xl font-bold rounded-lg text-white "
@@ -597,7 +558,7 @@ export default function Individual() {
 
       {/* property card */}
 
-      <div className="  md:mx-20 mx-8 ">
+      <div className="  md:mx-20 mx-5 ">
         <div class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:p-5 ">
           <div className="img-border p-5 md:w-1/3 md:h-80   ">
             <img
@@ -622,7 +583,7 @@ export default function Individual() {
                 <Datepicker
                   value={checkInDate}
                   onSelectedDateChanged={handleCheckIn}
-                  className="p-0  custom-date cursor-pointer"
+                  className="  custom-date cursor-pointer"
                 />
               </div>
 
@@ -631,7 +592,7 @@ export default function Individual() {
                 <Datepicker
                   value={checkOutDate}
                   onSelectedDateChanged={handleCheckOut}
-                  className="p-0  custom-date"
+                  className="  custom-date mobile-date2"
                 />
               </div>
 
@@ -767,89 +728,53 @@ export default function Individual() {
 
       {/* property card ends */}
 
-      <h1 className="text-4xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
+      <h1 className="md:text-4xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
         Amenities
       </h1>
-      <div className="w-100  md:mx-20 mx-10 p-10 grid justify-items-start  border-2 border-slate-200 rounded-lg">
-        <h1 className="text-2xl font-medium">Essentials</h1>
+      <div className="w-100  md:mx-20  md:p-10 mx-8 pb-10 grid justify-items-start  md:border-2 md:border-slate-200 md:rounded-lg">
+        <h1 className="md:text-2xl text-xl font-medium">Essentials</h1>
         {/* <div className="flex h-full flex-wrap mt-4"> */}
         <div className='flex h-full flex-wrap gap-y-8 md:gap-x-14 gap-x-4 my-6'>
 
-          {/* HoverEffect
-                {essentialAmenities?.map((item,index)=>{
+{essentialAmenities?.map((item,index)=>{
                     return(
-                <div className='aspect-square '>
-                    <div className="cursor-pointer flex-1 group perspective h-full custom-shadow rounded hover:w-52 transition-all duration-500   
-                ease-in-out">
-                        <div className="relative preserve-3d group-hover:my-rotate-y-180 w-full h-full duration-1000">
-                            <div className="absolute backface-hidden w-full h-full">
-                                <img src={item.icon.url} className=''/>
+                        <div onClick={()=>{showAmenitiesInfo(item)}} className='md:h-[8rem] md:w-[8rem] cursor-pointer h-[4rem] w-[4rem] mt-2'>
+                            <div className='flex-1 h-full custom-shadow rounded grid  justify-items-center place-content-center'>
+                                <img src={item.icon.url} className='w-2/3 md:w-full text-center'/>
                             </div>
-                            <div className="absolute my-rotate-y-180 backface-hidden w-full h-full overflow-hidden" >
-                                <h1>{item.description}</h1>
-                            </div>
+                            
+                            <h1 className='text-center mt-2 md:text-md text-xs'>{item.title}</h1>
                         </div>
-                    </div>
-                    <h1>{item.title}</h1>
-                </div>
                     )
-                })} */}
-
-          {essentialAmenities?.map((item, index) => {
-            return (
-                <ReactFlipCard
-                  frontComponent={
-                    // <div className="flex-1 h-full custom-shadow rounded grid group-hover:hidden justify-items-center place-content-center">
-                    <div className="text-center">
-                    <div className="md:h-[8rem] md:w-[8rem] h-[5rem] w-[5rem] custom-shadow rounded grid justify-items-center place-content-center mr-10 ">
-                      <img
-                        src={item.icon.url}
-                        className="w-2/3 md:w-full text-center"
-                        />
-                    </div>
-                        <h1 className="mt-2 text-md">{item.title}</h1>
-                    </div>
-                  }
-                  backComponent={
-                      <div className="bg-white md:h-[8rem] md:w-[8rem] h-[5rem] w-[5rem] custom-shadow rounded px-1">
-                      <h1 className="leading-tight text-sm">{item.description.substring(0,100)}</h1>
-                    </div>
-                  }
-                />)
-            })}
+                })}
         </div>
 
-        <h1 className="text-2xl font-medium mt-14">On Demand Service</h1>
+        <h1 className="md:text-2xl text-xl font-medium mt-10">On Demand Service</h1>
+        <h1 className="md:text-lg text-sm text-green-600">Click on services to add them</h1>
         <div className="flex flex-wrap gap-10  mt-4">
           {extraAmenities?.map((item, index) => {
             return (
               <div
-                className="md:h-[8rem] md:w-[8rem]  h-[5rem] w-[5rem] mt-2"
+                className="md:h-[8rem] md:w-[8rem] cursor-pointer  h-[4rem] w-[4rem] mt-2"
                 onClick={() => {
                   addOnDemand(item);
                 }}
               >
-                <div className="flex-1 h-full custom-shadow rounded grid group-hover:hidden justify-items-center place-content-center">
+                <div className="flex-1 h-full custom-shadow2  rounded grid  justify-items-center place-content-center">
                   <img
                     src={item.icon.url}
                     className="w-2/3 md:w-full text-center"
                   />
                 </div>
-                <h1 className="text-center mt-2 text-md">{item.title}</h1>
+                <h1 className="text-center mt-2 md:text-md text-xs">{item.title}</h1>
               </div>
-              // <div className='aspect-square ' onClick={()=>{addOnDemand(item)}}>
-              //     <div className='flex-1 h-full custom-shadow rounded grid content-center place-content-center'>
-              //         <img src={item.icon.url} className=''/>
-              //     </div>
-              //     <h1>{item.title}</h1>
-              // </div>
             );
           })}
         </div>
       </div>
 
       {showOnDemand && (
-        <div className="flex flex-wrap  md:mx-20 mx-10 mt-5">
+        <div className="flex flex-wrap  md:mx-20 mx-4 mt-5">
           <div className=" md:w-2/3 md:pr-2 ">
             <div className="border-2 border-slate-200 rounded-lg divide-y">
               {[...addedOnDemand].map((item, index) => {
@@ -910,7 +835,7 @@ export default function Individual() {
                   to the needs, we are transperant on pricing & the most
                   affordable brand for Homestays.
                 </p>
-                <button className="bg-[#F79489] w-full md:text-2xl text-xl py-1 rounded font-medium text-white my-4">
+                <button onClick={()=>{navigateToBook()}} className="bg-[#F79489] w-full md:text-2xl text-xl py-1 rounded font-medium text-white my-4">
                   Apply
                 </button>
               </div>
@@ -919,34 +844,63 @@ export default function Individual() {
         </div>
       )}
 
-      <div id="amenites" className="md:mx-20 mx-10 w-100 mt-10 text-center">
-        <Link to="/booking" state={{property}}>
-          <button className=" bg-[#F79489] w-1/2 md:text-3xl text-xl py-4 rounded font-medium text-white">
+      <div id="amenites" className="md:mx-20 mx-4 w-100 mt-10 text-center">
+        {/* <Link to="/booking" state={{property}}> */}
+          <button onClick={()=>{navigateToBook()}} className=" bg-[#F79489] md:w-1/2 w-full md:text-3xl text-xl md:py-4 py-2 rounded font-medium text-white">
             Book Now
           </button>
-        </Link>
+        {/* </Link> */}
       </div>
 
-      <div className="w-100 md:mx-20 mx-10 rounded-lg overflow-auto">
+      {/* <div className="w-100 md:mx-20 mx-10 rounded-lg overflow-auto">
         <Slide slides={property.slides} />
-      </div>
-      <h1 className="text-4xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
+      </div> */}
+      {/* <h1 className="lg:text-4xl md:tex-3xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
         Everything You Need To Know{" "}
         <span className="text-[#179FEB]">Before You Book</span>
-      </h1>
-      <div className="md:mx-20 mx-10">
-        <div className="flex flex-wrap  gap-y-3 ">
-          {property &&
-            property.cards.map((id) => {
-              return <IndividualCard id={id} />;
-            })}
+      </h1>  */}
+
+      <div className='flex items-center justify-center my-8 '>
+            <div className='bg-[#F79489] md:w-52 w-40 h-1'> </div>
+            <div className='px-3 text-center lg:text-4xl md:tex-3xl text-xl font-medium'>Everything You Need To Know <span className='text-[#179FEB]'>Before You Book</span></div>
+            <div className='bg-[#F79489] md:w-52 w-40 h-1'> </div>
         </div>
+
+      <div className="md:mx-20 mx-4">
+          
+          <IndividualCard2 cards={property.cards}/>
+          
       </div>
 
+
+      </div>
+
+      
+
+      <Modal dismissible show={openModal} className="center"   onClose={() => setOpenModal(false)}>
+        <Modal.Header >
+          <div className="flex w-full gap-x-3 items-center justify-center">
+          <img src={amenitesInfo?.icon.url} className='  text-center'/>
+          {amenitesInfo?.title}
+          </div></Modal.Header>
+        <Modal.Body>
+          <div className="space-y-6">
+            <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+              {amenitesInfo?.description}
+            </p>
+            
+          </div>
+        </Modal.Body>
+        {/* <Modal.Footer>
+          <Button onClick={() => setOpenModal(false)}>I accept</Button>
+          
+        </Modal.Footer> */}
+      </Modal>
       <Reviews />
       <Query />
       <About />
       <FooterC />
+      <button onClick={executeScroll} id="fixedbutton" className="md:hidden bg-[#F79489] text-white font-medium border-2 rounded-full p-4"> Edit</button>
     </div>
   );
 }

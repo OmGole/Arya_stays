@@ -6,9 +6,11 @@ import { Dropdown } from 'flowbite-react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateOrder } from '../Store/currentOrderSlice';
+import { useNavigate } from 'react-router-dom';
 export default function SearchMobile({dropdownArray}) {
     const dispatch = useDispatch();
     const currOrder = useSelector(state => state.currentOrder.currentOrder)
+    let navigate = useNavigate()
 
     const [selectedTitle,setSelectedTitle] = useState('');
     const [selectedLoc, setSelectedLoc] = useState('');
@@ -30,10 +32,15 @@ export default function SearchMobile({dropdownArray}) {
     const [checkInDate,setCheckInDate] = useState();  
     const [checkOutDate,setCheckOutDate] = useState(); 
     useEffect(()=>{
-        setCheckInDate(new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
-        dispatch(updateOrder({key:'CheckInDate',value:new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear()}))
-        setCheckOutDate((new Date().getDate()+1)+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear());
-        dispatch(updateOrder({key:'CheckOutDate',value:(new Date().getDate()+1)+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear()}))
+        const checkin = new Date();
+        checkin.setDate(new Date().getDate()+2);
+        const checkout = new Date();
+        checkout.setDate(new Date().getDate()+3);
+
+        setCheckInDate(`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`);
+        dispatch(updateOrder({key:'CheckInDate',value:`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`}))
+        setCheckOutDate(`${checkout.getDate()}/${checkout.getMonth() + 1}/${checkout.getFullYear()}`);
+        dispatch(updateOrder({key:'CheckOutDate',value:`${checkout.getDate()}/${checkout.getMonth() + 1}/${checkout.getFullYear()}`}))
         dispatch(updateOrder({key:'adultNumber',value:2}))
         dispatch(updateOrder({key:'childNumber',value:1}))
     },[]) 
@@ -78,14 +85,22 @@ export default function SearchMobile({dropdownArray}) {
     }
    }
 
+   const redirectToIndividualPage = ()=>{
+    if(selectedId){
+        navigate('/property/'+selectedId)
+    }else{
+        alert('Please select a property')
+    }
+   }
+
   return (
     <div>
         <div className='container md:hidden  pt-10 mx-auto '>
           <div className='flex flex-wrap border-2 mx-5  border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg'>
-            <div className="w-2/3 dropdown flex items-center   py-2  px-4 ...">
+            <div className="w-3/5 dropdown flex items-center   py-2  px-4 ...">
                 <Dropdown
                     inline
-                    label={ isChoose ? <div className='w-full text-sm text-start'><h1 className='font-medium'>{selectedTitle}</h1><p><i className='fa  fa-map-marker text-[#6ACDE9] mr-2'></i>{selectedLoc}</p></div> : <div className='py-2  text-lg   w-full font-medium'>Choose your stays</div> }
+                    label={ isChoose ? <div className='w-full text-sm text-start'><h1 className='font-medium'>{selectedTitle}</h1><p><i className='fa  fa-map-marker text-[#6ACDE9] mr-2'></i>{selectedLoc}</p></div> : <div className='py-2  text-[17px]   w-full font-medium'>Choose your stays</div> }
                 >
               {dropdownArray.map(item=>{
                     return(<>
@@ -99,22 +114,22 @@ export default function SearchMobile({dropdownArray}) {
                 })}
                 </Dropdown>
             </div>
-            <div className="w-1/3 dropdown pl-1  py-2 pr-1 ...">
+            <div className="w-2/5 dropdown pl-1  py-2 pr-1 ...">
                 <Dropdown
                     arrowIcon={true}
                     dismissOnClick={false}
                     className='px-5 py-4'
                     inline
-                    label={<div className='text-start  w-full'><div className='text-lg font-medium'>Guests</div>
+                    label={<div className='text-start  w-full'><div className='text-[17px] font-medium'>Guests</div>
                 <div className='text-[#F79489] text-[13px]'>{adultNumber} Adult, {childNumber} Child</div></div>}
                     
                 >
-                    <div className='flex w-100 mb-2 justify-between'>
+                    <div className='flex w-100 mb-2 justify-between items-center'>
                         <div><h1 className='font-bold text-base w-3/5'>Adults</h1><p className='text-gray-400'>Age 8+</p></div>
                         <div className='w-2/5 justify-between  flex '><button className='border mr-2 rounded-full border-2' onClick={decrAdult}>-</button> {adultNumber}<button className='ml-2 border rounded-full' onClick={incrAdult}>+</button></div>
                     </div>
                     <Dropdown.Divider />
-                    <div className='flex w-100 my-2 justify-between'>
+                    <div className='flex w-100 my-2 justify-between  items-center'>
                             <div><h1 className='font-bold text-base w-3/5'>Child</h1><p className='text-gray-400'>Age 0 - 8</p></div>
                             <div className='w-2/5 justify-between  flex'><button onClick={decrChild} className='border mr-2 rounded-full'>-</button> {childNumber}<button onClick={incrChild} className='ml-2 border rounded-full'>+</button></div>
                     </div>
@@ -125,18 +140,18 @@ export default function SearchMobile({dropdownArray}) {
             </div>
           </div>
           <div className='flex flex-wrap border-2 mx-5 mt-2 border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg'>
-            <div className="w-1/3 dropdown    py-2 ...">
-            <h1 className='pl-3  z-10 font-medium'>Check In</h1>
-                <Datepicker value={checkInDate} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
+            <div className="w-2/5 dropdown    py-2 ...">
+                <h1 className='pl-3  z-10 font-medium'>Check In</h1>
+                <Datepicker value={checkInDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+2)} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
             </div>
-            <div className="w-1/3 dropdown pl-0  py-2 ...">
+            <div className="w-2/5 dropdown pl-0  py-2 ...">
             <h1 className='pl-3 z-10 font-medium'>Check Out</h1>
-                <Datepicker value={checkOutDate} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date'/>
+                <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+3)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date mobile-date'/>
             </div>
-            <div className="w-1/3 dropdown    ...">
-                <Link to={`/property/${selectedId}`}>
-                    <button className='w-full align-center bg-[#F79489] h-full text-xl font-bold rounded-lg text-white '><i class="fa fa-search"/></button>
-                </Link>
+            <div className="w-1/5 dropdown    ...">
+                {/* <Link to={`/property/${selectedId}`}> */}
+                    <button onClick={()=>{redirectToIndividualPage()}} className='w-full align-center bg-[#F79489] h-full text-xl font-bold rounded-lg text-white '><i class="fa fa-search"/></button>
+                {/* </Link> */}
             </div>
           </div>
         </div>

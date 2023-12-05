@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { logout, login } from '../Store/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { HiOutlineExclamationCircle } from 'react-icons/hi';
 
 export default function NavbarC() {
   const navigate = useNavigate();
@@ -31,6 +32,8 @@ export default function NavbarC() {
   const [password,setPassword] = useState('')
   const [confirmPassword,setConfirmPassword] = useState('')
   const [isRegestering,setIsRegestering] = useState(false)
+  const [signoutConfirmation,setSignoutConfirmation] = useState(false)
+  
 
   useEffect(()=>{
     // onAuthStateChanged(authentication, (user) => {
@@ -87,6 +90,7 @@ export default function NavbarC() {
         // User signed in successfully.
         const user = result.user;
         console.log(user)
+        navigate('/profile')
         // ...
       }).catch((error) => {
         // User couldn't sign in (bad verification code?)
@@ -99,6 +103,7 @@ export default function NavbarC() {
       signInWithPopup(authentication,provider).then((result)=>{
         const user = result.user;
         console.log(user)
+        navigate('/profile')
       }).catch((error) => {
         // Handle Errors here.
         console.log(error)
@@ -110,6 +115,7 @@ export default function NavbarC() {
       signInWithPopup(authentication,provider).then((result)=>{
         const user = result.user;
         console.log(user)
+        navigate('/profile')
       }).catch((error) => {
         // Handle Errors here.
         console.log(error)
@@ -120,6 +126,7 @@ export default function NavbarC() {
       if(password == confirmPassword){
         createUserWithEmailAndPassword(authentication,emailAddress,password).then((userCredential) => {
           const user = userCredential.user;
+          navigate('/profile')
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -135,7 +142,7 @@ export default function NavbarC() {
       signInWithEmailAndPassword(authentication,emailAddress,password).then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        
+        navigate('/profile')  
         // ...
       })
       .catch((error) => {
@@ -186,13 +193,23 @@ export default function NavbarC() {
           unlisten();
       }
    }, []);
+
+  //  const navigate = useNavigate();
+   const navigateToOrders = () =>{
+      
+      navigate('/orders', { state: { id: 1 } });
+   }
+
+   const navigateToWishlist = () =>{
+    navigate('/orders', { state: { id: 3 } });
+   }
     
 
   // const [isChooseCountry,SetisChooseCountry] =useState(false);
 
   return (
-    <>
-    <Navbar fluid rounded className='md:mx-20 mx-8 md:sticky md:top-3 md:z-50'>
+    <div className='md:sticky md:top-0 md:z-50 w-full bg-white'>
+    <Navbar fluid rounded className='md:mx-20 mx-4 '>
       <Navbar.Brand href="#">
         <img src={logo} className="mr-3 h-9 sm:h-9" alt="Aarya Stays Logo" />
       </Navbar.Brand>
@@ -208,8 +225,8 @@ export default function NavbarC() {
         >
           <Dropdown.Item onClick={() => setOpenModal(true)}>Login/Register</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={() => handleSignOut()}>Sign out</Dropdown.Item>
-          <Dropdown.Divider />
+          {/* <Dropdown.Item onClick={() => handleSignOut()}>Sign out</Dropdown.Item>
+          <Dropdown.Divider /> */}
           <Link /><Dropdown.Item> Contact</Dropdown.Item>
         </Dropdown> : <Dropdown
           arrowIcon={false}
@@ -222,11 +239,11 @@ export default function NavbarC() {
           <Link to="/profile"><Dropdown.Item >
  My Profile</Dropdown.Item></Link> 
           <Dropdown.Divider />
-          <Link to="/orders"><Dropdown.Item >My Booking</Dropdown.Item></Link> 
+          <Dropdown.Item onClick={()=>{ navigateToOrders()}}>My Booking</Dropdown.Item>
           <Dropdown.Divider />
-          <Link to="/orders"><Dropdown.Item> My WishList</Dropdown.Item></Link> 
+          <Dropdown.Item onClick={()=>{navigateToWishlist()}}> My WishList</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={() => handleSignOut()}>Sign out</Dropdown.Item>
+          <Dropdown.Item onClick={() => setSignoutConfirmation(true)}>Sign out</Dropdown.Item>
         </Dropdown>}
         <Navbar.Toggle />
       </div>
@@ -294,6 +311,26 @@ export default function NavbarC() {
     </Modal.Footer> */}
     <div id="recaptcha-container"></div>
   </Modal>
-  </>
+
+  <Modal show={signoutConfirmation} size="md" onClose={() => setSignoutConfirmation(false)} popup>
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              Are you sure you want to Signout?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={() => {handleSignOut();setSignoutConfirmation(false)}}>
+                {"Yes, I'm sure"}
+              </Button>
+              <Button color="gray" onClick={() => setSignoutConfirmation(false)}>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+  </div>
   )
 }

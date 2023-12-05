@@ -6,6 +6,10 @@ import FooterC from '../Components/FooterC';
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { createUser, editUser, getUserById } from '../Store/userSlice';
+import { authentication } from '../firebase/config';
+import { useNavigate } from 'react-router-dom';
+import { Toast } from 'flowbite-react';
+import { HiCheck, HiExclamation, HiX } from 'react-icons/hi';
 
 export default function Profile() {
 
@@ -39,6 +43,7 @@ export default function Profile() {
         setEditEmail(false);
     }
 
+    const [success,setSuccess] = useState(false)
 
     const saveChanges = () =>{
         if(!name || !email || !number || !age) {
@@ -47,6 +52,7 @@ export default function Profile() {
             if(Object.keys(user.userDetails).length == 0) {
                 const userDetails ={_id:user.user.uid, name, email, phone: Number(number),age:Number(age)}
                 dispatch(createUser(userDetails));
+
             } else {
                 const updatedUser = {id:user.user.uid};
                 const newUser = {};
@@ -60,7 +66,7 @@ export default function Profile() {
                 dispatch(editUser(updatedUser));
             }
             // saveChanges; update user data using post request
-    
+           
             setEditName(true);
             setEditEmail(true);
             setEditNumber(true);
@@ -69,11 +75,40 @@ export default function Profile() {
         
     }
 
+    const [userget,setUser] = useState(null)
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
-        dispatch(getUserById(user.user.uid));
-    },[])
+        const unsubscribe = authentication.onAuthStateChanged(async (currentUser) => {
+            if (currentUser) {
+              setUser(currentUser);
+              setLoading(false); 
+      
+            } else {
+              setUser(null);
+              setLoading(false); 
+            }
+          });
+      
+          return () => unsubscribe();
+    }, []);
+
+    const navigate = useNavigate()
+    useEffect(() => {
+        // console.log(user)
+        if(!loading && userget === null){
+            alert("you must me logged in")
+            navigate('/')
+        }
+        if(!loading && userget){
+            dispatch(getUserById(userget.uid));
+        }
+    },[userget, loading])
+    // useEffect(() => {
+        
+    // },[userget,loading])
 
     useEffect(() => {
+        // console.log(user.userDetails)
         if(Object.keys(user.userDetails).length > 0) {
             setName(user.userDetails.name);
             setEmail(user.userDetails.email);
@@ -90,38 +125,45 @@ export default function Profile() {
   return (
     <div>
         <NavbarC/>
-        <div className='w-full flex flex-wrap px-12 flex-col mt-4 md:flex-row'>
-            <div className='md:w-2/3 px-10 '>
+        {/* {success && <Toast>
+        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+          <HiCheck className="h-5 w-5" />
+        </div>
+        <div className="ml-3 text-sm font-normal">Item moved successfully.</div>
+        <Toast.Toggle />
+      </Toast>} */}
+        <div className='w-full flex flex-wrap px-12 flex-col my-10 md:flex-row'>
+            <div className='md:w-2/3 md:px-10 '>
                 <h1 className='text-xl font-bold'>Personal Info</h1>
                 <div className='flex justify-between mt-4'>
                     
                     <Label htmlFor="">Name</Label>
-                    <button onClick={changeEditName} className='text-red-500 underline'>Edit</button>
+                    <button onClick={changeEditName} className='text-red-500 text-sm underline'>Edit</button>
                 </div>
                 <TextInput type="text" id="" placeholder="Your Name" disabled={editName} value={name} onChange={(e) => setName(e.target.value)}/>
                 <div className='flex justify-between mt-4'>
                     
                     <Label htmlFor="">Email Id</Label>
-                    <button onClick={changeEditEmail} className='text-red-500 underline'>Edit</button>
+                    <button onClick={changeEditEmail} className='text-red-500 text-sm underline'>Edit</button>
                 </div>
                 <TextInput type="email" id="" placeholder="Your Email Id" disabled={editEmail} value={email} onChange={(e) => setEmail(e.target.value)}/>
                 <div className='flex justify-between mt-4'>
                     
                     <Label htmlFor="">Phone Number</Label>
-                    <button onClick={changeEditNumber} className='text-red-500 underline'>Edit</button>
+                    <button onClick={changeEditNumber} className='text-red-500 text-sm underline'>Edit</button>
                 </div>
                 <TextInput type="number" id="" placeholder="Your Phone Number" disabled={editNumber} value={number} onChange={(e) => setNumber(e.target.value)}/>
                 <div className='flex justify-between mt-4'>
                     
                     <Label htmlFor="">Age</Label>
-                    <button onClick={changeEditAge} className='text-red-500 underline'>Edit</button>
+                    <button onClick={changeEditAge} className='text-red-500 text-sm underline'>Edit</button>
                 </div>
                 <TextInput type="number" id="" placeholder="Age" disabled={editAge} value={age} onChange={(e) => setAge(e.target.value)}/>
                 
                 <h1 className='font-medium text-green-600 my-4'>Tip: Add above details for faster Web Check-In</h1>
                 <Button color="success" onClick={saveChanges} disabled={editName && editEmail && editNumber && editAge} >Save</Button>
             </div>
-            <div className='md:w-1/3  rounded-lg border-2 border-slate-200'>
+            <div className='md:w-1/3 hidden md:block rounded-lg border-2 border-slate-200'>
                 {/* <h1 className="text-4xl font-bold">Profile</h1> */}
             </div>
         </div>

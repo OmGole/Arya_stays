@@ -46,7 +46,8 @@ export default function AddOn({item}) {
                                 
                                 <div className='text-center mt-2'>
                                     <h1>{item.title}</h1>
-                                    <div className='w-full justify-between  flex items-center'><button className='border mr-2 rounded-full border-2 px-3' onClick={decrQty}>-</button> {Qty}<button className='ml-2 border rounded-full border-2 px-3' onClick={incrQty}>+</button></div>
+                                    {item.title === 'Custom TV' ?<div>Qty 1</div> :<div className='w-full justify-between  flex items-center'><button className='border mr-2 rounded-full border-2 px-3' onClick={decrQty}>-</button> {Qty}<button className='ml-2 border rounded-full border-2 px-3' onClick={incrQty}>+</button></div>}
+                                    
                                 </div>
 
                             </div>

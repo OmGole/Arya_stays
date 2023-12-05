@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import api from "../api/api";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserById } from "../Store/userSlice";
+import { Link } from "react-router-dom";
 
-const OrderCard = ({order}) => {
+const OrderCard = ({order, validity}) => {
   const dispatch = useDispatch();
   const userDetails = useSelector(state => state.user.userDetails);
   const [property, setProperty] = useState();
@@ -94,20 +95,25 @@ const OrderCard = ({order}) => {
               <h1 className="font-medium md:text-3xl text-xl">
                 {property?.title}
               </h1>{" "}
-              <button className="rounded-lg bg-[#F79489] text-white md:px-6 hidden md:block">
-                VIEW BOOKING
-              </button>
+              
+              <Link to={`/booking/${validity}/${order._id}`}>
+              <div className="rounded-lg bg-[#F79489] h-full flex items-center text-white md:p-2 md:px-4 hidden md:block">
+                <div>
+                  VIEW BOOKING
+                </div>
+                </div>
+              </Link>
+              
             </div>
             <span className="md:text-lg text-[#8E8E8E]">
               <i className="fa  fa-map-marker text-[#6ACDE9] md:text-xl text-lg"></i>{" "}
               {property?.location}
             </span>
-            <ul className="flex gap-x-8 md:text-lg list-disc mt-2">
-              <div className="font-medium">
-                {" "}
-                Completed {/*Add status here */}
+            <ul className="flex flex-col md:flex-row gap-x-8 md:text-lg md:list-disc list-none mt-2">
+              <div className={order.status == 'accepted' ?'text-green-500 font-medium' : 'text-red-500 font-medium'}>
+                {order.status.charAt(0).toUpperCase() + order.status.slice(1)} {/*Add status here */}
               </div>
-              <li>Booking Id - {order._id}</li>
+              <li><b className="font-medium">Booking Id</b> - {order._id}</li>
             </ul>
           </div>
           <div className="flex-1 border-2 border-slate-200 md:px-10 p-3 justify-center flex-col flex">
@@ -130,9 +136,11 @@ const OrderCard = ({order}) => {
               <span className="py-1 px-2 ml-2 border-2 rounded-lg border-green-500 text-green-500 font-medium">
                 {property?.price + amenitiesPrice}
               </span>
-              <button className="rounded-lg bg-[#F79489] text-white px-4 py-1 ml-2  md:hidden">
-                VIEW BOOKING
-              </button>
+              <Link to={`/booking/${validity}/${order._id}`}>
+                <button className="rounded-lg bg-[#F79489] text-white px-4 py-1 ml-2  md:hidden">
+                  VIEW BOOKING
+                </button>
+              </Link>
             </div>
           </div>
         </div>

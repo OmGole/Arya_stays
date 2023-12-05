@@ -1,10 +1,55 @@
-import React from 'react'
-import HomeCard from './HomeCard';
+import React, { useEffect, useState } from 'react'
+import api from '../api/api';
+import { authentication } from '../firebase/config';
+import HomeCard2 from './HomeCard2';
 
 export default function Listing({properties}) {
 
-  // temporary array
-  const arr = [1,2,3,4,5];
+  const [wishlist,setWishList] = useState([])
+  const [user,setUser] = useState();
+  useEffect(() => {
+    const unsubscribe = authentication.onAuthStateChanged(async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+
+        try {
+          // Fetch wishlist or perform other actions that depend on the user
+          const wishlistData = await api.get(`api/v1/user/wishlist/${currentUser.uid}`);
+          setWishList(wishlistData.data);
+
+          // Additional actions or API calls related to the current user
+          // ...
+        } catch (error) {
+          console.error('Error fetching wishlist:', error);
+        }
+      } else {
+        setUser(null);
+        setWishList([]); // Reset wishlist if user is not available
+      }
+    });
+
+    return () => unsubscribe();
+    
+  }, []);
+
+  // useEffect(()=>{
+  //   getWishlist()
+
+  // },[user])
+  
+
+
+  // const getWishlist = async()=>{
+  //   try {
+  //       console.log(user)
+  //       const wishlistData = await api.get(`api/v1/user/wishlist/${user.uid}`);
+  //       console.log(wishlist)
+  //       setWishList(wishlistData.data);
+  //   } catch (error) {
+  //     console.error('Error fetching wishlist:', error);
+  //   }
+  // }
+
   return (
     <div className='text-black'>
       <div className='container   md:py-16 py-10 mx-auto   mx-auto '>
@@ -12,16 +57,26 @@ export default function Listing({properties}) {
         <div className='mt-5  px-3 text-center md:text-4xl text-xl font-medium'>"Make choosing <span className='text-[#179FEB]'>Aarya Stays,</span> <span className='text-[#F79489]'>the best decision of your vaccation</span>"</div>
       </div>
 
-        {properties?.map((property, index) => (
+        {/* {properties?.map((property, index) => (
         <div className='w-100 md:h-56 h-96 even:bg-[#FABEB7] odd:bg-[#D1EDF5] md:mt-40 md:mt-32 mt-36  relative'>
-        <div className={`md:px-0 px-10   md:w-2/3  absolute -top-32 ${
+          <div className={`md:px-0    md:w-2/3  absolute -top-32 ${
               index % 2 === 0 ?   'md:left-20':'md:right-20'
             }`}>
-          <div className='md:w-full p-3 bg-white  custom-shadow rounded'>
-            <div><HomeCard property={property}/></div>
+            <div className='md:w-full p-3 bg-white  custom-shadow rounded'>
+              <div><HomeCard property={property} wishlist={wishlist}/></div>
+            </div>
           </div>
         </div>
-      </div>
+      ))} */}
+
+       {properties?.map((property, index) => (
+        <div className='w-full md:h-56 h-96 even:bg-[#FABEB7] odd:bg-[#D1EDF5] md:mt-40 md:mt-32 mt-36  relative'>
+          <div className={`md:px-0 w-full   md:w-2/3  absolute -top-32 ${
+              index % 2 === 0 ?   'md:left-20':'md:right-20'
+            }`}>
+            <HomeCard2 property={property} wishlist={wishlist}/>
+          </div>
+        </div>
       ))}
 
        
