@@ -30,16 +30,20 @@ export default function Individual() {
   const [showOnDemand, setShowOnDemand] = useState(false);
   
   const dispatch = useDispatch();
-  const currOrder = useSelector((state) => state.currentOrder.currentOrder);
-  const [price, setPrice] = useState();
   const property = useSelector((state) => state.property.propertyById);
+  const currOrder = useSelector((state) => state.currentOrder.currentOrder);
   const heading_img = useSelector((state) => state.image.headingImage);
+  const [price, setPrice] = useState();
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [essentialAmenities, setEssentialAmenities] = useState([]);
   const [extraAmenities, setExtraAmenities] = useState([]);
   const [addedOnDemand, setAddedOnDemand] = useState(new Set());
   const [amenitiesPrice, setAmenitiesPrice] = useState();
   const [allEvents, setAllEvents] = useState([]);
   const [headingImage, setHeadingImage] = useState("");
+  const [checkInDate, setCheckInDate] = useState(currOrder?.CheckInDate);
+  const [roomType, setRoomType] = useState(currOrder?.RoomType);
+  const [checkOutDate, setCheckOutDate] = useState(currOrder?.CheckOutDate);
 
   useEffect(() => {
     dispatch(updateOrder({ key: "Id", value: routeParamsID }));
@@ -77,7 +81,6 @@ export default function Individual() {
         updateOrder({ key: "RoomType", value: data.payload.roomType[0] })
       );
       setPrice(data.payload.price);
-      console.log(data.payload.amenities);
       getAmenities(data.payload.amenities);
       getEvents(data.payload.events);
       dispatch(getHeadingImages(data.payload.currentLocation_images[0])).then(
@@ -89,8 +92,25 @@ export default function Individual() {
   }, [dispatch]);
 
   useEffect(() => {
+    if(roomType === "full-property") {
+      const events = allEvents?.filter(event => event.type === "full-property");
+      setFilteredEvents(events);
+    } else if(roomType === "private-rooms") {
+      const events = allEvents?.filter(event => event.type === "private-rooms");
+      setFilteredEvents(events);
+    } else {
+      const events = allEvents?.filter(event => event.type === "dorm-beds");
+      setFilteredEvents(events);
+    }
+  }, [allEvents, roomType]);
+
+  useEffect(() => {
     overLap();
-  }, [allEvents]);
+  },[filteredEvents, checkInDate]);
+
+  useEffect(() => {
+    console.log(filteredEvents)
+  },[filteredEvents])
 
   const getAmenities = async (prop) => {
     try {
@@ -101,7 +121,7 @@ export default function Individual() {
           return result.data;
         })
       );
-      console.log(new_amenities);
+      // console.log(new_amenities);
       // setAmenities(new_amenities)
       const essential = new_amenities.filter(
         (amenity) => amenity.type === "essential"
@@ -125,16 +145,22 @@ export default function Individual() {
   }
 
   const overLap = () => {
-    for (let i = 0; i < allEvents.length; i++) {
-      const d1 = new Date(allEvents[i].start);
-      const d2 = new Date();
-      const d3 = new Date(allEvents[i].end);
-      const d4 = d2;
-      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
-        setPrice(allEvents[i].title);
-        return;
-      }
-    } 
+    // const arr = checkInDate.split("/");
+    // const day = arr[0];
+    // const month = arr[1];
+    // const year = arr[2];
+    // for (let i = 0; i < allEvents.length; i++) {
+    //   const d1 = new Date(allEvents[i].start);
+    //   const d2 = new Date(year,month,day)
+    //   const d3 = new Date(allEvents[i].end);
+    //   const d4 = d2;
+    //   if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
+    //     console.log(d2)
+    //     setPrice(allEvents[i].title);
+    //     return;
+    //   }
+    // } 
+    console.log(checkInDate);
   }
 
   const addOnDemand = (item) => {
@@ -154,15 +180,6 @@ export default function Individual() {
     setAddedOnDemand((prev) => new Set([...prev, item]));
     setShowOnDemand(true);
   };
-
-  useEffect(() => {
-    // const arr =
-    console.log(
-      [...addedOnDemand].map((item, index) => {
-        return item.icon.url;
-      })
-    );
-  }, [addedOnDemand]);
 
   const removeAddedItem = (item) => {
     const updatedValues = new Set(addedOnDemand);
@@ -201,11 +218,10 @@ export default function Individual() {
 
   // Search component logic
 
-  const [checkInDate, setCheckInDate] = useState();
-  const [checkOutDate, setCheckOutDate] = useState();
+  
   useEffect(() => {
-    setCheckInDate(currOrder.CheckInDate);
-    setCheckOutDate(currOrder.CheckOutDate);
+    // setCheckInDate(currOrder.CheckInDate);
+    // setCheckOutDate(currOrder.CheckOutDate);
     setRoomType(currOrder.RoomType);
     const totalSum = currOrder.amenities.reduce((accumulator, amenity) => {
       return accumulator + amenity.price * amenity.qty;
@@ -213,7 +229,7 @@ export default function Individual() {
     setAmenitiesPrice(totalSum);
 
     if (currOrder.amenities.length > 0) {
-      console.log("have amenities");
+      // console.log("have amenities");
       setShowOnDemand(true);
       getAlreadyAddedAmenity(currOrder.amenities);
     }
@@ -292,7 +308,6 @@ export default function Individual() {
   };
 
 
-  const [roomType, setRoomType] = useState(currOrder.RoomType);
 
   const handleRoomType = (type) => {
     setRoomType(type);

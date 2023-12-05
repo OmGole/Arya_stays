@@ -4,7 +4,6 @@ import FooterC from '../Components/FooterC'
 import { useDispatch, useSelector } from 'react-redux'
 import { Modal } from 'flowbite-react';
 import api from '../api/api'
-import { getPropertyById } from '../Store/propertySlice'
 import whatsapp from '../Resources/Whatsapp.png'
 import gmail from '../Resources/Gmail.png'
 import { useLocation, useNavigate } from 'react-router-dom';

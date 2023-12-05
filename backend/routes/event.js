@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {getAllEvents,createEvent,getEvent,updateEvent,deleteEvent} = require('../controllers/event');
+const {getAllEvents,createEvent,getEvent,updateEvent,deleteEvent,getFullPropertyEvents,getDormBedsEvents,getPrivateRoomsEvents} = require('../controllers/event');
 
 
 router.route('/').get(getAllEvents).post(createEvent);

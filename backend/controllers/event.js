@@ -11,6 +11,7 @@ const getAllEvents = async (req,res) => {
   }
 }
 
+
 const createEvent = async (req,res) => {
   try {
     const {propertyId, title, start, end} = req.body;

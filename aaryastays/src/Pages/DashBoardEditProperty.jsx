@@ -301,7 +301,6 @@ const DashBoardEditProperty = () => {
 
   useEffect(() => {
     if (property) {
-      console.log(property);
       setTitle(property.title);
       setLocation(property.location);
       setPrice(property.price);
