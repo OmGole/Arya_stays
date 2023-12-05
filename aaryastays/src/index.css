@@ -123,6 +123,17 @@ input::-webkit-inner-spin-button {
       width: 45px; /* Adjust the width for mobile */
       height: 30px; /* Adjust the height for mobile */
   }
+
+  .mobile-date .top-10{
+    /* left: 50%;
+  transform: translateX(-50%); */
+  left:-5.5rem;
+  }
+  .mobile-date2 .top-10{
+    /* left: 50%;
+  transform: translateX(-50%); */
+  left:-7.5rem;
+  }
 }
 
 .img-border{
