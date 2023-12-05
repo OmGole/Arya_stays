@@ -519,7 +519,7 @@ export default function Individual() {
 
       {/* property card */}
 
-      <div className="  md:mx-20 mx-8 ">
+      <div className="  md:mx-20 mx-5 ">
         <div class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:p-5 ">
           <div className="img-border p-5 md:w-1/3 md:h-80   ">
             <img
@@ -689,34 +689,34 @@ export default function Individual() {
 
       {/* property card ends */}
 
-      <h1 className="text-4xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
+      <h1 className="md:text-4xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
         Amenities
       </h1>
-      <div className="w-100  md:mx-20 mx-4 md:p-10 p-5 pb-10 grid justify-items-start  border-2 border-slate-200 rounded-lg">
-        <h1 className="text-2xl font-medium">Essentials</h1>
+      <div className="w-100  md:mx-20  md:p-10 mx-8 pb-10 grid justify-items-start  md:border-2 md:border-slate-200 md:rounded-lg">
+        <h1 className="md:text-2xl text-xl font-medium">Essentials</h1>
         {/* <div className="flex h-full flex-wrap mt-4"> */}
         <div className='flex h-full flex-wrap gap-y-8 md:gap-x-14 gap-x-4 my-6'>
 
 {essentialAmenities?.map((item,index)=>{
                     return(
-                        <div onClick={()=>{showAmenitiesInfo(item)}} className='md:h-[8rem] md:w-[8rem] cursor-pointer h-[5rem] w-[5rem] mt-2'>
+                        <div onClick={()=>{showAmenitiesInfo(item)}} className='md:h-[8rem] md:w-[8rem] cursor-pointer h-[4rem] w-[4rem] mt-2'>
                             <div className='flex-1 h-full custom-shadow rounded grid  justify-items-center place-content-center'>
                                 <img src={item.icon.url} className='w-2/3 md:w-full text-center'/>
                             </div>
                             
-                            <h1 className='text-center mt-2 text-md'>{item.title}</h1>
+                            <h1 className='text-center mt-2 md:text-md text-xs'>{item.title}</h1>
                         </div>
                     )
                 })}
         </div>
 
-        <h1 className="text-2xl font-medium mt-10">On Demand Service</h1>
-        <h1 className="text-lg text-green-600">Click on services to add them</h1>
+        <h1 className="md:text-2xl text-xl font-medium mt-10">On Demand Service</h1>
+        <h1 className="md:text-lg text-sm text-green-600">Click on services to add them</h1>
         <div className="flex flex-wrap gap-10  mt-4">
           {extraAmenities?.map((item, index) => {
             return (
               <div
-                className="md:h-[8rem] md:w-[8rem] cursor-pointer  h-[5rem] w-[5rem] mt-2"
+                className="md:h-[8rem] md:w-[8rem] cursor-pointer  h-[4rem] w-[4rem] mt-2"
                 onClick={() => {
                   addOnDemand(item);
                 }}
@@ -727,7 +727,7 @@ export default function Individual() {
                     className="w-2/3 md:w-full text-center"
                   />
                 </div>
-                <h1 className="text-center mt-2 text-md">{item.title}</h1>
+                <h1 className="text-center mt-2 md:text-md text-xs">{item.title}</h1>
               </div>
             );
           })}
