@@ -32,17 +32,22 @@ export default function Individual() {
   const routeParams = useParams();
   const routeParamsID = routeParams.id;
   const [showOnDemand, setShowOnDemand] = useState(false);
-
+  
   const dispatch = useDispatch();
-  const currOrder = useSelector((state) => state.currentOrder.currentOrder);
   const property = useSelector((state) => state.property.propertyById);
+  const currOrder = useSelector((state) => state.currentOrder.currentOrder);
   const heading_img = useSelector((state) => state.image.headingImage);
+  const [price, setPrice] = useState();
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [essentialAmenities, setEssentialAmenities] = useState([]);
   const [extraAmenities, setExtraAmenities] = useState([]);
   const [addedOnDemand, setAddedOnDemand] = useState(new Set());
   const [amenitiesPrice, setAmenitiesPrice] = useState();
-
+  const [allEvents, setAllEvents] = useState([]);
   const [headingImage, setHeadingImage] = useState("");
+  const [checkInDate, setCheckInDate] = useState(currOrder?.CheckInDate);
+  const [roomType, setRoomType] = useState(currOrder?.RoomType);
+  const [checkOutDate, setCheckOutDate] = useState(currOrder?.CheckOutDate);
 
   const { pathname } = useLocation();
 
@@ -74,8 +79,8 @@ export default function Individual() {
         updateOrder({ key: "RoomType", value: data.payload.roomType[0] })
       );
       setPrice(data.payload.price);
-      console.log(data.payload.amenities);
       getAmenities(data.payload.amenities);
+      getEvents(data.payload.events);
       dispatch(getHeadingImages(data.payload.currentLocation_images[0])).then(
         (data) => {
           setHeadingImage(data.payload.url);
@@ -84,9 +89,26 @@ export default function Individual() {
     });
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   console.log(currOrder);
-  // }, [currOrder]);
+  useEffect(() => {
+    if(roomType === "full-property") {
+      const events = allEvents?.filter(event => event.type === "full-property");
+      setFilteredEvents(events);
+    } else if(roomType === "private-rooms") {
+      const events = allEvents?.filter(event => event.type === "private-rooms");
+      setFilteredEvents(events);
+    } else {
+      const events = allEvents?.filter(event => event.type === "dorm-beds");
+      setFilteredEvents(events);
+    }
+  }, [allEvents, roomType]);
+
+  useEffect(() => {
+    if(checkInDate) {
+      overLap();
+    }
+  }, [filteredEvents, checkInDate]);
+
+
 
   const getAmenities = async (prop) => {
     try {
@@ -97,7 +119,7 @@ export default function Individual() {
           return result.data;
         })
       );
-      console.log(new_amenities);
+      // console.log(new_amenities);
       // setAmenities(new_amenities)
       const essential = new_amenities.filter(
         (amenity) => amenity.type === "essential"
@@ -110,6 +132,40 @@ export default function Individual() {
     }
   };
 
+  const getEvents = async (events) => {
+    const fethcedEvents = await Promise.all(
+      events.map(async (id) => {
+        const result = await api.get(`/api/v1/event/${id}`);
+        return result.data;
+      })
+    );
+    setAllEvents(fethcedEvents);
+  }
+
+  const overLap = () => {
+    const [day, month, year] = checkInDate.split("/");
+    console.log(filteredEvents)
+    for (let i = 0; i < filteredEvents.length; i++) {
+      const d1 = new Date(filteredEvents[i].start);
+
+      const d2 = new Date(year,month-1,day);
+      d2.setSeconds(d2.getSeconds() + 2);
+
+      const d3 = new Date(filteredEvents[i].end);
+
+      const d4 = new Date(year,month-1,day);
+      d4.setDate(d4.getDate() + 1);
+      d4.setSeconds(d4.getSeconds() - 2);
+      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
+        console.log(filteredEvents[i].title)
+        setPrice(filteredEvents[i].title);
+        return;
+      }
+    } 
+    setPrice(property.price);
+    console.log(checkInDate);
+  }
+
   const addOnDemand = (item) => {
     const obj = {
       id: item._id,
@@ -117,10 +173,8 @@ export default function Individual() {
       qty: 1,
     };
     const arr = currOrder.amenities;
-    console.log(arr)
     const isNewObjArray = !arr.some((obj2) => obj2.id === obj.id);
     //add obj in arr
-    console.log(isNewObjArray)
     if (isNewObjArray) {
       dispatch(updateOrder({ key: "amenities", value: [...arr, obj] }));
       setAddedOnDemand((prev) => new Set([...prev, item]));
@@ -129,15 +183,6 @@ export default function Individual() {
     
     setShowOnDemand(true);
   };
-
-  // useEffect(() => {
-  //   // const arr =
-  //   console.log(
-  //     [...addedOnDemand].map((item, index) => {
-  //       return item.icon.url;
-  //     })
-  //   );
-  // }, [addedOnDemand]);
 
   const removeAddedItem = (item) => {
     const updatedValues = new Set(addedOnDemand);
@@ -159,11 +204,10 @@ export default function Individual() {
 
   // Search component logic
 
-  const [checkInDate, setCheckInDate] = useState();
-  const [checkOutDate, setCheckOutDate] = useState();
+  
   useEffect(() => {
-    setCheckInDate(currOrder.CheckInDate);
-    setCheckOutDate(currOrder.CheckOutDate);
+    // setCheckInDate(currOrder.CheckInDate);
+    // setCheckOutDate(currOrder.CheckOutDate);
     setRoomType(currOrder.RoomType);
     const totalSum = currOrder.amenities.reduce((accumulator, amenity) => {
       return accumulator + amenity.price * amenity.qty;
@@ -171,7 +215,7 @@ export default function Individual() {
     setAmenitiesPrice(totalSum);
 
     if (currOrder.amenities.length > 0) {
-      console.log("have amenities");
+      // console.log("have amenities");
       setShowOnDemand(true);
       getAlreadyAddedAmenity(currOrder.amenities);
     }
@@ -249,9 +293,7 @@ export default function Individual() {
     }
   };
 
-  const [price, setPrice] = useState(7000);
 
-  const [roomType, setRoomType] = useState(currOrder.RoomType);
 
   const handleRoomType = (type) => {
     setRoomType(type);
@@ -288,7 +330,7 @@ export default function Individual() {
   const [user,setUser] = useState(null)
   const navigateToBook = () =>{
     if(user){
-      navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder}})
+      navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder,price}})
     }else{
       alert("You must be logged in")
     }

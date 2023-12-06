@@ -20,7 +20,7 @@ export const store = configureStore({
     image: imageReducer,
     slide: slideReducer,
     currentOrder: currentOrderReducer,
-    event: eventReducer,
-    review: reviewReducer,
+    event:eventReducer,
+    review:reviewReducer
   },
 });

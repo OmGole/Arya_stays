@@ -13,6 +13,11 @@ const EventSchema = new mongoose.Schema({
     type:Date,
     required:true,
   },
+  type:{
+    type: String,
+    enum : ['full-property','dorm-beds','private-rooms'],
+    required:true
+  }
 })
 
 

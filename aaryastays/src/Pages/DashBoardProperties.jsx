@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import DashBoardPropertyRow from "../Components/DashBoardPropertyRow";
 import { getAllProperties } from "../Store/propertySlice";
 import { Link } from "react-router-dom";
+import DashBoardNavbar from "../Components/DashBoardNavbar";
 
 
 function DashBoardProperties() {
@@ -22,6 +23,7 @@ function DashBoardProperties() {
 
   return (
     <>
+      <DashBoardNavbar/>
       <div className="md:container mx-auto pt-5 md:px-10 px-6 mb-5">
       <div>
           <div className="md:container mx-auto relative">

@@ -3,6 +3,7 @@ import api from "../api/api.js";
 
 const initialState = {
   createReview: {},
+  deletedReview:{},
   error: "",
 };
 
@@ -30,6 +31,18 @@ export const postReview = createAsyncThunk(
   }
 );
 
+export const deleteReview = createAsyncThunk(
+  "review/removeReview",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/api/v1/review/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const reviewSlice = createSlice({
   name: "review",
   initialState,
@@ -44,6 +57,16 @@ export const reviewSlice = createSlice({
     [postReview.rejected]: (state, { payload }) => {
       console.log(payload);
       state.createReview = {};
+      state.error = payload;
+    },
+    [deleteReview.fulfilled]: (state, { payload }) => {
+      console.log(payload);
+      state.deletedReview = payload;
+      state.error = "";
+    },
+    [deleteReview.rejected]: (state, { payload }) => {
+      console.log(payload);
+      state.deletedReview = {};
       state.error = payload;
     },
     //     [getCurrentOrders.fulfilled] : (state, { payload }) => {

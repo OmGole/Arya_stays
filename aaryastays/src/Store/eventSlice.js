@@ -78,9 +78,9 @@ export const editEvent = createAsyncThunk(
 
 export const deleteEvent = createAsyncThunk(
   "event/removeEvent",
-  async (id, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const response = await api.delete(`/api/v1/event/${id}`);
+      const response = await api.delete(`/api/v1/event/${data.id}`, {data: data.propertyDetails});
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

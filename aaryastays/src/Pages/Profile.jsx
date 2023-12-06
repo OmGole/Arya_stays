@@ -71,8 +71,6 @@ export default function Profile() {
             setEditEmail(true);
             setEditNumber(true);
             setEditAge(true);
-
-
         }
         
     }

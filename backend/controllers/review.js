@@ -14,7 +14,7 @@ const createReview = async (req,res) => {
   // req.body.createdBy = req.user.userId; 
   const {userId, propertyId, rating, description} = req.body;
   
-  if(!userId || !rating || !description) {
+  if(!userId || !propertyId || !rating || !description) {
     console.log(req.body);
     return res.status(401).send("Please fill the missing fields");
   }
@@ -59,12 +59,9 @@ const deleteReview = async (req,res) => {
   }
 }
 
-
-
 module.exports = {
   getAllReviews,
   createReview,
   getReviewsByReviewId,
   deleteReview
 }
-

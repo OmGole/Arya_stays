@@ -51,7 +51,7 @@ function DashBoardOrderRow({ apply, startDate, endDate, search, order }) {
 
   if ((propertyContainsSearchTerm || userContainsSearchTerm) && (!apply ||
   (new Date(startDate) <= new Date(order.check_in) &&
-  new Date(order.check_out) <= new Date(endDate)))) {
+  new Date(order.check_in) <= new Date(endDate)))) {
       return (
         <div className="md:flex text-center py-9 md:justify-center content-center items-center border-b-2 border-black">
           <div className="basis-1/6 mb-3">

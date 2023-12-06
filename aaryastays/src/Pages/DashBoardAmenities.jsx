@@ -6,6 +6,8 @@ import DashBoardOrderRow from "../Components/DashBoardOrderRow";
 import { getAllAmenity } from "../Store/amenitySlice";
 import DashBoardAmenityRow from "../Components/DashBoardAmenityRow";
 import AddAmenityModal from "../Components/AddAmenityModal";
+import DashBoardNavbar from "../Components/DashBoardNavbar";
+
 
 function DashBoardAmenities() {
   const amenitites = useSelector((state) => state.amenity);
@@ -21,6 +23,7 @@ function DashBoardAmenities() {
 
   return (
     <>
+    <DashBoardNavbar/>
       <div className="md:container mx-auto pt-5 md:px-10 px-6 mb-5">
         <div>
           <div className="md:container mx-auto relative">

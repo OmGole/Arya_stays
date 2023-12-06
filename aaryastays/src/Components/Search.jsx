@@ -48,10 +48,6 @@ export default function Search({dropdownArray}) {
         dispatch(updateOrder({key:'childNumber',value:1}))
     },[]) 
 
-    useEffect(()=>{
-        console.log(currOrder)
-    },[currOrder])
-
     const handleCheckIn = (date) => {
         console.log(typeof date)
         setCheckInDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());

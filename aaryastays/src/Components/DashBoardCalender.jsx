@@ -8,7 +8,7 @@ import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Modal } from "flowbite-react";
 import { useDispatch } from "react-redux";
-import { createEvent, editEvent, getOverlap } from "../Store/eventSlice";
+import { createEvent, deleteEvent, editEvent } from "../Store/eventSlice";
 import api from "../api/api";
 // import DatePicker from "react-datepicker";
 // import "react-datepicker/dist/react-datepicker.css";
@@ -25,12 +25,13 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-
-function DashBoardCalender( { property } ) {
-
+function DashBoardCalender({ property }) {
   const dispatch = useDispatch();
+  const [selectedTab, setSelectedTab] = useState(1);
+  const [type, setType] = useState("full-property");
   const [price, setPrice] = useState();
   const [allEvents, setAllEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [checkInDate, setCheckInDate] = useState();
   const [checkOutDate, setCheckOutDate] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -52,25 +53,28 @@ function DashBoardCalender( { property } ) {
 
     console.log(correctedEnd);
     const newEvent = {
-      propertyId:property._id,
+      propertyId: property._id,
       title: Number(price),
       start: correctedStart,
       end: correctedEnd,
+      type
     };
-    
-    for (let i = 0; i < allEvents.length; i++) {
-      const d1 = new Date(allEvents[i].start);
-      const d2 = new Date(newEvent.start);
-      const d3 = new Date(allEvents[i].end);
-      const d4 = new Date(newEvent.end);
+
+    for (let i = 0; i < filteredEvents.length; i++) {
+      const d1 = new Date(filteredEvents[i].start);
+      const d2 = new Date(filteredEvents.start);
+      const d3 = new Date(filteredEvents[i].end);
+      const d4 = new Date(filteredEvents.end);
       if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
         alert("CLASH");
+        setPrice();
+        setCheckInDate();
+        setCheckOutDate();
         return;
       }
-    }    
-    
+    }
+
     dispatch(createEvent(newEvent));
-    getEvents()
     setPrice("");
     setCheckInDate("");
     setCheckOutDate("");
@@ -79,32 +83,36 @@ function DashBoardCalender( { property } ) {
   function handleEditEvent(e) {
     e.preventDefault();
     const newEvent = {};
-    console.log(modalData);
     if (price) newEvent.title = Number(price);
 
     if (checkInDate) newEvent.start = checkInDate;
     else newEvent.start = modalData.start;
 
-    if (checkOutDate) newEvent.end = checkOutDate;
-    else newEvent.end = modalData.end;
+    if (checkOutDate) {
+      newEvent.end = checkOutDate;
+    } else {
+      newEvent.end = modalData.end;
+    }
 
-    for (let i = 0; i < allEvents.length; i++) {
-      if(allEvents[i]._id == modalData._id) continue;
-      const d1 = new Date(allEvents[i].start);
-      const d2 = new Date(newEvent.start);
-      const d3 = new Date(allEvents[i].end);
-      const d4 = new Date(newEvent.end);
+    for (let i = 0; i < filteredEvents.length; i++) {
+      if (filteredEvents[i]._id == modalData._id) continue;
+      const d1 = new Date(filteredEvents[i].start);
+      const d2 = new Date(filteredEvents.start);
+      const d3 = new Date(filteredEvents[i].end);
+      const d4 = new Date(filteredEvents.end);
       if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
         alert("CLASH");
+        setPrice();
+        setCheckInDate();
+        setCheckOutDate();
         return;
       }
     }
 
-    const updatedEvent = {id:modalData._id, newEvent};
+    const updatedEvent = { id: modalData._id, newEvent };
 
     dispatch(editEvent(updatedEvent));
     setOpenModal(false);
-    // getEvents();
   }
 
   const getEvents = async (e) => {
@@ -115,22 +123,36 @@ function DashBoardCalender( { property } ) {
       })
     );
     setAllEvents(events);
-  }
+  };
 
+  const overLapToday = () => {
+    for (let i = 0; i < filteredEvents.length; i++) {
+      const d1 = new Date(filteredEvents[i].start);
+      const d2 = new Date();
+      const d3 = new Date(filteredEvents[i].end);
+      const d4 = d2;
+      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
+        setTodayPrice(filteredEvents[i].title);
+        return;
+      }
+    }
+    setTodayPrice(property?.price);
+  };
 
   const handleCheckIn = (date) => {
-    console.log(date);
     setCheckInDate(date);
   };
 
   const handleDeleteEvent = (e) => {
     e.preventDefault();
-
+    const propertyDetails = { propertyId: property._id, type: "events" };
+    const data = { id: modalData._id, propertyDetails };
+    console.log(data);
+    dispatch(deleteEvent(data));
     setOpenModal(false);
-  }
+  };
 
   const handleCheckOut = (date) => {
-    console.log(date);
     setCheckOutDate(date);
   };
 
@@ -140,27 +162,38 @@ function DashBoardCalender( { property } ) {
   };
 
   useEffect(() => {
-    setPrice();
-    setCheckInDate();
-    setCheckOutDate();
+    setPrice("");
+    setCheckInDate("");
+    setCheckOutDate("");
   }, [openModal]);
 
-  useEffect(() => {
-    dispatch(getOverlap()).then(data => {
-      if(data.payload.length != 0) {
-        setTodayPrice(data.payload[0].title);
-      } else {
-        setTodayPrice(property.price);
-      }
-    });
-  },[allEvents])
 
   useEffect(() => {
-    if(property) {
-      console.log(property);
+    if (property) {
       getEvents();
     }
   }, [property]);
+
+  useEffect(() => {
+    if(selectedTab == 1) {
+      const events = allEvents.filter(event => {
+        return event.type === "full-property"});
+      setFilteredEvents(events);
+      setType("full-property");
+    } else if(selectedTab == 2) {
+      const events = allEvents.filter(event => event.type == "dorm-beds");
+      setFilteredEvents(events);
+      setType("dorm-beds");
+    } else {
+      const events = allEvents.filter(event => event.type == "private-rooms");
+      setFilteredEvents(events);
+      setType("private-rooms");
+    }
+  },[allEvents, selectedTab])
+  
+  useEffect(() => {
+    overLapToday();
+  },[filteredEvents])
 
   return (
     <div className="mt-10">
@@ -170,11 +203,11 @@ function DashBoardCalender( { property } ) {
       <div className="font-semibold mt-8 text-lg">
         Today's Price: {todayPrice}
       </div>
-      
+
       <div className="my-8">
-      <div className="mb-2">
-        <h2 className="text-xl">Add New Event</h2>
-      </div>
+        <div className="mb-2">
+          <h2 className="text-xl">Add New Event</h2>
+        </div>
         <input
           type="number"
           placeholder="Price"
@@ -207,14 +240,60 @@ function DashBoardCalender( { property } ) {
           Add
         </button>
       </div>
+      <div className="md:mx-20 mx-10">
+        <div className="flex justify-around">
+          <div>
+            <button
+              onClick={() => {
+                setSelectedTab(1);
+              }}
+              className={`border-2 font-medium  py-3 px-8 rounded ${
+                selectedTab == 1
+                  ? "bg-[#F79489] border-[#FFD93D] text-white"
+                  : "border-slate-200"
+              }`}
+            >
+              Full Property
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                setSelectedTab(2);
+              }}
+              className={`border-2 font-medium  py-3 px-8 rounded ${
+                selectedTab == 2
+                  ? "bg-[#F79489] border-[#FFD93D] text-white"
+                  : "border-slate-200"
+              }`}
+            >
+              Dorm beds
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                setSelectedTab(3);
+              }}
+              className={`border-2 font-medium  py-3 px-8 rounded ${
+                selectedTab == 3
+                  ? "bg-[#F79489] border-[#FFD93D] text-white"
+                  : "border-slate-200"
+              }`}
+            >
+              Private Rooms
+            </button>
+          </div>
+        </div>
+      </div>
       <Calendar
         localizer={localizer}
-        events={allEvents}
+        events={filteredEvents}
         startAccessor="start"
         endAccessor="end"
         onSelectEvent={(e) => handleSelect(e)}
         style={{ height: 600, marginTop: "100px" }}
-        views={['month','agenda']}
+        views={["month", "agenda"]}
       />
       <Modal
         dismissible

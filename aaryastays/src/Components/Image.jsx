@@ -20,9 +20,6 @@ const Image = ({ id, file,type, propertyId }) => {
     }
   },[id])
 
-  useEffect(() => {
-    console.log(image);
-  },[image])
 
   const handleImageEdit = (e) => {
     e.preventDefault();
