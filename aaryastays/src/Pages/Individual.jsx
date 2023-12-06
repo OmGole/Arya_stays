@@ -26,6 +26,7 @@ import { Dropdown, Datepicker, Modal } from "flowbite-react";
 import { updateOrder } from "../Store/currentOrderSlice";
 import AddOn from "../Components/AddOn";
 import IndividualCard2 from "../Components/IndividualCard2";
+import { useLocation } from "react-router-dom";
 
 export default function Individual() {
   const routeParams = useParams();
@@ -42,6 +43,12 @@ export default function Individual() {
   const [amenitiesPrice, setAmenitiesPrice] = useState();
 
   const [headingImage, setHeadingImage] = useState("");
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname]);
 
   useEffect(() => {
     dispatch(updateOrder({ key: "Id", value: routeParamsID }));
@@ -304,7 +311,11 @@ export default function Individual() {
           <h1 className="text-white md:text-4xl text-lg">
             {property.location}
           </h1>
+          <div className="absolute bottom-0 right-0 p-4">
+      <Link to={`/gallery/${routeParamsID}`}><button className="bg-white text-xs md:px-4 md:text-md px-3 py-2 rounded"><i class="fa fa-th text-[#6ACDE9]" aria-hidden="true"></i> Show all Photos</button></Link>
+    </div>
         </div>
+        
       </div>
 
       <h1 className="md:text-4xl text-xl text-center font-medium mt-10 mb-14 underline decoration-[#F79489] underline-offset-8 decoration-4">

@@ -12,6 +12,7 @@ import { createOrder } from '../Store/orderSlice';
 import { reset } from '../Store/currentOrderSlice';
 import emailjs from '@emailjs/browser'
 import { authentication } from '../firebase/config';
+// import { useLocation } from 'react-router-dom';
 
 
 
@@ -34,6 +35,12 @@ export default function Booking() {
     const [amenityTitle,setAmenityTitle] = useState([])
     const [user,setUser] = useState(null)
     let navigate = useNavigate(); 
+
+    const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname]);
 
     useEffect(() => {
         if (state) {
