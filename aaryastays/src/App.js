@@ -16,6 +16,7 @@ import DashBoardEditProperty from "./Pages/DashBoardEditProperty";
 import { ToastContainer } from "react-toastify";
 
 import IndividualOrder from "./Pages/IndividualOrder";
+import ScrollToTop from "./ScrollToTop";
 import Gallery from "./Pages/Gallery";
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         Book your comfortable rooms, before 48 hrs to 60 mins before the check
         In!
       </div>
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />

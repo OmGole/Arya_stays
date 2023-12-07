@@ -87,7 +87,28 @@ export default function SearchMobile({dropdownArray}) {
 
    const redirectToIndividualPage = ()=>{
     if(selectedId){
-        navigate('/property/'+selectedId)
+        const checkOutDateParts = checkOutDate.split('/'); // Assuming checkOutDate is '10/12/2023'
+        const day = parseInt(checkOutDateParts[0], 10);
+        const month = parseInt(checkOutDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+        const year = parseInt(checkOutDateParts[2], 10);
+
+        const checkout = new Date(year, month, day);
+
+        const checkInDateParts = checkInDate.split('/'); // Assuming checkInDate is '10/12/2023'
+        const day1 = parseInt(checkInDateParts[0], 10);
+        const month1 = parseInt(checkInDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+        const year1 = parseInt(checkInDateParts[2], 10);
+
+        const checkin = new Date(year1, month1, day1);
+
+        if(checkin > checkout){
+            alert('CheckIn date should be less than CheckOut date')
+            return;
+        }else{
+            navigate('/property/'+selectedId)
+        }
+
+        
     }else{
         alert('Please select a property')
     }

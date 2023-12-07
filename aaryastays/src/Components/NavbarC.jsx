@@ -210,7 +210,7 @@ export default function NavbarC() {
   return (
     <div className='md:sticky md:top-0 md:z-50 w-full bg-white'>
     <Navbar fluid rounded className='md:mx-20 mx-4 '>
-      <Navbar.Brand href="#">
+      <Navbar.Brand href="/">
         <img src={logo} className="mr-3 h-9 sm:h-9" alt="Aarya Stays Logo" />
       </Navbar.Brand>
       <div className="flex md:order-2 space-x-3 ">

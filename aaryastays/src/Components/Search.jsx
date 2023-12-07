@@ -39,6 +39,8 @@ export default function Search({dropdownArray}) {
         checkin.setDate(new Date().getDate()+2);
         const checkout = new Date();
         checkout.setDate(new Date().getDate()+3);
+        console.log(checkin)
+        console.log(checkout)
 
         setCheckInDate(`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`);
         dispatch(updateOrder({key:'CheckInDate',value:`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`}))
@@ -48,15 +50,45 @@ export default function Search({dropdownArray}) {
         dispatch(updateOrder({key:'childNumber',value:1}))
     },[]) 
 
+    useEffect(()=>{
+        console.log("checkin "+checkInDate)
+        console.log("checkout "+checkOutDate)
+    },[checkInDate,checkOutDate])
+
     const handleCheckIn = (date) => {
-        console.log(typeof date)
+        // console.log(date)
+        // console.log(checkOutDate)
+        // const checkOutDateParts = checkOutDate.split('/'); // Assuming checkOutDate is '10/12/2023'
+        // const day = parseInt(checkOutDateParts[0], 10);
+        // const month = parseInt(checkOutDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+        // const year = parseInt(checkOutDateParts[2], 10);
+
+        // const checkout = new Date(year, month, day);
+        // console.log(checkout)
+        // if(date < checkout){
         setCheckInDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
         dispatch(updateOrder({key:'CheckInDate',value:date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear()}))
+        // }
+        // else{
+        //     alert('CheckIn date should be less than CheckOut date')
+        // }
     };
 
     const handleCheckOut = (date) => {
+//         const checkInDateParts = checkInDate.split('/'); // Assuming checkInDate is '10/12/2023'
+// const day = parseInt(checkInDateParts[0], 10);
+// const month = parseInt(checkInDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+// const year = parseInt(checkInDateParts[2], 10);
+
+// const checkin = new Date(year, month, day);
+//         console.log(checkin)
+//         console.log(date)
+//         if(date > checkin){
         setCheckOutDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
         dispatch(updateOrder({key:'CheckOutDate', value:date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear()}))
+        // }else{
+        //     alert('CheckOut date should be greater than CheckIn date')
+        // }
     };
    
 
@@ -86,7 +118,28 @@ export default function Search({dropdownArray}) {
 
    const redirectToIndividualPage = ()=>{
     if(selectedId){
-        navigate('/property/'+selectedId)
+        const checkOutDateParts = checkOutDate.split('/'); // Assuming checkOutDate is '10/12/2023'
+        const day = parseInt(checkOutDateParts[0], 10);
+        const month = parseInt(checkOutDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+        const year = parseInt(checkOutDateParts[2], 10);
+
+        const checkout = new Date(year, month, day);
+
+        const checkInDateParts = checkInDate.split('/'); // Assuming checkInDate is '10/12/2023'
+        const day1 = parseInt(checkInDateParts[0], 10);
+        const month1 = parseInt(checkInDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+        const year1 = parseInt(checkInDateParts[2], 10);
+
+        const checkin = new Date(year1, month1, day1);
+
+        if(checkin > checkout){
+            alert('CheckIn date should be less than CheckOut date')
+            return;
+        }else{
+            navigate('/property/'+selectedId)
+        }
+
+        
     }else{
         alert('Please select a property')
     }
@@ -152,7 +205,7 @@ export default function Search({dropdownArray}) {
                 className='px-5 py-4 mt-2'
                 inline
                 label={<div className='text-start  w-full'><div className='text-xl font-medium'>Guests</div>
-            <div className='text-[#F79489] mt-2'>{adultNumber} Adult, {childNumber} Child</div></div>}
+            <div className='text-[#F79489] '>{adultNumber} Adult, {childNumber} Child</div></div>}
                 
             >
                 <div className='flex w-100 mb-2 justify-between'>

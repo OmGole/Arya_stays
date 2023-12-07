@@ -12,6 +12,7 @@ import { authentication } from '../firebase/config';
 import {getPropertyById} from '../Store/propertySlice'
 import WishListCard from '../Components/WishListCard';
 import WishList2 from '../Components/WishList2';
+import ScrollToTop from '../ScrollToTop';
 
 export default function Orders() {
 
@@ -27,6 +28,8 @@ export default function Orders() {
     const [wishlist,setWishList] = useState([])
     const [wishlistProperties,setWishlistProperties] = useState([])
     const [loading, setLoading] = useState(true);
+    
+  
     useEffect(()=>{
         const { state } = location;
         const  id  = state?.id;
@@ -129,6 +132,7 @@ export default function Orders() {
 
   return (
     <>
+    <ScrollToTop />
         <NavbarC/>
         <div className='md:mx-20 mx-8'>
             <div className='flex justify-around'>

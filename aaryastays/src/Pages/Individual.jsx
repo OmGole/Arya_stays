@@ -330,7 +330,28 @@ export default function Individual() {
   const [user,setUser] = useState(null)
   const navigateToBook = () =>{
     if(user){
-      navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder,price}})
+        const checkOutDateParts = checkOutDate.split('/'); // Assuming checkOutDate is '10/12/2023'
+        const day = parseInt(checkOutDateParts[0], 10);
+        const month = parseInt(checkOutDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+        const year = parseInt(checkOutDateParts[2], 10);
+
+        const checkout = new Date(year, month, day);
+
+        const checkInDateParts = checkInDate.split('/'); // Assuming checkInDate is '10/12/2023'
+        const day1 = parseInt(checkInDateParts[0], 10);
+        const month1 = parseInt(checkInDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+        const year1 = parseInt(checkInDateParts[2], 10);
+
+        const checkin = new Date(year1, month1, day1);
+
+        if(checkin > checkout){
+          alert("Check In Date cannot be greater than Check Out Date")
+          return;
+        }else{
+          navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder,price}})
+        }
+
+      
     }else{
       alert("You must be logged in")
     }
@@ -411,7 +432,7 @@ export default function Individual() {
                 </p>
               </div>
             </div>
-            <div class="lg:w-1/6 h-full text-lg py-2 bg-white ...">
+            <div class="lg:w-1/6  text-lg py-2 bg-white ...">
               <h1 className="pl-3 z-10 font-medium">Check In</h1>
               <Datepicker
                 value={checkInDate}
@@ -915,6 +936,7 @@ export default function Individual() {
       <About />
       <FooterC />
       <button onClick={executeScroll} id="fixedbutton" className="md:hidden bg-[#F79489] text-white font-medium border-2 rounded-full p-4"> Edit</button>
+      <button onClick={executeScroll} id="fixedbutton-pc" className="md:block hidden bg-[#F79489] text-white font-medium border-2 rounded-full p-4"> Book Now</button>
     </div>
   );
 }
