@@ -16,7 +16,7 @@ export const getAllEvents = createAsyncThunk(
   "event/fetchAllEvents",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/api/v1/event`);
+      const response = await api.get(`/api/v1/event/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -126,7 +126,7 @@ export const eventSlice = createSlice({
       state.error = payload;
     },
     [createEvent.fulfilled]: (state, { payload }) => {
-      console.log(payload);
+      state.allEvents.push(payload);
       state.createdEvent = payload;
       state.error = "";
     },

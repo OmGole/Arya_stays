@@ -855,9 +855,9 @@ export default function Individual() {
         {/* </Link> */}
       </div>
 
-      {/* <div className="w-100 md:mx-20 mx-10 rounded-lg overflow-auto">
+      <div className="w-100 md:mx-20 mx-10 mt-12 rounded-lg overflow-auto">
         <Slide slides={property.slides} />
-      </div> */}
+      </div>
       {/* <h1 className="lg:text-4xl md:tex-3xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
         Everything You Need To Know{" "}
         <span className="text-[#179FEB]">Before You Book</span>

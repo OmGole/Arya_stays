@@ -121,23 +121,13 @@ const DashBoardSlide = ({ id, propertyId, type }) => {
           ))}
       </div>
       <div className="my-3">
-            <button
-              onClick={handleEditSlideDescription}
-              className="text-red-500 underline block ml-auto"
-            >
-              Edit
-            </button>
 
             <textarea
               name=""
               id=""
               cols=""
               rows="3"
-              className={`border-2 rounded-xl py-1 px-3  w-full ${
-                disableSlide_description
-                  ? " text-gray-400 cursor-not-allowed"
-                  : "text-black"
-              }`}
+              className={`border-2 rounded-xl py-1 px-3 mt-5 w-full text-black`}
               placeholder="Surrounding Description"
               onChange={handleSlideDescription}
               value={slide_description}
@@ -146,7 +136,7 @@ const DashBoardSlide = ({ id, propertyId, type }) => {
             className="block w-full bg-[#F79489] text-white py-1 px-5 rounded-full hover:bg-white hover:text-[#F79489] border-2 border-[#F79489] transition duration-200 box-border text-l my-3 font-poppins"
             onClick={handleEditSlide}
           >
-            Edit
+            Save
           </button>
           </div>
     </div>
