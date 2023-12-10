@@ -76,8 +76,13 @@
   outline: none !important;
 }
 
-.custom-date input{
-  padding-top: 0%;
+/* .custom-date input{
+  padding-top: 0% !important;
+} */
+
+.custom-date .p-2\.5{
+  padding:0 !important;
+  padding-left: 2.5rem !important;
 }
 
 /* .custom-date2 .bg-gray-50{
@@ -205,6 +210,12 @@ h3{
   position: fixed;
   bottom: 5px;
   right: 5px; 
+}
+
+#fixedbutton-pc {
+  position: fixed;
+  bottom: 10px;
+  right: 10px; 
 }
 
 .center > div{

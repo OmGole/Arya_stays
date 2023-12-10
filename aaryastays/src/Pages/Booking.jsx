@@ -11,6 +11,8 @@ import { createOrder } from '../Store/orderSlice';
 import { reset } from '../Store/currentOrderSlice';
 import emailjs from '@emailjs/browser'
 import { authentication } from '../firebase/config';
+import ScrollToTop from '../ScrollToTop';
+// import { useLocation } from 'react-router-dom';
 
 
 
@@ -34,6 +36,8 @@ export default function Booking() {
     const [amenityTitle,setAmenityTitle] = useState([])
     const [user,setUser] = useState(null)
     let navigate = useNavigate(); 
+
+    
 
     useEffect(() => {
         if (state) {
@@ -251,6 +255,7 @@ export default function Booking() {
     }
   return (
     <div>
+        <ScrollToTop />
         <NavbarC/>
         <div class="container mx-auto px-5 py-2 lg:px-20 lg:my-5">
             <div className='flex gap-x-2 flex-col md:flex-row'>

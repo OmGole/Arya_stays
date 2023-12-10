@@ -26,6 +26,7 @@ import { Dropdown, Datepicker, Modal } from "flowbite-react";
 import { updateOrder } from "../Store/currentOrderSlice";
 import AddOn from "../Components/AddOn";
 import IndividualCard2 from "../Components/IndividualCard2";
+import { useLocation } from "react-router-dom";
 
 export default function Individual() {
   const routeParams = useParams();
@@ -47,6 +48,12 @@ export default function Individual() {
   const [checkInDate, setCheckInDate] = useState(currOrder?.CheckInDate);
   const [roomType, setRoomType] = useState(currOrder?.RoomType);
   const [checkOutDate, setCheckOutDate] = useState(currOrder?.CheckOutDate);
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname]);
 
   useEffect(() => {
     dispatch(updateOrder({ key: "Id", value: routeParamsID }));
@@ -323,7 +330,28 @@ export default function Individual() {
   const [user,setUser] = useState(null)
   const navigateToBook = () =>{
     if(user){
-      navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder,price}})
+        const checkOutDateParts = checkOutDate.split('/'); // Assuming checkOutDate is '10/12/2023'
+        const day = parseInt(checkOutDateParts[0], 10);
+        const month = parseInt(checkOutDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+        const year = parseInt(checkOutDateParts[2], 10);
+
+        const checkout = new Date(year, month, day);
+
+        const checkInDateParts = checkInDate.split('/'); // Assuming checkInDate is '10/12/2023'
+        const day1 = parseInt(checkInDateParts[0], 10);
+        const month1 = parseInt(checkInDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
+        const year1 = parseInt(checkInDateParts[2], 10);
+
+        const checkin = new Date(year1, month1, day1);
+
+        if(checkin > checkout){
+          alert("Check In Date cannot be greater than Check Out Date")
+          return;
+        }else{
+          navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder,price}})
+        }
+
+      
     }else{
       alert("You must be logged in")
     }
@@ -346,7 +374,11 @@ export default function Individual() {
           <h1 className="text-white md:text-4xl text-lg">
             {property.location}
           </h1>
+          <div className="absolute bottom-0 right-0 p-4">
+      <Link to={`/gallery/${routeParamsID}`}><button className="bg-white text-xs md:px-4 md:text-md px-3 py-2 rounded"><i class="fa fa-th text-[#6ACDE9]" aria-hidden="true"></i> Show all Photos</button></Link>
+    </div>
         </div>
+        
       </div>
 
       <h1 className="md:text-4xl text-xl text-center font-medium mt-10 mb-14 underline decoration-[#F79489] underline-offset-8 decoration-4">
@@ -400,7 +432,7 @@ export default function Individual() {
                 </p>
               </div>
             </div>
-            <div class="lg:w-1/6 h-full text-lg py-2 bg-white ...">
+            <div class="lg:w-1/6  text-lg py-2 bg-white ...">
               <h1 className="pl-3 z-10 font-medium">Check In</h1>
               <Datepicker
                 value={checkInDate}
@@ -904,6 +936,7 @@ export default function Individual() {
       <About />
       <FooterC />
       <button onClick={executeScroll} id="fixedbutton" className="md:hidden bg-[#F79489] text-white font-medium border-2 rounded-full p-4"> Edit</button>
+      <button onClick={executeScroll} id="fixedbutton-pc" className="md:block hidden bg-[#F79489] text-white font-medium border-2 rounded-full p-4"> Book Now</button>
     </div>
   );
 }

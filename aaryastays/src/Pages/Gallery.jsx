@@ -6,6 +6,7 @@ import { useSelector,useDispatch } from 'react-redux';
 import { getPropertyById } from '../Store/propertySlice';
 import api from '../api/api';
 import FooterC from '../Components/FooterC';
+import { useLocation } from 'react-router-dom';
 
 export default function Gallery() {
     const routeParams = useParams();
@@ -13,6 +14,11 @@ export default function Gallery() {
   const dispatch = useDispatch();
   const property = useSelector((state) => state.property.propertyById);
   const [slideImage,setSlideImage] = useState([])
+
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname]);
 
   useEffect(()=>{
     dispatch(getPropertyById(routeParamsID)).then((data)=>{

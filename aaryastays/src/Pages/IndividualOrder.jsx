@@ -12,6 +12,8 @@ import { AiFillStar } from "react-icons/ai";
 import { css } from "@emotion/css";
 import { Modal,Textarea } from 'flowbite-react';
 import { postReview } from '../Store/reviewSlice';
+import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const stars = [1, 2, 3, 4, 5];
 
@@ -54,6 +56,11 @@ export default function IndividualOrder() {
     const [review,setReview] = useState('');
     const [typeOfModal,setTypeOfModal] = useState();
     const [noCheckInReview,setNoCheckInReview] = useState('');
+    const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname]);
 
     useEffect(()=>{
         console.log(Validity)
@@ -94,9 +101,9 @@ export default function IndividualOrder() {
     const PostReview = async()=>{
         // console.log(typeof selectedStar)
         const data = {
-            orderId: singleOrder._id,
+            // orderId: singleOrder._id,
             userId: singleOrder.userId,
-            // propertyId: singleOrder.propertyId,
+            propertyId: singleOrder.propertyId,
             rating: selectedStar,
             description: review
         }
@@ -193,13 +200,17 @@ export default function IndividualOrder() {
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
                             {
                                 slideImage.map((item,index)=>{
+                                    if(index < 5)
                                     return(
                                         <div>
-                                            <img class="h-auto max-w-full rounded-lg" src={item} alt=""/>
+                                            <img class="h-full max-w-full rounded-lg" src={item} alt=""/>
                                         </div>
                                     )
                                 })
                             }
+                            <div className='border-2 rounded-lg border-[#F79489] flex justify-center items-center'>
+                                <Link to={`/gallery/${property?._id}`}  className=''>See more</Link>
+                            </div>
                             
                         </div>
                     </div>

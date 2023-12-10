@@ -10,6 +10,7 @@ import { authentication } from '../firebase/config';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from 'flowbite-react';
 import { HiCheck, HiExclamation, HiX } from 'react-icons/hi';
+import ScrollToTop from '../ScrollToTop';
 
 export default function Profile() {
 
@@ -44,6 +45,11 @@ export default function Profile() {
     }
 
     const [success,setSuccess] = useState(false)
+//     const { pathname } = useLocation();
+
+//   useEffect(() => {
+//     window.scrollTo(-100, -100)
+//   }, [pathname]);
 
     const saveChanges = () =>{
         if(!name || !email || !number || !age) {
@@ -124,6 +130,7 @@ export default function Profile() {
 
   return (
     <div>
+        <ScrollToTop />
         <NavbarC/>
         {/* {success && <Toast>
         <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
