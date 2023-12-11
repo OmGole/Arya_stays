@@ -301,7 +301,7 @@ export default function Booking() {
                         <h1 className='text-lg'>{stateCurrOrder?.Location}</h1>
                         <h1 className='text-lg'>Type : {stateCurrOrder?.RoomType}</h1>
                         <h1 className='text-lg'>Total guest : {stateCurrOrder?.adultNumber + stateCurrOrder?.childNumber}</h1>
-                        <h1 className='text-lg'>Adult : {stateCurrOrder?.adultNumber} Children : {stateCurrOrder?.childNumber}</h1>
+                        <h1 className='text-lg'>Adult : {stateCurrOrder?.adultNumber}, Children : {stateCurrOrder?.childNumber}</h1>
                         <div className='flex'>
                             <div className='w-1/2 pr-2 py-2 text-white font-medium'><div className='bg-[#6ACDE9] md:text-xl p-4 rounded-lg '><h1 className=''>Check In Date</h1>{stateCurrOrder?.CheckInDate}</div></div>
                             <div className='w-1/2 pl-2 py-2 text-white font-medium'><div className='bg-[#6ACDE9] md:text-xl p-4 rounded-lg '><h1 className=''>Check Out Date</h1>{stateCurrOrder?.CheckOutDate}</div></div>

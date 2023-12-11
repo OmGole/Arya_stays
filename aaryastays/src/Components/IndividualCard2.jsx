@@ -36,7 +36,7 @@ export default function IndividualCard2({cards}) {
                         <h1 className='text-2xl font-medium'>{item?.title}</h1>
                     </div>
                     <div className=' flex  justify-center'>
-                        <ul className='list-disc lg:text-lg pl-8 py-3'>
+                        <ul className='list-disc lg:text-lg px-16 py-3'>
                             {item?.description}
                         </ul>
                     </div>
@@ -66,7 +66,7 @@ export default function IndividualCard2({cards}) {
                     <h1 className='text-2xl font-medium'>{item?.title}</h1>
                 </div>
                 <div className=' flex  justify-center'>
-                    <ul className='list-disc lg:text-lg pl-8 py-3'>
+                    <ul className='list-disc lg:text-lg px-5  py-3'>
                         {item?.description}
                     </ul>
                 </div>

@@ -170,13 +170,14 @@ input::-webkit-inner-spin-button {
 .custom-carousel div:nth-child(3),
 .custom-carousel div:nth-child(4){
   align-items: flex-end !important;
+  margin-top: 2.5rem;
 }
 
 .custom-carousel div:nth-child(3) button span,
 .custom-carousel div:nth-child(4) button span,
 .custom-carousel div:nth-child(3) button span:focus,
 .custom-carousel div:nth-child(4) button span:focus{
-  background-color: #6ACDE9 !important;
+  background-color: #b4d4de !important;
 }
 
 

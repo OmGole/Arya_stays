@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import NavbarC from "../Components/NavbarC";
-import aboutspace from "../Resources/aboutspace.png";
+// import aboutspace from "../Resources/aboutspace.png";
 import Reviews from "../Components/Reviews";
 import Query from "../Components/Query";
 import About from "../Components/About";
@@ -27,6 +27,9 @@ import { updateOrder } from "../Store/currentOrderSlice";
 import AddOn from "../Components/AddOn";
 import IndividualCard2 from "../Components/IndividualCard2";
 import { useLocation } from "react-router-dom";
+import hd720 from "../Resources/hd720.png";
+import hd300 from "../Resources/hd300.png";
+import { Carousel } from "flowbite-react";
 
 export default function Individual() {
   const routeParams = useParams();
@@ -48,12 +51,15 @@ export default function Individual() {
   const [checkInDate, setCheckInDate] = useState(currOrder?.CheckInDate);
   const [roomType, setRoomType] = useState(currOrder?.RoomType);
   const [checkOutDate, setCheckOutDate] = useState(currOrder?.CheckOutDate);
+  const [aboutspace, setAboutspace] = useState("");
+  const [slideImage,setSlideImage] = useState([])
 
-  const { pathname } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [pathname]);
+  // const { pathname } = useLocation();
+
+  // useEffect(() => {
+  //   window.scrollTo(0, 0)
+  // }, [pathname]);
 
   useEffect(() => {
     dispatch(updateOrder({ key: "Id", value: routeParamsID }));
@@ -79,6 +85,7 @@ export default function Individual() {
         updateOrder({ key: "RoomType", value: data.payload.roomType[0] })
       );
       setPrice(data.payload.price);
+      getSlideImage();
       getAmenities(data.payload.amenities);
       getEvents(data.payload.events);
       dispatch(getHeadingImages(data.payload.currentLocation_images[0])).then(
@@ -86,8 +93,26 @@ export default function Individual() {
           setHeadingImage(data.payload.url);
         }
       );
+      dispatch(getImageById(data.payload.ats_image)).then((data) => {
+        setAboutspace(data.payload.url);
+      });
     });
   }, [dispatch]);
+
+  const getSlideImage = async()=>{
+    try{
+      const new_slide_images = await Promise.all(property.currentLocation_images.map(async (id,index) => {
+          try{
+            const result = await api.get(`/api/v1/image/${id}`);
+            return result.data.url;
+          }catch(err){}
+      }));
+      setSlideImage(new_slide_images)
+
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   useEffect(() => {
     if(roomType === "full-property") {
@@ -358,6 +383,16 @@ export default function Individual() {
 
   };
   //    Amenities Logic
+  const location = useLocation();
+  // Scroll to the section based on the URL hash
+  useEffect(() => {
+    const { hash } = location;
+    const sectionId = hash.substring(1); // Remove '#' from the hash
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [location]);
 
   if (!property || !property.cards) {
     return <div></div>;
@@ -366,12 +401,13 @@ export default function Individual() {
     <div>
       <NavbarC />
       <div className="relative overflow-hidden md:h-full h-64">
-        <img src={headingImage} className="object-cover  h-full  w-full" />
+      {/* src={headingImage} */}
+        <img src={hd720}  className="object-cover  h-full  w-full" />
         <div className="absolute inset-0    grid content-center text-center backdrop-brightness-50  ">
-          <h1 className="text-white md:text-6xl text-2xl font-medium">
+          <h1 className="text-white md:text-6xl text-xl font-medium">
             {property.title}
           </h1>
-          <h1 className="text-white md:text-4xl text-lg">
+          <h1 className="text-white md:text-4xl text-md">
             {property.location}
           </h1>
           <div className="absolute bottom-0 right-0 p-4">
@@ -386,16 +422,17 @@ export default function Individual() {
       </h1>
 
       <div className="w-100 md:h-full h-96 even:bg-[#FABEB7] odd:bg-[#D1EDF5]  md:mt-20 mt-10  relative">
-        <img src={aboutspace} className="object-  h-full  w-full" />
+        {/* src={aboutspace} */}
+        <img src={hd300} className="object-  h-full  w-full" />
 
-        <div className="absolute -bottom-32  w-4/5 md:h-56 mx-auto left-0 right-0 ml-auto mr-auto px-10 py-8 border-8 rounded border-[#B4E2EF] grid content-center text-center bg-white  ">
+        <div className="absolute -bottom-20   w-4/5 md:h-56 mx-auto left-0 right-0 ml-auto mr-auto px-10 py-8 border-8 rounded border-[#B4E2EF] grid content-center text-center bg-white  ">
           <h1 className="text-black md:text-xl text-sm ">
             {property.location_description}
           </h1>
         </div>
       </div>
 
-      <h1 className="md:text-4xl text-xl text-center mt-44 font-medium my-10 ">
+      <h1 className="md:text-4xl text-xl text-center mt-44 font-medium my-10 mx-5 ">
         Get a{" "}
         <span className="text-[#179FEB] font-bold">
           Sense of the Atmosphere
@@ -436,6 +473,7 @@ export default function Individual() {
               <h1 className="pl-3 z-10 font-medium">Check In</h1>
               <Datepicker
                 value={checkInDate}
+                minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())}
                 onSelectedDateChanged={handleCheckIn}
                 className=" custom-date"
               />
@@ -444,6 +482,7 @@ export default function Individual() {
               <h1 className="pl-3 z-10 font-medium">Check Out</h1>
               <Datepicker
                 value={checkOutDate}
+                minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+1)}
                 onSelectedDateChanged={handleCheckOut}
                 className=" custom-date "
               />
@@ -565,11 +604,11 @@ export default function Individual() {
           <div className="flex flex-wrap border-2 mx-5 mt-2 border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg">
           <div className="w-2/5 dropdown    py-2 ...">
                 <h1 className='pl-3  z-10 font-medium'>Check In</h1>
-                <Datepicker value={checkInDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+2)} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
+                <Datepicker value={checkInDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
             </div>
             <div className="w-2/5 dropdown pl-0  py-2 ...">
             <h1 className='pl-3 z-10 font-medium'>Check Out</h1>
-                <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+3)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date mobile-date'/>
+                <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+1)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date mobile-date'/>
             </div>
             <div className="w-1/5 dropdown    ...">
               <button
@@ -586,7 +625,7 @@ export default function Individual() {
       {/* <Search/>
             <SearchMobile /> */}
 
-      <h1 className="md:text-4xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
+      <h1 className="md:text-4xl text-xl text-center font-medium mb-10 mt-8 underline decoration-[#F79489] underline-offset-8 decoration-4">
         Accomodations in{" "}
         <span className="text-[#179FEB] font-bold">Aarya Stays</span>
       </h1>
@@ -595,23 +634,28 @@ export default function Individual() {
 
       <div className="  md:mx-20 mx-5 ">
         <div class="flex flex-col items-center bg-white border border-gray-200 rounded-lg shadow md:flex-row md:p-5 ">
-          <div className="img-border p-5 md:w-1/3 md:h-80   ">
-            <img
+          <div className="img-border p-5 md:w-1/3 md:h-72 w-full h-60  ">
+            {/* <img
               class="object-cover w-full  rounded-lg h-auto md:h-full md:w-full  "
               src={DummyImgSqr}
               alt=""
-            />
+            /> */}
+            <Carousel>
+            {slideImage?.map((item)=>{
+              return(<img src={item} class="object-cover w-full rounded-br-lg rounded-tl-lg h-auto md:h-full md:w-full "  alt="..." />)
+            })}
+          </Carousel>
           </div>
 
           <div class="flex flex-col justify-between p-5 md:w-2/3 leading-normal">
             <h1 className="font-medium md:text-3xl text-xl">
               {property.title}
             </h1>
-            <span className="text-lg text-[#8E8E8E]">
+            <span className="md:text-lg text-md font-medium text-[#8E8E8E]">
               <i className="fa  fa-map-marker text-[#6ACDE9] text-xl"></i>{" "}
               {property.location}
             </span>
-            <p className="md:text-xl text-md">{property.room_description}</p>
+            <p className="md:text-xl text-md text-slate-400">{property.room_description}</p>
             <div className="flex flex-wrap">
               <div class="md:w-1/3 w-1/2 h-full text-lg py-2 ...">
                 <h1 className="pl-3 z-10 font-medium">Check In</h1>
@@ -632,7 +676,11 @@ export default function Individual() {
               </div>
 
               <div class="md:lg:w-1/3 w-1/2 dropdown px-3 py-2 ...">
-                <Dropdown
+                {property.roomType.length == 1 ? (
+                  <div>
+                    <h1 className="text-xl font-medium">Type</h1>
+                    <h1 className="text-[#F79489]">{roomType}</h1>
+                  </div>):<Dropdown
                   arrowIcon={true}
                   className="px-5 py-4"
                   inline
@@ -657,7 +705,11 @@ export default function Individual() {
                       </Dropdown.Item>
                     );
                   })}
-                  {/* <Dropdown.Item>
+                  
+                </Dropdown>}
+                
+
+                {/* <Dropdown.Item>
                       <div className=' cursor-pointer' onClick={()=>{handleRoomType('Full Property')}}>
                           <h1 className='font-bold text-base '>Full Property</h1>
                       </div>
@@ -676,7 +728,6 @@ export default function Individual() {
                           <h1 className='font-bold text-base '>Private Rooms</h1>
                       </div>
                       </Dropdown.Item> */}
-                </Dropdown>
               </div>
 
               <div class="lg:w-1/3 w-1/2 dropdown px-3 py-2 ...">
@@ -763,7 +814,7 @@ export default function Individual() {
 
       {/* property card ends */}
 
-      <h1 className="md:text-4xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
+      <h1 className="md:text-4xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4" id="amenities">
         Amenities
       </h1>
       <div className="w-100  md:mx-20  md:p-10 mx-8 pb-10 grid justify-items-start  md:border-2 md:border-slate-200 md:rounded-lg">
@@ -896,9 +947,9 @@ export default function Individual() {
       </h1>  */}
 
       <div className='flex items-center justify-center my-8 '>
-            <div className='bg-[#F79489] md:w-52 w-40 h-1'> </div>
-            <div className='px-3 text-center lg:text-4xl md:tex-3xl text-xl font-medium'>Everything You Need To Know <span className='text-[#179FEB]'>Before You Book</span></div>
-            <div className='bg-[#F79489] md:w-52 w-40 h-1'> </div>
+            <div className='bg-[#F79489] md:w-52 w-36 h-1'> </div>
+            <div className='px-1 text-center lg:text-4xl md:tex-3xl text-xl font-medium'>Everything You Need To Know <span className='text-[#179FEB]'>Before You Book</span></div>
+            <div className='bg-[#F79489] md:w-52 w-36 h-1'> </div>
         </div>
 
       <div className="md:mx-20 mx-4">

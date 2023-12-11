@@ -33,9 +33,9 @@ export default function SearchMobile({dropdownArray}) {
     const [checkOutDate,setCheckOutDate] = useState(); 
     useEffect(()=>{
         const checkin = new Date();
-        checkin.setDate(new Date().getDate()+2);
+        checkin.setDate(new Date().getDate());
         const checkout = new Date();
-        checkout.setDate(new Date().getDate()+3);
+        checkout.setDate(new Date().getDate()+1);
 
         setCheckInDate(`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`);
         dispatch(updateOrder({key:'CheckInDate',value:`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`}))
@@ -163,11 +163,11 @@ export default function SearchMobile({dropdownArray}) {
           <div className='flex flex-wrap border-2 mx-5 mt-2 border-slate-300/50 custom-shadow-mobile content-center divide-x	  rounded-lg'>
             <div className="w-2/5 dropdown    py-2 ...">
                 <h1 className='pl-3  z-10 font-medium'>Check In</h1>
-                <Datepicker value={checkInDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+2)} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
+                <Datepicker value={checkInDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
             </div>
             <div className="w-2/5 dropdown pl-0  py-2 ...">
             <h1 className='pl-3 z-10 font-medium'>Check Out</h1>
-                <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+3)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date mobile-date'/>
+                <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+1)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date mobile-date'/>
             </div>
             <div className="w-1/5 dropdown    ...">
                 {/* <Link to={`/property/${selectedId}`}> */}

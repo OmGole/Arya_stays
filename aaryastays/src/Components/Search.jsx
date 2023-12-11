@@ -36,9 +36,9 @@ export default function Search({dropdownArray}) {
         // console.log
         // const currentDate = new Date();
         const checkin = new Date();
-        checkin.setDate(new Date().getDate()+2);
+        checkin.setDate(new Date().getDate());
         const checkout = new Date();
-        checkout.setDate(new Date().getDate()+3);
+        checkout.setDate(new Date().getDate()+1);
         console.log(checkin)
         console.log(checkout)
 
@@ -192,11 +192,11 @@ export default function Search({dropdownArray}) {
             <div class="lg:w-1/6 h-full items-center text-lg py-2 ...">
                 <h1 className='pl-3 z-10 font-medium'>Check In</h1>
                 {/* new Date().getDate()+'/'+(new Date().getMonth()+1) +'/'+new Date().getFullYear() */}
-                <Datepicker value={checkInDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+2)} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
+                <Datepicker value={checkInDate}  minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())} onSelectedDateChanged={handleCheckIn} className='p-0  custom-date'/>
             </div>
             <div class="lg:w-1/6 text-lg py-2 ...">
                 <h1 className='pl-3 z-10 font-medium'>Check Out</h1>
-                <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+3)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date'/>
+                <Datepicker value={checkOutDate} minDate={new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()+1)} onSelectedDateChanged={handleCheckOut} className='p-0  custom-date z-20'/>
             </div>
             <div class="lg:w-1/6 dropdown px-3 py-2 ...">
             <Dropdown
