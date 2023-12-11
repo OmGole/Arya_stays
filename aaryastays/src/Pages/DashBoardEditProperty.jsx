@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllAmenity } from "../Store/amenitySlice";
 import { getAllCards } from "../Store/cardSlice";
-import { deleteProperty, editProperty, getPropertyById } from "../Store/propertySlice";
+import {
+  deleteProperty,
+  editProperty,
+  getPropertyById,
+} from "../Store/propertySlice";
+import { Modal } from "flowbite-react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api";
 import { BiTrash } from "react-icons/bi";
@@ -21,9 +26,9 @@ const DashBoardEditProperty = () => {
   const navigate = useNavigate();
   const amenitiesList = useSelector((state) => state.amenity);
   const cardsList = useSelector((state) => state.card);
+  const property = useSelector((state) => state.property.propertyById);
 
   const options = ["full-property", "private-rooms", "dorm-beds"];
-  const [property, setProperty] = useState();
   const [title, setTitle] = useState();
   const [location, setLocation] = useState();
   const [price, setPrice] = useState();
@@ -45,19 +50,11 @@ const DashBoardEditProperty = () => {
   const [disableRoom_description, setDisableRoom_description] = useState(true);
   const [disableSurrounding_description, setDisableSurrounding_description] =
     useState(true);
-  const [disableSlide_description, setDisableSlide_description] =
-    useState(true);
   const [disableVideo, setDisableVideo] = useState(true);
-  const [disableRoomType, setDisableRoomType] = useState(true);
-  const [disableAmenities, setDisableAmenities] = useState(true);
-  const [disableCards, setDisableCards] = useState(true);
-  const [cimage, setCImage] = useState();
+  const [cimages, setCImages] = useState();
   const [aimage, setAImage] = useState();
 
-  const getProperty = async () => {
-    const response = await api.get(`/api/v1/property/${id}`);
-    setProperty(response.data);
-  };
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const convertBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -155,25 +152,15 @@ const DashBoardEditProperty = () => {
     setDisableVideo(false);
   };
 
-  const handleEditRoomType = (e) => {
+  const handleCImages = async (e) => {
     e.preventDefault();
-    setDisableRoomType(false);
-  };
-
-  const handleEditAmenities = (e) => {
-    e.preventDefault();
-    setDisableAmenities(false);
-  };
-
-  const handleEditCards = (e) => {
-    e.preventDefault();
-    setDisableCards(false);
-  };
-
-  const handleCImage = async (e) => {
-    e.preventDefault();
-    const base64 = await convertBase64(e.target.files[0]);
-    setCImage(base64);
+    let base64s = [];
+    const files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+      const base64 = await convertBase64(files[i]);
+      base64s.push(base64);
+    }
+    setCImages(base64s);
   };
 
   const handleAImage = async (e) => {
@@ -197,17 +184,27 @@ const DashBoardEditProperty = () => {
     setSlide_description(e.target.value);
   };
 
-  const handleAddCurrentLocationImage = async (e) => {
-    if (!cimage) {
+  const handleAddCurrentLocationImages = async (e) => {
+    e.preventDefault();
+    if (cimages.length === 0) {
       alert("Please Upload Image");
       return;
     }
-    const imageObj = {
-      type: "currentLocation_images",
-      propertyId: id,
-      image: cimage,
-    };
-    dispatch(createImage(imageObj));
+
+    for (let i = 0; i < cimages.length; i++) {
+      const imageObj = {
+        type: "currentLocation_images",
+        propertyId: id,
+        image: cimages[i],
+      };
+      if (i != cimages.length - 1) {
+        dispatch(createImage(imageObj));
+      } else {
+        dispatch(createImage(imageObj)).then((data) =>
+          dispatch(getPropertyById(id))
+        );
+      }
+    }
   };
 
   const handleAddAtsImage = async (e) => {
@@ -216,7 +213,9 @@ const DashBoardEditProperty = () => {
       return;
     }
     const imageObj = { type: "ats_image", propertyId: id, image: aimage };
-    dispatch(createImage(imageObj));
+    dispatch(createImage(imageObj)).then((data) =>
+      dispatch(getPropertyById(id))
+    );
   };
 
   const handleAddSlide = (e) => {
@@ -239,17 +238,63 @@ const DashBoardEditProperty = () => {
     }
   };
 
+  const handlePropertyDeleteModal = (e) => {
+    e.preventDefault();
+    setOpenDeleteModal(true);
+    // e.preventDefault();
+    // property.ats_image.forEach((id) =>
+    //   dispatch(deleteImage(id)).then((data) => console.log("ats"))
+    // );
+
+    // property.currentLocation_images.forEach((id) =>
+    //   dispatch(deleteImage(id)).then((data) =>
+    //     console.log("currentLocation_images")
+    //   )
+    // );
+
+    // property.slides.forEach((id) =>
+    //   dispatch(deleteSlide(id)).then((data) => console.log("slides"))
+    // );
+
+    // property.events.forEach((id) =>
+    //   dispatch(deleteEvent(id)).then((data) => console.log("events"))
+    // );
+
+    // property.reviews.forEach((id) =>
+    //   dispatch(deleteReview(id)).then((data) => console.log("events"))
+    // );
+
+    // dispatch(deleteOrdersByPropertyId(id));
+
+    // dispatch(deleteProperty(property._id));
+
+    // navigate("/dashboard/property");
+  };
+
   const handlePropertyDelete = (e) => {
     e.preventDefault();
-    property.ats_image.forEach(id => dispatch(deleteImage(id)).then(data => console.log("ats")));
 
-    property.currentLocation_images.forEach(id => dispatch(deleteImage(id)).then(data => console.log("currentLocation_images")));
+    property.ats_image.forEach((id) =>
+      dispatch(deleteImage(id)).then((data) => console.log("ats"))
+    );
 
-    property.slides.forEach(id => dispatch(deleteSlide(id)).then(data => console.log("slides")));
+    property.currentLocation_images.forEach((id) =>
+      dispatch(deleteImage(id)).then((data) =>
+        console.log("currentLocation_images")
+      )
+    );
 
-    property.events.forEach(id => dispatch(deleteEvent(id)).then(data => console.log("events")));
+    property.slides.forEach((id) =>
+      dispatch(deleteSlide(id)).then((data) => console.log("slides"))
+    );
 
-    property.reviews.forEach(id => dispatch(deleteReview(id)).then(data => console.log("events")));
+    property.events.forEach((id) =>
+      dispatch(deleteEvent(id)).then((data) => console.log("events"))
+    );
+
+    property.reviews.forEach((id) =>
+      dispatch(deleteReview(id)).then((data) => console.log("events"))
+    );
 
     dispatch(deleteOrdersByPropertyId(id));
 
@@ -273,14 +318,12 @@ const DashBoardEditProperty = () => {
       newProperty.room_description = room_description;
     if (!disableSurrounding_description)
       newProperty.surrounding_description = surrounding_description;
-    if (!disableRoomType) newProperty.roomType = roomType;
-    if (!disableAmenities) newProperty.amenities = amenities;
-    if (!disableCards) newProperty.cards = cards;
+    newProperty.roomType = roomType;
+    newProperty.amenities = amenities;
+    newProperty.cards = cards;
     const updatedProperty = { id, newProperty };
 
-    dispatch(editProperty(updatedProperty)).then((prop) =>
-      setProperty(prop.payload)
-    );
+    dispatch(editProperty(updatedProperty));
     setDisableTitle(true);
     setDisableLocation(true);
     setDisablePrice(true);
@@ -288,18 +331,16 @@ const DashBoardEditProperty = () => {
     setDisableRoom_description(true);
     setDisableSurrounding_description(true);
     setDisableVideo(true);
-    setDisableRoomType(true);
-    setDisableAmenities(true);
-    setDisableCards(true);
   };
 
   useEffect(() => {
-    getProperty();
+    dispatch(getPropertyById(id));
     dispatch(getAllAmenity());
     dispatch(getAllCards());
   }, []);
 
   useEffect(() => {
+    console.log(property);
     if (property) {
       setTitle(property.title);
       setLocation(property.location);
@@ -314,404 +355,425 @@ const DashBoardEditProperty = () => {
     }
   }, [property]);
 
+  if (Object.keys(property).length == 0) {
+    return <></>;
+  }
 
   return (
-    <div>
-      <div className="bg-white px-8 py-5 rounded mx-auto box-border w-3/4">
-        <div className="flex justify-between mb-10">
-          <h2 className="text-3xl text-center font-poppins">
-            Edit Property
-          </h2>
-          <button onClick={handlePropertyDelete}>
-            <BiTrash className="block bg-red-500 text-white p-3 text-5xl rounded-xl hover:bg-red-600 hover:cursor-pointer" />
-          </button>
-        </div>
-        <form action="" className="font-montserrat text-sm">
-          <div className="mb-3">
-            <button
-              onClick={handleEditTitle}
-              className="text-red-500 underline block ml-auto"
-            >
-              Edit
+    <>
+      <div>
+        <div className="bg-white px-8 py-5 rounded mx-auto box-border w-3/4">
+          <div className="flex justify-between mb-10">
+            <h2 className="text-3xl text-center font-poppins">Edit Property</h2>
+            <button onClick={handlePropertyDeleteModal}>
+              <BiTrash className="block bg-red-500 text-white p-3 text-5xl rounded-xl hover:bg-red-600 hover:cursor-pointer" />
             </button>
-            <input
-              type="text"
-              className={`border-2 rounded-xl py-1 px-3  w-full ${
-                disableTitle
-                  ? " text-gray-400 cursor-not-allowed"
-                  : "text-black"
-              }`}
-              placeholder="Title"
-              value={title}
-              disabled={disableTitle}
-              onChange={handleTitle}
-            />
           </div>
-          <div className="mb-3">
-            <button
-              onClick={handleEditLocation}
-              className="text-red-500 underline block ml-auto"
-            >
-              Edit
-            </button>
-            <input
-              type="text"
-              className={`border-2 rounded-xl py-1 px-3  w-full ${
-                disableLocation
-                  ? " text-gray-400 cursor-not-allowed"
-                  : "text-black"
-              }`}
-              placeholder="Location"
-              value={location}
-              onChange={handleLocation}
-            />
-          </div>
-          <div className="mb-3">
-            <button
-              onClick={handleEditPrice}
-              className="text-red-500 underline block ml-auto"
-            >
-              Edit
-            </button>
-            <input
-              type="number"
-              onChange={handlePrice}
-              value={price}
-              className={`border-2 rounded-xl py-1 px-3  w-full ${
-                disablePrice
-                  ? " text-gray-400 cursor-not-allowed"
-                  : "text-black"
-              }`}
-              placeholder="Price"
-            />
-          </div>
-          <div className="mb-3">
-            <button
-              onClick={handleEditVideo}
-              className="text-red-500 underline block ml-auto"
-            >
-              Edit
-            </button>
-            <input
-              type="text"
-              className={`border-2 rounded-xl py-1 px-3  w-full ${
-                disableVideo
-                  ? " text-gray-400 cursor-not-allowed"
-                  : "text-black"
-              }`}
-              placeholder="Video URL"
-              value={video}
-              onChange={handleVideo}
-            />
-          </div>
-          <div className="mb-3">
-            <button
-              onClick={handleEditLocationDescription}
-              className="text-red-500 underline block ml-auto"
-            >
-              Edit
-            </button>
-            <textarea
-              name=""
-              id=""
-              cols=""
-              rows="3"
-              className={`border-2 rounded-xl py-1 px-3  w-full ${
-                disableLocation_description
-                  ? " text-gray-400 cursor-not-allowed"
-                  : "text-black"
-              }`}
-              placeholder="Location Description"
-              onChange={handleLocationDescription}
-              value={location_description}
-            ></textarea>
-          </div>
-          <div className="mb-3">
-            <button
-              onClick={handleEditRoomDescription}
-              className="text-red-500 underline block ml-auto"
-            >
-              Edit
-            </button>
-            <textarea
-              name=""
-              id=""
-              cols=""
-              rows="3"
-              className={`border-2 rounded-xl py-1 px-3  w-full ${
-                disableRoom_description
-                  ? " text-gray-400 cursor-not-allowed"
-                  : "text-black"
-              }`}
-              placeholder="Room Description"
-              onChange={handleRoomDescription}
-              value={room_description}
-            ></textarea>
-          </div>
-          <div className="mb-3">
-            <button
-              onClick={handleEditSurroundingDescription}
-              className="text-red-500 underline block ml-auto"
-            >
-              Edit
-            </button>
+          <form action="" className="font-montserrat text-sm">
+            <div className="mb-3">
+              <button
+                onClick={handleEditTitle}
+                className="text-red-500 underline block ml-auto"
+              >
+                Edit
+              </button>
+              <input
+                type="text"
+                className={`border-2 rounded-xl py-1 px-3  w-full ${
+                  disableTitle
+                    ? " text-gray-400 cursor-not-allowed"
+                    : "text-black"
+                }`}
+                placeholder="Title"
+                value={title}
+                disabled={disableTitle}
+                onChange={handleTitle}
+              />
+            </div>
+            <div className="mb-3">
+              <button
+                onClick={handleEditLocation}
+                className="text-red-500 underline block ml-auto"
+              >
+                Edit
+              </button>
+              <input
+                type="text"
+                className={`border-2 rounded-xl py-1 px-3  w-full ${
+                  disableLocation
+                    ? " text-gray-400 cursor-not-allowed"
+                    : "text-black"
+                }`}
+                placeholder="Location"
+                value={location}
+                onChange={handleLocation}
+              />
+            </div>
+            <div className="mb-3">
+              <button
+                onClick={handleEditPrice}
+                className="text-red-500 underline block ml-auto"
+              >
+                Edit
+              </button>
+              <input
+                type="number"
+                onChange={handlePrice}
+                value={price}
+                className={`border-2 rounded-xl py-1 px-3  w-full ${
+                  disablePrice
+                    ? " text-gray-400 cursor-not-allowed"
+                    : "text-black"
+                }`}
+                placeholder="Price"
+              />
+            </div>
+            <div className="mb-3">
+              <button
+                onClick={handleEditVideo}
+                className="text-red-500 underline block ml-auto"
+              >
+                Edit
+              </button>
+              <input
+                type="text"
+                className={`border-2 rounded-xl py-1 px-3  w-full ${
+                  disableVideo
+                    ? " text-gray-400 cursor-not-allowed"
+                    : "text-black"
+                }`}
+                placeholder="Video URL"
+                value={video}
+                onChange={handleVideo}
+              />
+            </div>
+            <div className="mb-3">
+              <button
+                onClick={handleEditLocationDescription}
+                className="text-red-500 underline block ml-auto"
+              >
+                Edit
+              </button>
+              <textarea
+                name=""
+                id=""
+                cols=""
+                rows="3"
+                className={`border-2 rounded-xl py-1 px-3  w-full ${
+                  disableLocation_description
+                    ? " text-gray-400 cursor-not-allowed"
+                    : "text-black"
+                }`}
+                placeholder="Location Description"
+                onChange={handleLocationDescription}
+                value={location_description}
+              ></textarea>
+            </div>
+            <div className="mb-3">
+              <button
+                onClick={handleEditRoomDescription}
+                className="text-red-500 underline block ml-auto"
+              >
+                Edit
+              </button>
+              <textarea
+                name=""
+                id=""
+                cols=""
+                rows="3"
+                className={`border-2 rounded-xl py-1 px-3  w-full ${
+                  disableRoom_description
+                    ? " text-gray-400 cursor-not-allowed"
+                    : "text-black"
+                }`}
+                placeholder="Room Description"
+                onChange={handleRoomDescription}
+                value={room_description}
+              ></textarea>
+            </div>
+            <div className="mb-3">
+              <button
+                onClick={handleEditSurroundingDescription}
+                className="text-red-500 underline block ml-auto"
+              >
+                Edit
+              </button>
 
-            <textarea
-              name=""
-              id=""
-              cols=""
-              rows="3"
-              className={`border-2 rounded-xl py-1 px-3  w-full ${
-                disableSurrounding_description
-                  ? " text-gray-400 cursor-not-allowed"
-                  : "text-black"
-              }`}
-              placeholder="Surrounding Description"
-              onChange={handleSurroundingDescription}
-              value={surrounding_description}
-            ></textarea>
-          </div>
+              <textarea
+                name=""
+                id=""
+                cols=""
+                rows="3"
+                className={`border-2 rounded-xl py-1 px-3  w-full ${
+                  disableSurrounding_description
+                    ? " text-gray-400 cursor-not-allowed"
+                    : "text-black"
+                }`}
+                placeholder="Surrounding Description"
+                onChange={handleSurroundingDescription}
+                value={surrounding_description}
+              ></textarea>
+            </div>
 
-          <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">
-            Choose Room Types:
-          </h3>
-          <button
-            onClick={handleEditRoomType}
-            className="text-red-500 underline block ml-auto"
-          >
-            Edit
-          </button>
-          <ul class="grid w-full gap-6 md:grid-cols-3 mb-5">
-            {options.map((type) => (
-              <li>
-                <input
-                  type="checkbox"
-                  class="hidden peer"
-                  id={type}
-                  value={type}
-                  disabled={disableRoomType}
-                  checked={roomType?.includes(type)}
-                  onChange={handleRoomTypeChange}
-                ></input>
-                <label
-                  for={type}
-                  class={`inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer ${
-                    !disableRoomType
-                      ? "dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-                      : ""
-                  }`}
-                >
-                  <div class="block">
-                    <div class="w-full text-lg font-semibold">{type}</div>
-                    <div class="w-full text-sm"></div>
-                  </div>
-                </label>
-              </li>
-            ))}
-          </ul>
-          <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">
-            Choose Amenities:
-          </h3>
-          <button
-            onClick={handleEditAmenities}
-            className="text-red-500 underline block ml-auto"
-          >
-            Edit
-          </button>
-          <ul class="grid w-full gap-6 md:grid-cols-3 mb-5">
-            {amenitiesList &&
-              amenitiesList.allAmenities.map((amenity) => (
+            <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">
+              Choose Room Types:
+            </h3>
+            <ul class="grid w-full gap-6 md:grid-cols-3 mb-5">
+              {options.map((type) => (
                 <li>
                   <input
                     type="checkbox"
                     class="hidden peer"
-                    id={amenity._id}
-                    disabled={disableAmenities}
-                    value={amenity._id}
-                    checked={amenities?.includes(amenity._id)}
-                    onChange={handleAmenityChange}
+                    id={type}
+                    value={type}
+                    checked={roomType?.includes(type)}
+                    onChange={handleRoomTypeChange}
                   ></input>
                   <label
-                    for={amenity._id}
-                    class={`inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer ${
-                      !disableAmenities
-                        ? "dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-                        : ""
-                    }`}
+                    for={type}
+                    class={`inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700
+                  `}
                   >
-                    <div class="flex w-full align-middle">
-                      <div class="basis-1/4 text-sm">
-                        <img
-                          src={amenity.icon.url}
-                          alt=""
-                          className="w-5 self-center"
-                        />
-                      </div>
-                      <div class="basis-3/4 text-lg font-semibold">
-                        {amenity.title}
-                      </div>
+                    <div class="block">
+                      <div class="w-full text-lg font-semibold">{type}</div>
+                      <div class="w-full text-sm"></div>
                     </div>
                   </label>
                 </li>
               ))}
-          </ul>
-
-          <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">
-            Choose Cards:
-          </h3>
-          <button
-            onClick={handleEditCards}
-            className="text-red-500 underline block ml-auto"
-          >
-            Edit
-          </button>
-          <ul class="grid w-full gap-6 md:grid-cols-3 mb-5">
-            {cardsList &&
-              cardsList.allCards.map((card) => (
-                <li>
-                  <input
-                    type="checkbox"
-                    class="hidden peer"
-                    disabled={disableCards}
-                    id={card._id}
-                    value={card._id}
-                    checked={cards?.includes(card._id)}
-                    onChange={handleCardChange}
-                  ></input>
-                  <label
-                    for={card._id}
-                    class={`inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer ${
-                      !disableCards
-                        ? "dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700"
-                        : ""
-                    }`}
-                  >
-                    <div class="flex w-full align-middle">
-                      <div class="basis-1/4 text-sm">
-                        <img
-                          src={card.icon.url}
-                          alt=""
-                          className="w-5 self-center"
-                        />
+            </ul>
+            <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">
+              Choose Amenities:
+            </h3>
+            <ul class="grid w-full gap-6 md:grid-cols-3 mb-5">
+              {amenitiesList &&
+                amenitiesList.allAmenities.map((amenity) => (
+                  <li>
+                    <input
+                      type="checkbox"
+                      class="hidden peer"
+                      id={amenity._id}
+                      value={amenity._id}
+                      checked={amenities?.includes(amenity._id)}
+                      onChange={handleAmenityChange}
+                    ></input>
+                    <label
+                      for={amenity._id}
+                      class={`inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700`}
+                    >
+                      <div class="flex w-full align-middle">
+                        <div class="basis-1/4 text-sm">
+                          <img
+                            src={amenity.icon.url}
+                            alt=""
+                            className="w-5 self-center"
+                          />
+                        </div>
+                        <div class="basis-3/4 text-lg font-semibold">
+                          {amenity.title}
+                        </div>
                       </div>
-                      <div class="basis-3/4 text-lg font-semibold">
-                        {card.title}
-                      </div>
-                    </div>
-                  </label>
-                </li>
-              ))}
-          </ul>
+                    </label>
+                  </li>
+                ))}
+            </ul>
 
+            <h3 class="mb-5 text-lg font-medium text-gray-900 dark:text-white">
+              Choose Cards:
+            </h3>
+            <ul class="grid w-full gap-6 md:grid-cols-3 mb-5">
+              {cardsList &&
+                cardsList.allCards.map((card) => (
+                  <li>
+                    <input
+                      type="checkbox"
+                      class="hidden peer"
+                      id={card._id}
+                      value={card._id}
+                      checked={cards?.includes(card._id)}
+                      onChange={handleCardChange}
+                    ></input>
+                    <label
+                      for={card._id}
+                      class={`inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700
+                    `}
+                    >
+                      <div class="flex w-full align-middle">
+                        <div class="basis-1/4 text-sm">
+                          <img
+                            src={card.icon.url}
+                            alt=""
+                            className="w-5 self-center"
+                          />
+                        </div>
+                        <div class="basis-3/4 text-lg font-semibold">
+                          {card.title}
+                        </div>
+                      </div>
+                    </label>
+                  </li>
+                ))}
+            </ul>
+
+            <button
+              className="block w-full bg-[#F79489] text-white py-1 px-5 rounded-full hover:bg-white hover:text-[#F79489] border-2 border-[#F79489] transition duration-200 box-border text-xl text-semibold mb-3 font-poppins"
+              onClick={handleEditProperty}
+            >
+              Save
+            </button>
+          </form>
+          <div className="flex mt-14 mb-10">
+            <h2 className="basis-3/4 text-xl font-semibold">
+              Current Location Image :
+            </h2>
+            <input
+              type="file"
+              accept="image/"
+              className="mr-5"
+              placeholder="Add"
+              multiple
+              onChange={handleCImages}
+            />
+          </div>
           <button
-            className="block w-full bg-[#F79489] text-white py-2 px-5 rounded-full hover:bg-white hover:text-[#F79489] border-2 border-[#F79489] transition duration-200 box-border text-l mb-3 font-poppins"
-            onClick={handleEditProperty}
+            className="block w-full bg-black text-white py-1 px-5 rounded-xl hover:bg-white hover:text-black border-2 border-black transition duration-200 box-border text-l mb-5 font-poppins"
+            onClick={handleAddCurrentLocationImages}
           >
-            Edit
+            Add{" "}
           </button>
-        </form>
-        <div className="flex mt-14 mb-10">
-          <h2 className="basis-3/4 text-xl font-semibold">
-            Current Location Image :
-          </h2>
-          <input
-            type="file"
-            accept="image/"
-            className="mr-5"
-            placeholder="Add"
-            onChange={handleCImage}
-          />
-        </div>
-        <button
-          className="block w-full bg-black text-white py-1 px-5 rounded-xl hover:bg-white hover:text-black border-2 border-black transition duration-200 box-border text-l mb-5 font-poppins"
-          onClick={handleAddCurrentLocationImage}
-        >
-          Add{" "}
-        </button>
-        <div class="grid grid-cols-3 gap-4">
-          {property && property.currentLocation_images.length > 0 ? (
-            property.currentLocation_images.map((id) => (
-              <Image id={id} file={cimage} propertyId={property._id} type={"currentLocation_images"} />
-            ))
-          ) : (
-            <h2 className="basis-3/4 text-l font-semibold">No Images Added.</h2>
-          )}
-        </div>
-        <div className="flex mt-14 mb-10">
-          <h2 className="basis-3/4 text-xl font-semibold">
-            About the Space Image :
-          </h2>
-          <input
-            type="file"
-            accept="image/"
-            className="mr-5"
-            placeholder="Add"
-            onChange={handleAImage}
-          />
-        </div>
-        {property && property.ats_image.length == 0 ? (
+          <div class="grid grid-cols-3 gap-4">
+            {property && property.currentLocation_images.length > 0 ? (
+              property.currentLocation_images.map((id) => (
+                <Image
+                  id={id}
+                  propertyId={property._id}
+                  type={"currentLocation_images"}
+                />
+              ))
+            ) : (
+              <h2 className="basis-3/4 text-l font-semibold">
+                No Images Added.
+              </h2>
+            )}
+          </div>
+          <div className="flex mt-14 mb-10">
+            <h2 className="basis-3/4 text-xl font-semibold">
+              About the Space Image :
+            </h2>
+            <input
+              type="file"
+              accept="image/"
+              className="mr-5"
+              placeholder="Add"
+              onChange={handleAImage}
+            />
+          </div>
           <button
             className="block w-full bg-black text-white py-1 px-5 rounded-xl hover:bg-white hover:text-black border-2 border-black transition duration-200 box-border text-l mb-5 font-poppins"
             onClick={handleAddAtsImage}
           >
             Add{" "}
           </button>
-        ) : (
-          ""
-        )}
-        <div class="grid grid-cols-3 gap-4">
-          {property && property.ats_image.length > 0 ? (
-            property.ats_image.map((id) => <Image id={id} file={aimage} propertyId={property._id} type={"ats_image"}/>)
-          ) : (
-            <h2 className="basis-3/4 text-l font-semibold">No Images Added.</h2>
-          )}
-        </div>
-        <div className="flex mt-14 mb-10">
-          <h2 className="basis-3/4 text-xl font-semibold">Slides :</h2>
-        </div>
-        <div>
-          <form action="" className="font-montserrat text-sm">
-            <div className="mb-3">
-              <input
-                type="file"
-                multiple
-                accept="image/"
-                className="mr-5"
-                onChange={handleSlideImages}
-              />
-            </div>
-            <div className="mb-3">
-              <textarea
-                name=""
-                id=""
-                cols=""
-                rows="3"
-                className={`border-2 rounded-xl py-1 px-3  w-full`}
-                placeholder="Slide Description"
-                onChange={handleSlideDescription}
-                value={slide_description}
-              ></textarea>
-            </div>
-          </form>
-        </div>
-        <button
-          className="block w-full bg-black text-white py-1 px-5 rounded-xl hover:bg-white hover:text-black border-2 border-black transition duration-200 box-border text-l mb-5 font-poppins"
-          onClick={handleAddSlide}
-        >
-          Add{" "}
-        </button>
-        <div class="">
-          {property && property.slides.length > 0 ? (
-            property.slides.map((id) => <DashBoardSlide id={id} propertyId={property._id} type={"slides"}/>)
-          ) : (
-            <h2 className="basis-3/4 text-l font-semibold">No Slides Added.</h2>
-          )}
-        </div>
-        <div>
-          <DashBoardCalender property={property} />
+          <div class="grid grid-cols-3 gap-4">
+            {property && property.ats_image.length > 0 ? (
+              property.ats_image.map((id) => (
+                <Image
+                  id={id}
+                  file={aimage}
+                  propertyId={property._id}
+                  type={"ats_image"}
+                />
+              ))
+            ) : (
+              <h2 className="basis-3/4 text-l font-semibold">
+                No Images Added.
+              </h2>
+            )}
+          </div>
+          <div className="flex mt-14 mb-10">
+            <h2 className="basis-3/4 text-xl font-semibold">Slides :</h2>
+          </div>
+          <div>
+            <form action="" className="font-montserrat text-sm">
+              <div className="mb-3">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/"
+                  className="mr-5"
+                  onChange={handleSlideImages}
+                />
+              </div>
+              <div className="mb-3">
+                <textarea
+                  name=""
+                  id=""
+                  cols=""
+                  rows="3"
+                  className={`border-2 rounded-xl py-1 px-3  w-full`}
+                  placeholder="Slide Description"
+                  onChange={handleSlideDescription}
+                  value={slide_description}
+                ></textarea>
+              </div>
+            </form>
+          </div>
+          <button
+            className="block w-full bg-black text-white py-1 px-5 rounded-xl hover:bg-white hover:text-black border-2 border-black transition duration-200 box-border text-l mb-5 font-poppins"
+            onClick={handleAddSlide}
+          >
+            Add{" "}
+          </button>
+          <div class="">
+            {property && property.slides.length > 0 ? (
+              property.slides.map((id) => (
+                <DashBoardSlide
+                  id={id}
+                  propertyId={property._id}
+                  type={"slides"}
+                />
+              ))
+            ) : (
+              <h2 className="basis-3/4 text-l font-semibold">
+                No Slides Added.
+              </h2>
+            )}
+          </div>
+          <div>
+            <DashBoardCalender property={property} />
+          </div>
         </div>
       </div>
-    </div>
+      <Modal
+        dismissible
+        show={openDeleteModal}
+        onClose={() => setOpenDeleteModal(false)}
+        popup
+      >
+        <Modal.Header></Modal.Header>
+        <Modal.Body>
+          <div className="flex flex-col">
+            <h2 className="text-2xl text-center">
+              Are you sure you want to detete the property
+            </h2>
+            <div className="flex justify-center mt-5">
+              <button className="block w-1/4 bg-red-600 text-white py-1 px-5 rounded-xl hover:bg-white hover:text-red-600 border-2 border-red-600 transition duration-200 box-border text-l mb-5 mr-5 font-poppins" onClick={handlePropertyDelete}>
+                Delete
+              </button>
+              <button
+                className="block w-1/4 text-black py-1 px-5 rounded-xl border-2 border-gray-600 box-border text-l mb-5 font-poppins"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setOpenDeleteModal(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+    </>
   );
 };
 

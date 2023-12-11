@@ -5,15 +5,15 @@ import DummyImgSqr from '../Resources/DummyImgSqr.png'
 
 export default function Slide2({slides}) {
   const [slideDetails,setSlideDetails] = useState([]);
-  const parentRef = useRef(null);
-    const childRef = useRef(null);
+  // const parentRef = useRef(null);
+    // const childRef = useRef(null);
   
-    useEffect(() => {
-      const parentHeight = parentRef;
-      console.log("parent",parentHeight)
-      // childRef.current.style.height = `${parentHeight}px`;
-      // console.log("child",childRef.current.style.height)
-    }, []); 
+    // useEffect(() => {
+    //   const parentHeight = parentRef;
+    //   console.log("parent",parentHeight)
+    //   // childRef.current.style.height = `${parentHeight}px`;
+    //   // console.log("child",childRef.current.style.height)
+    // }, []); 
   
 
 
@@ -39,22 +39,29 @@ export default function Slide2({slides}) {
 
 
   return (
-        <Carousel className="h-[700px]" ref={parentRef} slide={false} indicators={false}>
+        <Carousel className="h-[500px]" slide={false} indicators={false}>
           {slideDetails.map(slide => {
-            return (<div className="dark:text-white ">
-            <div className="flex justify-between mb-10">
+            const length = slide.images.length;
+            return (<div className="dark:text-white h-full">
+            <div className="flex justify-between mb-10 h-1/2">
               {slide.images.map((img, index) => {
-                if (index == 1) {
-                  return <img src={img.url} className="block" alt="Image 1" />;
-                  }
-      
+                if(index == 0) {
+                  return <img src={img.url} className="h-full md:mr-14 md:w-1/3 w-full" />;
+                }
+                if (index === length - 1) {
                   return (
-                    <img src={img.url} className="hidden sm:block" alt="Image 2" />
+                    <img src={img.url} className="h-full w-1/3 hidden md:block" />
                   );
+                }
+
+                return <img src={img.url} className="h-full w-1/3 md:mr-14 hidden md:block" />;
+      
+                  
                 })}
             </div>
-            <div className="border-[#179FEB] border-2 p-5 lg:text-lg">
-              <p className="mb-5">{slide.description}</p>
+            <div className="border-[#179FEB] border-2 p-4 text-lg leading-6">
+              {/* <p className="mb-5">{slide.description}</p> */}
+              <p className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio eius fugiat numquam quas dolorem distinctio voluptate, culpa beatae facilis. Ex fugiat placeat facilis, qui eligendi suscipit quisquam dolorem atque voluptatibus libero. Minus atque similique facere consequatur ipsam distinctio tempore repellat culpa nisi iste voluptas delectus placeat repudiandae, adipisci, aliquam cupiditate, dolorem harum nulla rerum fugit? Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio eius fugiat numquam quas dolorem distinctio voluptate, culpa beatae facilis. Ex fugiat placeat facilis, qui eligendi suscipit quisquam dolorem atque voluptatibus libero. Minus atque similique facere consequatur ipsam distinctio tempore repellat culpa nisi iste voluptas delectus placeat repudiandae, adipisci, aliquam cupiditate, dolorem harum nulla rerum fugit?  </p>
             </div>
           </div>)
           })} 

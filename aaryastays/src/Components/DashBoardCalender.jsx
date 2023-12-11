@@ -46,50 +46,58 @@ function DashBoardCalender({ property }) {
 
     const correctedStart = new Date(checkInDate);
     correctedStart.setSeconds(correctedStart.getSeconds() + 1);
-
+    
     const correctedEnd = new Date(checkOutDate);
     correctedEnd.setDate(correctedEnd.getDate() + 1);
     correctedEnd.setSeconds(correctedEnd.getSeconds() - 1);
 
-    console.log(correctedEnd);
     const newEvent = {
       propertyId: property._id,
       title: Number(price),
       start: correctedStart,
       end: correctedEnd,
-      type
+      type,
     };
 
     for (let i = 0; i < filteredEvents.length; i++) {
       const d1 = new Date(filteredEvents[i].start);
-      const d2 = new Date(filteredEvents.start);
+      const d2 = correctedStart;
       const d3 = new Date(filteredEvents[i].end);
-      const d4 = new Date(filteredEvents.end);
-      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
+      const d4 = correctedEnd;
+      if (
+        (d1 <= d2 && d2 <= d3) ||
+        (d1 <= d4 && d4 <= d3) ||
+        (d2 <= d1 && d3 <= d4)
+      ) {
         alert("CLASH");
-        setPrice();
-        setCheckInDate();
-        setCheckOutDate();
         return;
       }
     }
-
-    dispatch(createEvent(newEvent));
     setPrice("");
     setCheckInDate("");
     setCheckOutDate("");
+    dispatch(createEvent(newEvent)).then((data) => setAllEvents([...allEvents, data.payload]));
   }
 
   function handleEditEvent(e) {
     e.preventDefault();
+
     const newEvent = {};
+
     if (price) newEvent.title = Number(price);
 
-    if (checkInDate) newEvent.start = checkInDate;
+    if (checkInDate) {
+      const correctedStart = new Date(checkInDate);
+      correctedStart.setSeconds(correctedStart.getSeconds() + 1);
+      newEvent.start = correctedStart;
+    } 
     else newEvent.start = modalData.start;
-
+    
     if (checkOutDate) {
-      newEvent.end = checkOutDate;
+      const correctedEnd = new Date(checkOutDate);
+      correctedEnd.setDate(correctedEnd.getDate() + 1);
+      correctedEnd.setSeconds(correctedEnd.getSeconds() - 1);
+      newEvent.end = correctedEnd;
     } else {
       newEvent.end = modalData.end;
     }
@@ -97,22 +105,26 @@ function DashBoardCalender({ property }) {
     for (let i = 0; i < filteredEvents.length; i++) {
       if (filteredEvents[i]._id == modalData._id) continue;
       const d1 = new Date(filteredEvents[i].start);
-      const d2 = new Date(filteredEvents.start);
+      const d2 = new Date(newEvent.start);
       const d3 = new Date(filteredEvents[i].end);
-      const d4 = new Date(filteredEvents.end);
-      if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
+      const d4 = new Date(newEvent.end);
+      if (
+        (d1 <= d2 && d2 <= d3) ||
+        (d1 <= d4 && d4 <= d3) ||
+        (d2 <= d1 && d3 <= d4)
+      ) {
         alert("CLASH");
-        setPrice();
-        setCheckInDate();
-        setCheckOutDate();
         return;
       }
     }
 
     const updatedEvent = { id: modalData._id, newEvent };
 
-    dispatch(editEvent(updatedEvent));
     setOpenModal(false);
+    dispatch(editEvent(updatedEvent)).then(data => {
+      const newAllEvents = allEvents.map(event => event._id != data.payload._id ? event : data.payload);
+      setAllEvents(newAllEvents);
+    });
   }
 
   const getEvents = async (e) => {
@@ -147,8 +159,7 @@ function DashBoardCalender({ property }) {
     e.preventDefault();
     const propertyDetails = { propertyId: property._id, type: "events" };
     const data = { id: modalData._id, propertyDetails };
-    console.log(data);
-    dispatch(deleteEvent(data));
+    dispatch(deleteEvent(data)).then(data => setAllEvents(allEvents.filter(event => event._id != data.payload._id)));
     setOpenModal(false);
   };
 
@@ -167,7 +178,6 @@ function DashBoardCalender({ property }) {
     setCheckOutDate("");
   }, [openModal]);
 
-
   useEffect(() => {
     if (property) {
       getEvents();
@@ -175,25 +185,27 @@ function DashBoardCalender({ property }) {
   }, [property]);
 
   useEffect(() => {
-    if(selectedTab == 1) {
-      const events = allEvents.filter(event => {
-        return event.type === "full-property"});
+    console.log(allEvents)
+    if (selectedTab == 1) {
+      const events = allEvents.filter(
+        (event) => event.type === "full-property"
+      );
       setFilteredEvents(events);
       setType("full-property");
-    } else if(selectedTab == 2) {
-      const events = allEvents.filter(event => event.type == "dorm-beds");
+    } else if (selectedTab == 2) {
+      const events = allEvents.filter((event) => event.type == "dorm-beds");
       setFilteredEvents(events);
       setType("dorm-beds");
     } else {
-      const events = allEvents.filter(event => event.type == "private-rooms");
+      const events = allEvents.filter((event) => event.type == "private-rooms");
       setFilteredEvents(events);
       setType("private-rooms");
     }
-  },[allEvents, selectedTab])
-  
+  }, [allEvents, selectedTab]);
+
   useEffect(() => {
     overLapToday();
-  },[filteredEvents])
+  }, [filteredEvents]);
 
   return (
     <div className="mt-10">
@@ -217,7 +229,7 @@ function DashBoardCalender({ property }) {
         />
         <div className="flex">
           <div class="basis-1/2 items-center text-lg py-2 ...">
-            <h1 className="pl-3 z-10 font-medium">Check In</h1>
+            <h1 className="pl-3 z-10 font-medium">From Date</h1>
             <Datepicker
               value={checkInDate}
               onSelectedDateChanged={handleCheckIn}
@@ -225,7 +237,7 @@ function DashBoardCalender({ property }) {
             />
           </div>
           <div class="basis-1/2 text-lg py-2 ...">
-            <h1 className="pl-3 z-10 font-medium">Check Out</h1>
+            <h1 className="pl-3 z-10 font-medium">To Date</h1>
             <Datepicker
               value={checkOutDate}
               onSelectedDateChanged={handleCheckOut}
@@ -315,7 +327,7 @@ function DashBoardCalender({ property }) {
                 />
                 <div className="flex">
                   <div class="basis-1/2 items-center text-lg py-2 ...">
-                    <h1 className="pl-3 z-10 font-medium">Check In</h1>
+                    <h1 className="pl-3 z-10 font-medium">From date</h1>
                     <Datepicker
                       value={checkInDate}
                       onSelectedDateChanged={handleCheckIn}
@@ -323,7 +335,7 @@ function DashBoardCalender({ property }) {
                     />
                   </div>
                   <div class="basis-1/2 text-lg py-2 ...">
-                    <h1 className="pl-3 z-10 font-medium">Check Out</h1>
+                    <h1 className="pl-3 z-10 font-medium">To Date</h1>
                     <Datepicker
                       value={checkOutDate}
                       onSelectedDateChanged={handleCheckOut}
