@@ -53,6 +53,7 @@ export default function Individual() {
   const [checkOutDate, setCheckOutDate] = useState(currOrder?.CheckOutDate);
   const [aboutspace, setAboutspace] = useState("");
   const [slideImage,setSlideImage] = useState([])
+  const [roomNumber,setRoomNumber] = useState(1)
 
 
   // const { pathname } = useLocation();
@@ -797,7 +798,75 @@ export default function Individual() {
                 </Dropdown>
               </div>
 
-              <div className="lg:w-1/2 w-full px-3 py-2">
+              {roomType === "private-rooms" && 
+              <div class="lg:w-1/3 w-1/2 dropdown px-3 py-2 ...">
+                <Dropdown
+                  arrowIcon={true}
+                  dismissOnClick={false}
+                  className="px-5 py-4"
+                  inline
+                  label={
+                    <div className="text-start  w-full">
+                      <div className="text-xl font-medium">Quantity</div>
+                      <div className="text-[#F79489]">
+                        {roomNumber} Rooms
+                      </div>
+                    </div>
+                  }
+                >
+                  <div className="flex w-100 mb-2 justify-between">
+                    <div>
+                      <h1 className="font-bold text-base w-3/5">Adults</h1>
+                      <p className="text-gray-400">Age 8+</p>
+                    </div>
+                    <div className="w-2/5 justify-between  flex items-center">
+                      <button
+                        className="border mr-2 rounded-full border-2"
+                        onClick={decrAdult}
+                      >
+                        -
+                      </button>{" "}
+                      {adultNumber}
+                      <button
+                        className="ml-2 border rounded-full border-2"
+                        onClick={incrAdult}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <Dropdown.Divider />
+                  <div className="flex w-100 my-2 justify-between">
+                    <div>
+                      <h1 className="font-bold text-base w-3/5">Child</h1>
+                      <p className="text-gray-400">Age 0 - 8</p>
+                    </div>
+                    <div className="w-2/5 justify-between  flex items-center">
+                      <button
+                        onClick={decrChild}
+                        className="border mr-2 rounded-full border-2"
+                      >
+                        -
+                      </button>{" "}
+                      {childNumber}
+                      <button
+                        onClick={incrChild}
+                        className="ml-2 border rounded-full border-2"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <Dropdown.Divider />
+                  <div>
+                    <h1 className="text-green-500 font-bold w-64">
+                      Charges are not applicable for children below 8
+                    </h1>
+                  </div>
+                </Dropdown>
+              </div>}
+
+              <div className="lg:w-max w-full px-3 py-2">
                 <div className="flex  items-center h-full">
                   <h1 className="font-medium md:text-xl">
                     Total before Taxes{" "}
