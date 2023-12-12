@@ -30,6 +30,7 @@ import { useLocation } from "react-router-dom";
 import hd720 from "../Resources/hd720.png";
 import hd300 from "../Resources/hd300.png";
 import { Carousel } from "flowbite-react";
+import ReadMore from "../Components/ReadMore";
 
 export default function Individual() {
   const routeParams = useParams();
@@ -305,6 +306,17 @@ export default function Individual() {
     }
   };
 
+  const incrRooms = () => {
+    setRoomNumber(roomNumber + 1);
+    // dispatch(updateOrder({ key: "adultNumber", value: adultNumber + 1 }));
+  };
+  const decrRooms = () => {
+    if (roomNumber > 0) {
+      setRoomNumber(roomNumber - 1);
+      // dispatch(updateOrder({ key: "adultNumber", value: adultNumber - 1 }));
+    }
+  };
+
   const [childNumber, setChildNumber] = useState(
     currOrder.childNumber ? currOrder.childNumber : 1
   );
@@ -403,7 +415,7 @@ export default function Individual() {
       <NavbarC />
       <div className="relative overflow-hidden md:h-full h-64">
       {/* src={headingImage} */}
-        <img src={hd720}  className="object-cover  h-full  w-full" />
+        <img src={headingImage}  className="object-cover  h-full  w-full" />
         <div className="absolute inset-0    grid content-center text-center backdrop-brightness-50  ">
           <h1 className="text-white md:text-6xl text-xl font-medium">
             {property.title}
@@ -424,16 +436,19 @@ export default function Individual() {
 
       <div className="w-100 md:h-full h-96 even:bg-[#FABEB7] odd:bg-[#D1EDF5]  md:mt-20 mt-10  relative">
         {/* src={aboutspace} */}
-        <img src={hd300} className="object-  h-full  w-full" />
+        <img src={aboutspace} className="object-  h-full  w-full" />
 
-        <div className="absolute -bottom-20   w-4/5 md:h-56 mx-auto left-0 right-0 ml-auto mr-auto px-10 py-8 border-8 rounded border-[#B4E2EF] grid content-center text-center bg-white  ">
-          <h1 className="text-black md:text-xl text-sm ">
+        <div className="absolute md:-bottom-20  -bottom-20 md:h-auto    w-4/5  mx-auto left-0 right-0 ml-auto mr-auto md:px-10 px-5 md:py-8 py-4 border-8 rounded border-[#B4E2EF] grid content-center text-center bg-white  ">
+          <h1 className="text-black md:text-xl text-sm hidden md:block">
             {property.location_description}
+          </h1>
+          <h1 className="text-black  text-xs md:hidden">
+            <ReadMore>{property.location_description}</ReadMore>
           </h1>
         </div>
       </div>
 
-      <h1 className="md:text-4xl text-xl text-center mt-44 font-medium my-10 mx-5 ">
+      <h1 className="md:text-4xl text-xl text-center md:mt-36 mt-28 font-medium my-10 mx-5 ">
         Get a{" "}
         <span className="text-[#179FEB] font-bold">
           Sense of the Atmosphere
@@ -816,57 +831,36 @@ export default function Individual() {
                 >
                   <div className="flex w-100 mb-2 justify-between">
                     <div>
-                      <h1 className="font-bold text-base w-3/5">Adults</h1>
-                      <p className="text-gray-400">Age 8+</p>
+                      <h1 className="font-bold text-base w-3/5">Rooms</h1>
+                      
                     </div>
                     <div className="w-2/5 justify-between  flex items-center">
                       <button
                         className="border mr-2 rounded-full border-2"
-                        onClick={decrAdult}
+                        onClick={decrRooms}
                       >
                         -
                       </button>{" "}
-                      {adultNumber}
+                      {roomNumber}
                       <button
                         className="ml-2 border rounded-full border-2"
-                        onClick={incrAdult}
+                        onClick={incrRooms}
                       >
                         +
                       </button>
                     </div>
                   </div>
                   <Dropdown.Divider />
-                  <div className="flex w-100 my-2 justify-between">
-                    <div>
-                      <h1 className="font-bold text-base w-3/5">Child</h1>
-                      <p className="text-gray-400">Age 0 - 8</p>
-                    </div>
-                    <div className="w-2/5 justify-between  flex items-center">
-                      <button
-                        onClick={decrChild}
-                        className="border mr-2 rounded-full border-2"
-                      >
-                        -
-                      </button>{" "}
-                      {childNumber}
-                      <button
-                        onClick={incrChild}
-                        className="ml-2 border rounded-full border-2"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                  <Dropdown.Divider />
+                  
                   <div>
                     <h1 className="text-green-500 font-bold w-64">
-                      Charges are not applicable for children below 8
+                      Maximum 3 Adults can be accomodated in a room
                     </h1>
                   </div>
                 </Dropdown>
               </div>}
 
-              <div className="lg:w-max w-full px-3 py-2">
+              <div className="lg:w-max w-full px-1 py-2">
                 <div className="flex  items-center h-full">
                   <h1 className="font-medium md:text-xl">
                     Total before Taxes{" "}
