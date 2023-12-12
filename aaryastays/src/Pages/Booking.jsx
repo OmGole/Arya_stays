@@ -112,10 +112,10 @@ export default function Booking() {
     const getSlideImage = async()=>{
         try{
             const new_slide_images = await Promise.all(property.currentLocation_images.map(async (id,index) => {
-                if(index!=2){
+                
                     const result = await api.get(`/api/v1/image/${id}`);
                     return result.data.url;
-                }
+                
             }));
             setSlideImage(new_slide_images)
         }catch(err){
