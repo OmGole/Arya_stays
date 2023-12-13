@@ -220,7 +220,7 @@ export default function NavbarC() {
           dismissOnClick={true}
           className='mr-2'
           label={
-            <Avatar alt="User settings" className='mr-2' img={user1} rounded />
+            <Avatar alt="User settings" className='usericon' img={user1} rounded />
           }
         >
           <Dropdown.Item onClick={() => setOpenModal(true)}>Login/Register</Dropdown.Item>
@@ -233,7 +233,7 @@ export default function NavbarC() {
           inline
           dismissOnClick={true}
           label={
-            <Avatar alt="User settings" img={user1} rounded />
+            <Avatar alt="User settings" className='usericon ' img={user1} rounded />
           }
         >
           <Link to="/profile"><Dropdown.Item >

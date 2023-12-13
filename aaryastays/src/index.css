@@ -157,6 +157,11 @@ input::-webkit-inner-spin-button {
 }
 
 
+.usericon  div img{
+  width:1.8rem !important;
+  height:1.8rem !important;
+  filter: contrast(0.2);
+}
 
 .custom-align-home:nth-child(1){
   margin-top: 0;
