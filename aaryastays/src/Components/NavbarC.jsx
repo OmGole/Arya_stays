@@ -11,6 +11,7 @@ import { logout, login } from '../Store/userSlice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import api from '../api/api';
 
 export default function NavbarC() {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ export default function NavbarC() {
   const [confirmPassword,setConfirmPassword] = useState('')
   const [isRegestering,setIsRegestering] = useState(false)
   const [signoutConfirmation,setSignoutConfirmation] = useState(false)
+  const [role,setRole] = useState('')
   
 
   useEffect(()=>{
@@ -173,6 +175,26 @@ export default function NavbarC() {
     //     }
     //   });
     // },[])
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          console.log(user.user.uid);
+          const response = await api.get(`/api/v1/user/${user.user.uid}`);
+          console.log(response.data);
+          setRole(response.data.isAdmin);
+          // Process the data fetched from the API call here
+        } catch (error) {
+          // Handle any errors that occur during the API call
+          console.error('Error fetching user data:', error);
+        }
+      };
+    
+      if (user && user.user && user.user.uid) {
+        fetchData();
+      }
+    },[user])
+
+    
 
     useEffect(() =>{
       const unlisten = onAuthStateChanged(authentication,
@@ -183,6 +205,7 @@ export default function NavbarC() {
               uid:user.uid,
               provider:user.providerData[0].providerId
             }
+            
             dispatch(login(userData));
             setOpenModal(false);
           } else {
@@ -203,6 +226,8 @@ export default function NavbarC() {
    const navigateToWishlist = () =>{
     navigate('/orders', { state: { id: 3 } });
    }
+
+   
     
 
   // const [isChooseCountry,SetisChooseCountry] =useState(false);
@@ -243,6 +268,9 @@ export default function NavbarC() {
           <Dropdown.Divider />
           <Dropdown.Item onClick={()=>{navigateToWishlist()}}> My WishList</Dropdown.Item>
           <Dropdown.Divider />
+          {role == 'admin' && <><Link to="/dashboard/property"><Dropdown.Item >
+            Dashboard</Dropdown.Item></Link> <Dropdown.Divider /></>}
+
           <Dropdown.Item onClick={() => setSignoutConfirmation(true)}>Sign out</Dropdown.Item>
         </Dropdown>}
         <Navbar.Toggle />
