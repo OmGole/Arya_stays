@@ -256,6 +256,9 @@ export default function Booking() {
   return (
     <div>
         <ScrollToTop />
+        <div className="text-center bg-[#B4E2EF] py-2 md:font-medium text-[10px] md:text-base">
+        Book your comfortable rooms, even before 60 mins before the check in!
+      </div>
         <NavbarC/>
         <div class="container mx-auto px-5 py-2 lg:px-20 lg:my-5">
             <div className='flex gap-x-2 flex-col md:flex-row'>

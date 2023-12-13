@@ -56,6 +56,9 @@ export default function Gallery() {
 
   return (
     <>
+    <div className="text-center bg-[#B4E2EF] py-2 md:font-medium text-[10px] md:text-base">
+        Book your comfortable rooms, even before 60 mins before the check in!
+      </div>
     <NavbarC/>
     <h1 className='text-center text-3xl font-bold'>{property.title}</h1>
     <div className='md:mx-20  md:h-[550px] h-[250] mt-4 mx-2 custom-slider rounded-lg mb-4'>

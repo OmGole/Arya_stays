@@ -43,7 +43,7 @@ export default function Slide2({slides}) {
           {slideDetails.map(slide => {
             const length = slide.images.length;
             return (<div className="dark:text-white h-full">
-            <div className="flex justify-between mb-10 h-1/2">
+            <div className="flex justify-between md:mb-10 mb-3 h-1/2">
               {slide.images.map((img, index) => {
                 if(index == 0) {
                   return <img src={img.url} className="h-full md:mr-14 md:w-1/3 w-full" />;
@@ -59,9 +59,9 @@ export default function Slide2({slides}) {
                   
                 })}
             </div>
-            <div className="border-[#179FEB] border-2 p-4 text-lg leading-6">
+            <div className="border-[#179FEB] border-2 px-4 py-1 leading-6">
               {/* <p className="mb-5">{slide.description}</p> */}
-              <p className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio eius fugiat numquam quas dolorem distinctio voluptate, culpa beatae facilis. Ex fugiat placeat facilis, qui eligendi suscipit quisquam dolorem atque voluptatibus libero. Minus atque similique facere consequatur ipsam distinctio tempore repellat culpa nisi iste voluptas delectus placeat repudiandae, adipisci, aliquam cupiditate, dolorem harum nulla rerum fugit? Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio eius fugiat numquam quas dolorem distinctio voluptate, culpa beatae facilis. Ex fugiat placeat facilis, qui eligendi suscipit quisquam dolorem atque voluptatibus libero. Minus atque similique facere consequatur ipsam distinctio tempore repellat culpa nisi iste voluptas delectus placeat repudiandae, adipisci, aliquam cupiditate, dolorem harum nulla rerum fugit?  </p>
+              <p className="text-xs md:text-lg">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio eius fugiat numquam quas dolorem distinctio voluptate, culpa beatae facilis. Ex fugiat placeat facilis, qui eligendi suscipit quisquam dolorem atque voluptatibus libero. Minus atque similique facere consequatur ipsam distinctio tempore repellat culpa nisi iste voluptas delectus placeat repudiandae, adipisci, aliquam cupiditate, dolorem harum nulla rerum fugit? Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio eius fugiat numquam quas dolorem distinctio voluptate, culpa beatae facilis. Ex fugiat placeat facilis, qui eligendi suscipit quisquam dolorem atque voluptatibus libero. </p>
             </div>
           </div>)
           })} 

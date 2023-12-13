@@ -160,6 +160,9 @@ export default function IndividualOrder() {
 
   return (
     <>
+    <div className="text-center bg-[#B4E2EF] py-2 md:font-medium text-[10px] md:text-base">
+        Book your comfortable rooms, even before 60 mins before the check in!
+      </div>
         <NavbarC/>
         <div className="md:mx-20 mx-5 my-4">
             <div className='flex gap-x-4 flex-col md:flex-row '>
