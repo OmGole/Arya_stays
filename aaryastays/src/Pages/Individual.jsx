@@ -87,7 +87,7 @@ export default function Individual() {
         updateOrder({ key: "RoomType", value: data.payload.roomType[0] })
       );
       setPrice(data.payload.price);
-      getSlideImage();
+      // getSlideImage();
       getAmenities(data.payload.amenities);
       getEvents(data.payload.events);
       dispatch(getHeadingImages(data.payload.currentLocation_images[0])).then(
@@ -101,6 +101,10 @@ export default function Individual() {
     });
   }, [dispatch]);
 
+  useEffect(() => {
+    getSlideImage();
+  }, [property])
+
   const getSlideImage = async()=>{
     try{
       const new_slide_images = await Promise.all(property.currentLocation_images.map(async (id,index) => {
@@ -109,6 +113,7 @@ export default function Individual() {
             return result.data.url;
           }catch(err){}
       }));
+      console.log(new_slide_images) 
       setSlideImage(new_slide_images)
 
     }catch(err){
@@ -655,10 +660,10 @@ export default function Individual() {
               class="object-cover w-full  rounded-lg h-auto md:h-full md:w-full  "
               src={DummyImgSqr}
               alt=""
-            /> */}
-            <Carousel>
+            /> */}  
+            <Carousel>  
             {slideImage?.map((item)=>{
-              return(<img src={item} class="object-cover w-full rounded-br-lg rounded-tl-lg h-auto md:h-full md:w-full "  alt="..." />)
+              return(<img src={item} class="object-cover w-full rounded-br-lg rounded-tl-lg h-full md:h-full md:w-full "  alt="..." />)
             })}
           </Carousel>
           </div>
