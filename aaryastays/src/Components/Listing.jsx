@@ -70,8 +70,8 @@ export default function Listing({properties}) {
       ))} */}
 
        {properties?.map((property, index) => (
-        <div className='w-full md:h-56 h-96 even:bg-[#FABEB7] odd:bg-[#D1EDF5] md:mt-40 md:mt-32 mt-36  relative'>
-          <div className={`md:px-0 w-full   md:w-2/3  absolute -top-32 ${
+        <div className='w-full md:h-56 h-96 even:bg-[#FABEB7] odd:bg-[#D1EDF5]  md:mt-40 mt-36  relative'>
+          <div className={`md:px-0 w-full   md:w-2/3  absolute bottom-5 ${
               index % 2 === 0 ?   'md:left-20':'md:right-20'
             }`}>
             <HomeCard2 property={property} wishlist={wishlist}/>

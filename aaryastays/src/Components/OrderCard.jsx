@@ -134,7 +134,7 @@ const OrderCard = ({order, validity}) => {
             <div className="flex  items-center mt-3">
               <h1 className="font-medium md:text-xl">Amount </h1>
               <span className="py-1 px-2 ml-2 border-2 rounded-lg border-green-500 text-green-500 font-medium">
-                {property?.price + amenitiesPrice}
+                {order.totalPrice}
               </span>
               <Link to={`/booking/${validity}/${order._id}`}>
                 <button className="rounded-lg bg-[#F79489] text-white px-4 py-1 ml-2  md:hidden">

@@ -133,6 +133,9 @@ export default function Orders() {
   return (
     <>
     <ScrollToTop />
+    <div className="text-center bg-[#B4E2EF] py-2 md:font-medium text-[10px] md:text-base">
+        Book your comfortable rooms, even before 60 mins before the check in!
+      </div>
         <NavbarC/>
         <div className='md:mx-20 mx-8'>
             <div className='flex justify-around'>

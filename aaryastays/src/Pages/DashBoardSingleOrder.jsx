@@ -148,6 +148,9 @@ Rohit Arya`;
           <div className="mb-1 text-lg">
             <h2>Accomodation : {order?.accomodation}</h2>
           </div>
+          {order && order?.accomodation === "private-rooms" && <div className="mb-1 text-lg">
+            <h2>Private Rooms : {order?.privateRooms}</h2>
+          </div>}
           <div className="mb-1 text-lg">
             <h2>
               Guests :{" "}
@@ -155,7 +158,7 @@ Rohit Arya`;
             </h2>
           </div>
           <div className="mb-1 text-lg">
-            <h2>Price : ₹{property?.price}</h2>
+            <h2>Total Price : ₹{order?.totalPrice}</h2>
           </div>
           <div className="mb-1 text-lg">
             <h2>

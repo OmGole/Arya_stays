@@ -39,7 +39,8 @@ export default function Reviews() {
             </div>
         </div>
         <div className="h-96 sm:h-64 xl:h-80 2xl:h-96  mx-4 md:hidden">
-            <Carousel className='custom-carousel'>
+            <Carousel indicators={false} className='custom-carousel custom-btn h-ful'>
+                
             <div className=' border-2 rounded-t-3xl rounded-bl-3xl border-[#6ACDE9] p-6'>
                 <p>“ One of the best and amazing stay i've experienced in aurovilla. Our stay was simply unforgettable! Breathtaking views, delicious food, wonderful hosts, and excellent guidance made it a truly amazing experience. The presence of beautiful plants added to the charm, and we had a pleasant stay overall. We will visit again for sure, Highly recommended! ’’
                 </p>

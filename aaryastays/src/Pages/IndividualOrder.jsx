@@ -14,6 +14,7 @@ import { Modal,Textarea } from 'flowbite-react';
 import { postReview } from '../Store/reviewSlice';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { Tooltip } from 'flowbite-react';
 
 const stars = [1, 2, 3, 4, 5];
 
@@ -56,6 +57,7 @@ export default function IndividualOrder() {
     const [review,setReview] = useState('');
     const [typeOfModal,setTypeOfModal] = useState();
     const [noCheckInReview,setNoCheckInReview] = useState('');
+    const [toolTip2,setToolTip2] = useState([])
     const { pathname } = useLocation();
 
   useEffect(() => {
@@ -64,7 +66,7 @@ export default function IndividualOrder() {
 
     useEffect(()=>{
         console.log(Validity)
-        dispatch(getOrderById(routeParamsID)).then((data)=>{
+        dispatch(getOrderById(routeParamsID)).then(async (data)=>{
             setSingleOrder(data.payload[0])
             const totalSum = data.payload[0].amenities.reduce((accumulator, amenity) => {
                 return accumulator + (amenity.price * amenity.qty);
@@ -77,6 +79,25 @@ export default function IndividualOrder() {
             dispatch(getUserById(data.payload[0].userId)).then((data3)=>{
                 setUserName(data3.payload.name)
             })
+            // console.log(data.payload[0].amenities)
+            // data.payload[0].amenities.map(async (obj,index) => {
+            //     console.log(obj.id)
+            //     const result = await api.get(`/api/v1/amenity/${obj.id}`);
+            //     console.log(toolTip2)
+            //     setToolTip2((toolTip2)=>[...toolTip2,result.data.title + ' x ' + data.payload[0].amenities[index].qty + ' = ' + result.data.price * data.payload[0].amenities[index].qty + ' Rs'])
+            // })
+
+            const fetchedTooltips = await Promise.all(
+                data.payload[0].amenities.map(async (obj) => {
+                  const result = await api.get(`/api/v1/amenity/${obj.id}`);
+                  return `${result.data.title} x ${obj.qty} = ${result.data.price * obj.qty} Rs`;
+                })
+              );
+          
+              setToolTip2((prevToolTip2) => {
+                const uniqueTooltips = fetchedTooltips.filter((tooltip) => !prevToolTip2.includes(tooltip));
+                return [...prevToolTip2, ...uniqueTooltips];
+              });
         })
     },[dispatch])
 
@@ -87,10 +108,9 @@ export default function IndividualOrder() {
     const getSlideImage = async()=>{
         try{
             const new_slide_images = await Promise.all(property.currentLocation_images.map(async (id,index) => {
-                if(index!=2){
+                
                     const result = await api.get(`/api/v1/image/${id}`);
                     return result.data.url;
-                }
             }));
             setSlideImage(new_slide_images)
         }catch(err){
@@ -126,10 +146,23 @@ export default function IndividualOrder() {
             }
 
     }
+
+
+    const renderList = (
+        <div>
+        {toolTip2.map((item, index) => (
+            <h1 key={index}>{item}</h1>
+          ))}
+        </div>
+         
+      );
     
 
   return (
     <>
+    <div className="text-center bg-[#B4E2EF] py-2 md:font-medium text-[10px] md:text-base">
+        Book your comfortable rooms, even before 60 mins before the check in!
+      </div>
         <NavbarC/>
         <div className="md:mx-20 mx-5 my-4">
             <div className='flex gap-x-4 flex-col md:flex-row '>
@@ -177,7 +210,9 @@ export default function IndividualOrder() {
                                         <div className='md:text-lg'> RS {property?.price}/-</div>
                                     </div>
                                     <div className='flex justify-between mt-2'>
-                                        <div className='flex items-center'><i class="fa fa-info-circle mr-2" aria-hidden="true"></i><h1 className='md:text-lg'>Service Charges</h1></div>
+                                    
+                                        <div className='flex items-center'><Tooltip content={renderList} style="dark"><i class="fa fa-info-circle mr-2" aria-hidden="true"></i></Tooltip><h1 className='md:text-lg'>Service Charges</h1></div>
+                                        
                                         <div className='md:text-lg'> RS {amenitiesPrice}/-</div>
                                     </div>
                                     <hr className='mt-3 md:block hidden'></hr>

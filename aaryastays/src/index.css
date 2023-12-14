@@ -157,6 +157,11 @@ input::-webkit-inner-spin-button {
 }
 
 
+.usericon  div img{
+  width:1.8rem !important;
+  height:1.8rem !important;
+  filter: contrast(0.2);
+}
 
 .custom-align-home:nth-child(1){
   margin-top: 0;
@@ -167,16 +172,23 @@ input::-webkit-inner-spin-button {
   display: none;
 }
 
-.custom-carousel div:nth-child(3),
-.custom-carousel div:nth-child(4){
+.custom-carousel div:nth-child(2),
+.custom-carousel div:nth-child(3){
   align-items: flex-end !important;
+  padding-bottom: 10px;
 }
 
 .custom-carousel div:nth-child(3) button span,
-.custom-carousel div:nth-child(4) button span,
+.custom-carousel div:nth-child(2) button span,
 .custom-carousel div:nth-child(3) button span:focus,
-.custom-carousel div:nth-child(4) button span:focus{
-  background-color: #6ACDE9 !important;
+.custom-carousel div:nth-child(2) button span:focus{
+  background-color: #b4d4de !important;
+}
+
+.custom-btn  div:nth-child(2),
+.custom-btn div:nth-child(3){
+  padding-bottom: 0px !important;
+  margin-top: 10px;
 }
 
 

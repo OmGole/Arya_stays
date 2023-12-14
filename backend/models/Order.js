@@ -58,6 +58,10 @@ const OrderSchema = new mongoose.Schema(
     privateRooms:{
       type: Number,
       default: 0
+    },
+    totalPrice:{
+      type:Number,
+      required:true
     }
   },
   { timestamps: true }
