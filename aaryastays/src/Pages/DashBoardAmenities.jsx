@@ -7,6 +7,11 @@ import { getAllAmenity } from "../Store/amenitySlice";
 import DashBoardAmenityRow from "../Components/DashBoardAmenityRow";
 import AddAmenityModal from "../Components/AddAmenityModal";
 import DashBoardNavbar from "../Components/DashBoardNavbar";
+import { onAuthStateChanged } from "firebase/auth";
+import api from "../api/api";
+import { logout, login } from '../Store/userSlice';
+import { useNavigate } from "react-router-dom";
+import { authentication } from '../firebase/config';
 
 
 function DashBoardAmenities() {
@@ -14,10 +19,49 @@ function DashBoardAmenities() {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [openModal,setOpenModal] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllAmenity());
   }, []);
+
+  useEffect(() =>{
+    const unlisten = onAuthStateChanged(authentication,
+       user => {
+        if (user) {
+          const userData = {
+            token:user.accessToken,
+            uid:user.uid,
+            provider:user.providerData[0].providerId
+          }
+          
+          const fetchData = async()=>{
+            try {
+              console.log(user.uid);
+              const response = await api.get(`/api/v1/user/${user.uid}`);
+              console.log(response.data.role);
+              if(response.data.role != 'admin'){
+                navigate('/')
+              }
+            } catch (error) {
+              navigate('/')
+              // console.log(error)
+            }
+          }
+          // console.log(user)
+          fetchData()
+          dispatch(login(userData));
+
+          // setOpenModal(false);
+        } else {
+          dispatch(logout());
+          navigate('/')
+        }
+       });
+    return () => {
+        unlisten();
+    }
+ }, []);
 
 
 

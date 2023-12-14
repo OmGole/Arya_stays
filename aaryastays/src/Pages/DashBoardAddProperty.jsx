@@ -4,6 +4,10 @@ import { getAllAmenity } from "../Store/amenitySlice";
 import { getAllCards } from "../Store/cardSlice";
 import { createProperty } from "../Store/propertySlice";
 import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { logout, login } from '../Store/userSlice';
+import api from "../api/api";
+import { authentication } from '../firebase/config';
 
 const DashBoardAddProperty = () => {
   const dispatch = useDispatch();
@@ -26,7 +30,6 @@ const DashBoardAddProperty = () => {
   const [amenities, setAmenities] = useState([]);
   const [cards, setCards] = useState([]);
   const [id, setId] = useState();
-  const user = useSelector(state => state.user);
 
   useEffect(() =>{
     const unlisten = onAuthStateChanged(authentication,
@@ -38,37 +41,33 @@ const DashBoardAddProperty = () => {
             provider:user.providerData[0].providerId
           }
           
+          const fetchData = async()=>{
+            try {
+              console.log(user.uid);
+              const response = await api.get(`/api/v1/user/${user.uid}`);
+              console.log(response.data.role);
+              if(response.data.role != 'admin'){
+                navigate('/')
+              }
+            } catch (error) {
+              navigate('/')
+              // console.log(error)
+            }
+          }
+          // console.log(user)
+          fetchData()
           dispatch(login(userData));
+
           // setOpenModal(false);
         } else {
           dispatch(logout());
+          navigate('/')
         }
        });
     return () => {
         unlisten();
     }
  }, []);
-
- useEffect(() => {
-  const fetchData = async () => {
-    try {
-      console.log(user.user.uid);
-      const response = await api.get(`/api/v1/user/${user.user.uid}`);
-      console.log(response.data);
-      if(response.data.isAdmin != 'admin'){
-        navigate('/')
-      }
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
-
-  if (user && user.user && user.user.uid) {
-    fetchData();
-  }else{
-    navigate('/')
-  }
-},[user])
 
 
 

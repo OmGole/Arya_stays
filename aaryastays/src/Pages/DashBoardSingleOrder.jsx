@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteOrder, editOrder } from "../Store/orderSlice";
 import api from "../api/api";
+import { onAuthStateChanged } from "firebase/auth";
+import { logout, login } from '../Store/userSlice';
+import { authentication } from '../firebase/config';
 
 const DashBoardSingleOrder = () => {
   const { id } = useParams();
@@ -13,6 +16,47 @@ const DashBoardSingleOrder = () => {
   const [order, setOrder] = useState();
   const [user, setUser] = useState();
   const [formattedAmenities, setFormattedAmenities] = useState();
+
+  const curruser = useSelector(state => state.user);
+
+  useEffect(() =>{
+    const unlisten = onAuthStateChanged(authentication,
+       user2 => {
+        if (user2) {
+          const userData = {
+            token:user2.accessToken,
+            uid:user2.uid,
+            provider:user2.providerData[0].providerId
+          }
+          
+          const fetchData = async()=>{
+            try {
+              console.log(user2.uid);
+              const response = await api.get(`/api/v1/user/${user2.uid}`);
+              console.log(response.data.role);
+              if(response.data.role != 'admin'){
+                navigate('/')
+              }
+            } catch (error) {
+              navigate('/')
+              // console.log(error)
+            }
+          }
+          // console.log(user)
+          fetchData()
+          dispatch(login(userData));
+
+          // setOpenModal(false);
+        } else {
+          dispatch(logout());
+          navigate('/')
+        }
+       });
+    return () => {
+        unlisten();
+    }
+ }, []);
+  
 
   const formatDate = (isoDateString) => {
     const dateObject = new Date(isoDateString);
