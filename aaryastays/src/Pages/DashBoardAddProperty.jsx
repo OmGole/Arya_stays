@@ -39,7 +39,7 @@ const DashBoardAddProperty = () => {
           }
           
           dispatch(login(userData));
-          setOpenModal(false);
+          // setOpenModal(false);
         } else {
           dispatch(logout());
         }
@@ -65,6 +65,8 @@ const DashBoardAddProperty = () => {
 
   if (user && user.user && user.user.uid) {
     fetchData();
+  }else{
+    navigate('/')
   }
 },[user])
 
