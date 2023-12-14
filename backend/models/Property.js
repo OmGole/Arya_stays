@@ -19,17 +19,14 @@ const PropertySchema = new mongoose.Schema({
   location_description:{
     type:String,
     required:[true,'Please provide l description'],
-    maxlength:1000
   },
   room_description:{
     type:String,
     required:[true,'Please provide r description'],
-    maxlength:1000
   },
   surrounding_description:{
     type:String,
     required:[true,'Please provide s description'],
-    maxlength:1000
   },
   cards:[{
     type:mongoose.Types.ObjectId,
@@ -75,7 +72,11 @@ const PropertySchema = new mongoose.Schema({
     type:mongoose.Types.ObjectId,
     ref:'Event',
     _id:false
-  }]
+  }],
+  bhk:{
+    type:Number,
+    required:[true,'Please provide bhk'],
+  }
   // createdBy:{
   //   type:mongoose.Types.ObjectId,
   //   ref:'User',

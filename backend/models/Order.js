@@ -55,6 +55,10 @@ const OrderSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    privateRooms:{
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true }
 );

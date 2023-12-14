@@ -39,11 +39,11 @@ export default function Slide2({slides}) {
 
 
   return (
-        <Carousel className="h-[500px]" slide={false} indicators={false}>
+        <Carousel className="md:h-[500px] h-[700px] w-full px-0" slide={false} indicators={false}>
           {slideDetails.map(slide => {
             const length = slide.images.length;
             return (<div className="dark:text-white h-full">
-            <div className="flex justify-between mb-10 h-1/2">
+            <div className="flex justify-between md:mb-10 mb-6 md:h-1/2 h-1/3">
               {slide.images.map((img, index) => {
                 if(index == 0) {
                   return <img src={img.url} className="h-full md:mr-14 md:w-1/3 w-full" />;
@@ -59,7 +59,7 @@ export default function Slide2({slides}) {
                   
                 })}
             </div>
-            <div className="border-[#179FEB] border-2 p-4 text-lg leading-6">
+            <div className="border-[#179FEB] border-2 p-4 md:text-lg text-sm md:leading-6">
               {/* <p className="mb-5">{slide.description}</p> */}
               <p className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio eius fugiat numquam quas dolorem distinctio voluptate, culpa beatae facilis. Ex fugiat placeat facilis, qui eligendi suscipit quisquam dolorem atque voluptatibus libero. Minus atque similique facere consequatur ipsam distinctio tempore repellat culpa nisi iste voluptas delectus placeat repudiandae, adipisci, aliquam cupiditate, dolorem harum nulla rerum fugit? Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio eius fugiat numquam quas dolorem distinctio voluptate, culpa beatae facilis. Ex fugiat placeat facilis, qui eligendi suscipit quisquam dolorem atque voluptatibus libero. Minus atque similique facere consequatur ipsam distinctio tempore repellat culpa nisi iste voluptas delectus placeat repudiandae, adipisci, aliquam cupiditate, dolorem harum nulla rerum fugit?  </p>
             </div>

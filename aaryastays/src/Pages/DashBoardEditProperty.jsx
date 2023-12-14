@@ -32,6 +32,7 @@ const DashBoardEditProperty = () => {
   const [title, setTitle] = useState();
   const [location, setLocation] = useState();
   const [price, setPrice] = useState();
+  const [bhk, setBhk] = useState();
   const [location_description, setLocation_description] = useState();
   const [room_description, setRoom_description] = useState();
   const [slide_description, setSlide_description] = useState();
@@ -45,6 +46,7 @@ const DashBoardEditProperty = () => {
   const [disableTitle, setDisableTitle] = useState(true);
   const [disableLocation, setDisableLocation] = useState(true);
   const [disablePrice, setDisablePrice] = useState(true);
+  const [disableBhK, setDisableBhk] = useState(true);
   const [disableLocation_description, setDisableLocation_description] =
     useState(true);
   const [disableRoom_description, setDisableRoom_description] = useState(true);
@@ -95,6 +97,10 @@ const DashBoardEditProperty = () => {
     setPrice(e.target.value);
   };
 
+  const handleBHK = (e) => {
+    setBhk(e.target.value);
+  };
+
   const handleVideo = (e) => {
     setVideo(e.target.value);
   };
@@ -130,6 +136,11 @@ const DashBoardEditProperty = () => {
   const handleEditPrice = (e) => {
     e.preventDefault();
     setDisablePrice(false);
+  };
+
+  const handleEditBHK = (e) => {
+    e.preventDefault();
+    setDisableBhk(false);
   };
 
   const handleEditLocationDescription = (e) => {
@@ -301,7 +312,7 @@ const DashBoardEditProperty = () => {
     dispatch(deleteProperty(property._id));
 
     navigate("/dashboard/property");
-  }
+  };
 
   const handleEditProperty = async (e) => {
     e.preventDefault();
@@ -310,7 +321,8 @@ const DashBoardEditProperty = () => {
 
     if (!disableTitle) newProperty.title = title;
     if (!disableLocation) newProperty.location = location;
-    if (!disablePrice) newProperty.price = price;
+    if (!disablePrice) newProperty.price = Number(price);
+    if (!disableBhK) newProperty.bhk = Number(bhk);
     if (!disableVideo) newProperty.video = video;
     if (!disableLocation_description)
       newProperty.location_description = location_description;
@@ -321,6 +333,7 @@ const DashBoardEditProperty = () => {
     newProperty.roomType = roomType;
     newProperty.amenities = amenities;
     newProperty.cards = cards;
+
     const updatedProperty = { id, newProperty };
 
     dispatch(editProperty(updatedProperty));
@@ -331,6 +344,7 @@ const DashBoardEditProperty = () => {
     setDisableRoom_description(true);
     setDisableSurrounding_description(true);
     setDisableVideo(true);
+    setDisableBhk(true);
   };
 
   useEffect(() => {
@@ -352,6 +366,7 @@ const DashBoardEditProperty = () => {
       setAmenities(property.amenities);
       setCards(property.cards);
       setRoomType(property.roomType);
+      setBhk(property.bhk);
     }
   }, [property]);
 
@@ -406,6 +421,7 @@ const DashBoardEditProperty = () => {
                 }`}
                 placeholder="Location"
                 value={location}
+                disabled={disableLocation}
                 onChange={handleLocation}
               />
             </div>
@@ -425,7 +441,28 @@ const DashBoardEditProperty = () => {
                     ? " text-gray-400 cursor-not-allowed"
                     : "text-black"
                 }`}
+                disabled={disablePrice}
                 placeholder="Price"
+              />
+            </div>
+            <div className="mb-3">
+              <button
+                onClick={handleEditBHK}
+                className="text-red-500 underline block ml-auto"
+              >
+                Edit
+              </button>
+              <input
+                type="number"
+                onChange={handleBHK}
+                value={bhk}
+                className={`border-2 rounded-xl py-1 px-3  w-full ${
+                  disableBhK
+                    ? " text-gray-400 cursor-not-allowed"
+                    : "text-black"
+                }`}
+                disabled={disableBhK}
+                placeholder="BHK"
               />
             </div>
             <div className="mb-3">
@@ -444,10 +481,11 @@ const DashBoardEditProperty = () => {
                 }`}
                 placeholder="Video URL"
                 value={video}
+                disabled={disableVideo}
                 onChange={handleVideo}
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-6">
               <button
                 onClick={handleEditLocationDescription}
                 className="text-red-500 underline block ml-auto"
@@ -466,8 +504,12 @@ const DashBoardEditProperty = () => {
                 }`}
                 placeholder="Location Description"
                 onChange={handleLocationDescription}
+                disabled={disableLocation_description}
                 value={location_description}
               ></textarea>
+              <p className="text-red-500 text-end mt-0">
+                Less Than 753 Characters recommended
+              </p>
             </div>
             <div className="mb-3">
               <button
@@ -489,6 +531,7 @@ const DashBoardEditProperty = () => {
                 placeholder="Room Description"
                 onChange={handleRoomDescription}
                 value={room_description}
+                disabled={disableRoom_description}
               ></textarea>
             </div>
             <div className="mb-3">
@@ -512,6 +555,7 @@ const DashBoardEditProperty = () => {
                 placeholder="Surrounding Description"
                 onChange={handleSurroundingDescription}
                 value={surrounding_description}
+                disabled={disableSurrounding_description}
               ></textarea>
             </div>
 
@@ -622,18 +666,21 @@ const DashBoardEditProperty = () => {
               Save
             </button>
           </form>
-          <div className="flex mt-14 mb-10">
+          <div className="flex mt-14 mb-8">
             <h2 className="basis-3/4 text-xl font-semibold">
               Current Location Image :
             </h2>
-            <input
-              type="file"
-              accept="image/"
-              className="mr-5"
-              placeholder="Add"
-              multiple
-              onChange={handleCImages}
-            />
+            <div>
+              <input
+                type="file"
+                accept="image/"
+                className="mr-5"
+                placeholder="Add"
+                multiple
+                onChange={handleCImages}
+              />
+              <p className="text-red-500 mt-2">720 x 300 Recommended</p>
+            </div>
           </div>
           <button
             className="block w-full bg-black text-white py-1 px-5 rounded-xl hover:bg-white hover:text-black border-2 border-black transition duration-200 box-border text-l mb-5 font-poppins"
@@ -656,17 +703,20 @@ const DashBoardEditProperty = () => {
               </h2>
             )}
           </div>
-          <div className="flex mt-14 mb-10">
+          <div className="flex mt-14 mb-8">
             <h2 className="basis-3/4 text-xl font-semibold">
               About the Space Image :
             </h2>
-            <input
-              type="file"
-              accept="image/"
-              className="mr-5"
-              placeholder="Add"
-              onChange={handleAImage}
-            />
+            <div>
+              <input
+                type="file"
+                accept="image/"
+                className="mr-5"
+                placeholder="Add"
+                onChange={handleAImage}
+              />
+              <p className="text-red-500 mt-2">600 X 200 Recommended</p>
+            </div>
           </div>
           <button
             className="block w-full bg-black text-white py-1 px-5 rounded-xl hover:bg-white hover:text-black border-2 border-black transition duration-200 box-border text-l mb-5 font-poppins"
@@ -757,7 +807,10 @@ const DashBoardEditProperty = () => {
               Are you sure you want to detete the property
             </h2>
             <div className="flex justify-center mt-5">
-              <button className="block w-1/4 bg-red-600 text-white py-1 px-5 rounded-xl hover:bg-white hover:text-red-600 border-2 border-red-600 transition duration-200 box-border text-l mb-5 mr-5 font-poppins" onClick={handlePropertyDelete}>
+              <button
+                className="block w-1/4 bg-red-600 text-white py-1 px-5 rounded-xl hover:bg-white hover:text-red-600 border-2 border-red-600 transition duration-200 box-border text-l mb-5 mr-5 font-poppins"
+                onClick={handlePropertyDelete}
+              >
                 Delete
               </button>
               <button
