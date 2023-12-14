@@ -16,6 +16,7 @@ const DashBoardAddProperty = () => {
   const [title, setTitle] = useState();
   const [location, setLocation] = useState();
   const [price, setPrice] = useState();
+  const [bhk, setBhk] = useState();
   const [location_description, setLocation_description] = useState();
   const [room_description, setRoom_description] = useState();
   const [surrounding_description, setSurrounding_description] = useState();
@@ -93,6 +94,10 @@ const DashBoardAddProperty = () => {
     setPrice(e.target.value);
   };
 
+  const handleBHK = (e) => {
+    setBhk(e.target.value);
+  }
+
   const handleVideo = (e) => {
     setVideo(e.target.value);
   };
@@ -155,7 +160,8 @@ const DashBoardAddProperty = () => {
       reviews:[],
       cards,
       amenities,
-      roomType
+      roomType,
+      bhk:Number(bhk)
     };
     const payload = await dispatch(createProperty(newProperty)).unwrap();
     setPayload(payload);
@@ -217,6 +223,15 @@ const DashBoardAddProperty = () => {
           </div>
           <div className="mb-3">
             <input
+              type="number"
+              onChange={handleBHK}
+              value={bhk}
+              className="border-2 rounded-xl py-1 px-3  w-full"
+              placeholder="BHK"
+            />
+          </div>
+          <div className="mb-3">
+            <input
               type="text"
               className="border-2 rounded-xl py-1 px-3  w-full"
               placeholder="Video URL"
@@ -228,7 +243,7 @@ const DashBoardAddProperty = () => {
           <label htmlFor="" className=' text-gray-400 mr-2 text-lg'>Icon: </label>
           <input type="file" accept="image/" onChange={(e) => handleIcon(e.target.files)}/>
         </div> */}
-          <div className="mb-3">
+          <div className="mb-6">
             <textarea
               name=""
               id=""
@@ -239,6 +254,7 @@ const DashBoardAddProperty = () => {
               onChange={handleLocationDescription}
               value={location_description}
             ></textarea>
+            <p className="text-red-500 text-end">Less than 753 characters Recommended</p>
           </div>
           <div className="mb-3">
             <textarea

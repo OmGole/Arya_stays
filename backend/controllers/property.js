@@ -24,9 +24,9 @@ const getSingleProperty = async (req,res) => {
 const createProperty = async (req,res) => {
   try {
   // req.body.createdBy = req.user.userId; 
-  const {title,location,reviews, location_description,room_description,surrounding_description,cards,price,amenities,slides,roomType,currentLocation_images,ats_image} = req.body;
+  const {title,location,reviews, location_description,room_description,surrounding_description,cards,price,amenities,slides,roomType,currentLocation_images,ats_image,bhk} = req.body;
 
-  if(!title || !location || !reviews || !price  || !location_description || !room_description || !surrounding_description || !cards || !amenities || !roomType || !currentLocation_images || !ats_image || !slides) {
+  if(!title || !location || !reviews || !price  || !location_description || !room_description || !surrounding_description || !cards || !amenities || !roomType || !currentLocation_images || !ats_image || !slides || !bhk) {
     console.log(req.body);
     return res.status(401).send("Please fill the missing fields");
   }

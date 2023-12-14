@@ -17,15 +17,6 @@ const getSingleOrderById = async (req, res) => {
   return res.status(200).json(orders);
 };
 
-const getCurrentTime = () => {
-  const currentUTCDate = new Date();
-
-  // Adjust the date to IST (UTC+5:30)
-  const currentISTDate = new Date(currentUTCDate.getTime() + 330 * 60000);
-
-  return currentISTDate;
-};
-
 const getPastOrders = async (req, res) => {
   const { id } = req.params;
   // const currentTime = getCurrentTime();

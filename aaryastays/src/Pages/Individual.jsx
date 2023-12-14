@@ -42,6 +42,7 @@ export default function Individual() {
   const currOrder = useSelector((state) => state.currentOrder.currentOrder);
   const heading_img = useSelector((state) => state.image.headingImage);
   const [price, setPrice] = useState();
+  const [finalPrice, setFinalPrice] = useState();
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [essentialAmenities, setEssentialAmenities] = useState([]);
   const [extraAmenities, setExtraAmenities] = useState([]);
@@ -176,7 +177,6 @@ export default function Individual() {
 
   const overLap = () => {
     const [day, month, year] = checkInDate.split("/");
-    console.log(filteredEvents)
     for (let i = 0; i < filteredEvents.length; i++) {
       const d1 = new Date(filteredEvents[i].start);
 
@@ -189,13 +189,11 @@ export default function Individual() {
       d4.setDate(d4.getDate() + 1);
       d4.setSeconds(d4.getSeconds() - 2);
       if ((d1 <= d2 && d2 <= d3) || (d1 <= d4 && d4 <= d3)) {
-        console.log(filteredEvents[i].title)
         setPrice(filteredEvents[i].title);
         return;
       }
     } 
     setPrice(property.price);
-    console.log(checkInDate);
   }
 
   const addOnDemand = (item) => {
@@ -252,6 +250,8 @@ export default function Individual() {
       getAlreadyAddedAmenity(currOrder.amenities);
     }
   }, [currOrder]);
+
+  
 
   const getAlreadyAddedAmenity = async (prop) => {
     const new_amenities = await Promise.all(
@@ -336,6 +336,27 @@ export default function Individual() {
     }
   };
 
+  const calculateFinalPrice = () => {
+    if(!roomType) return;
+    
+    if(roomType === "full-property") {
+      const maxAdults = property.bhk * 2;
+      const extraAdults = adultNumber - maxAdults;
+      const extraFees = extraAdults > 0 ? extraAdults * 500 : 0;
+      setFinalPrice(price + extraFees);
+    } else if(roomType === "dorm-beds") {
+      console.log("price", price);
+      const adultFee = adultNumber * price;
+      console.log("adultFee", adultFee);
+      const childrenBed = childNumber % 2 === 0 ? childNumber / 2 : Math.ceil(childNumber / 2);
+      console.log("childrenbed", childrenBed);
+      const childFee = childrenBed * price;
+      console.log("childFee", childFee);
+      setFinalPrice(adultFee + childFee);
+    } else {
+      setFinalPrice(price * roomNumber)
+    }
+  }
 
 
   const handleRoomType = (type) => {
@@ -391,7 +412,8 @@ export default function Individual() {
           alert("Check In Date cannot be greater than Check Out Date")
           return;
         }else{
-          navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder,price}})
+          console.log(finalPrice);
+          navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder, price:finalPrice, prooms:roomNumber}})
         }
 
       
@@ -400,6 +422,11 @@ export default function Individual() {
     }
 
   };
+
+  useEffect(() => {
+    calculateFinalPrice();
+  },[price, adultNumber, childNumber, roomType, roomNumber]);
+
   //    Amenities Logic
   const location = useLocation();
   // Scroll to the section based on the URL hash
@@ -875,7 +902,7 @@ export default function Individual() {
                     Total before Taxes{" "}
                   </h1>
                   <span className="py-1 px-2 ml-2 border-2 rounded-lg border-green-500 text-green-500 font-medium">
-                    Rs {price}/-
+                    Rs {finalPrice}/-
                   </span>
                 </div>
               </div>

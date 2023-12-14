@@ -11,7 +11,7 @@ export default function Slide2({slides}) {
     // useEffect(() => {
     //   const parentHeight = parentRef;
     //   console.log("parent",parentHeight)
-    //   // childRef.current.style.height = `${parentHeight}px`;
+    //   // childRef.current.style.height = ${parentHeight}px;
     //   // console.log("child",childRef.current.style.height)
     // }, []); 
   

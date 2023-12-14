@@ -12,6 +12,7 @@ import { reset } from '../Store/currentOrderSlice';
 import emailjs from '@emailjs/browser'
 import { authentication } from '../firebase/config';
 import ScrollToTop from '../ScrollToTop';
+import { getUserById } from '../Store/userSlice';
 // import { useLocation } from 'react-router-dom';
 
 
@@ -27,12 +28,13 @@ export default function Booking() {
     const [property,setProperty] = useState()
     // const { property, stateCurrOrder } = state;
     // console.log(stateCurrOrder)
-    // const userId = useSelector(state => state.user.user.uid);
+    const userDetails = useSelector(state => state.user.userDetails);
     const [slideImage,setSlideImage] = useState([])
     const [numberOfNights,setNumberOfNights] = useState()
     const [amenitiesPrice,setAmenitiesPrice] = useState()
     const [openModal, setOpenModal] = useState(false);
     const [price, setPrice] = useState();
+    const [roomNumber, setRoomNumber] = useState();
     const [amenityTitle,setAmenityTitle] = useState([])
     const [user,setUser] = useState(null)
     let navigate = useNavigate(); 
@@ -41,10 +43,11 @@ export default function Booking() {
 
     useEffect(() => {
         if (state) {
-          const { propertyDetails, stateCurrOrders, price } = state;
+          const { propertyDetails, stateCurrOrders, price, prooms } = state;
           setStateCurrOrder(stateCurrOrders);
           setProperty(propertyDetails);
           setPrice(price);
+          setRoomNumber(prooms);
         } else {
           navigate('/'); // Redirect to the home page if state is null
         }
@@ -103,7 +106,12 @@ export default function Booking() {
           return () => unsubscribe();
       }, []);
 
-    
+      useEffect(() => {
+        if(user) {
+          dispatch(getUserById(user.uid))
+        }
+      },[user]);
+
     // get property images
     useEffect(()=>{
         getSlideImage()
@@ -153,7 +161,7 @@ export default function Booking() {
     const WhatsappMessage = () =>{
         console.log(amenityTitle);
 
-        let msg = 'Hello+I%27m+'+user.name+'%2C+I+would+like+to+enquire+about+following+property%0D%0AProperty+%3A+'+ stateCurrOrder.Title +'%0D%0ALocation+%3A+'+ stateCurrOrder.Location +'%0D%0ACheckInDate+%3A+'+ stateCurrOrder.CheckInDate + '%0D%0ACheckOutDate+%3A+'+ stateCurrOrder.CheckOutDate +'%0D%0ARoom+Type+%3A+'+ stateCurrOrder.RoomType +'%0D%0ANumber+of+Adult+%3A+'+ stateCurrOrder.adultNumber +'%0D%0ANumber+of+Child+%3A+'+ stateCurrOrder.childNumber +'%0D%0AAmenities+%3A+'+ amenityTitle;
+        let msg = 'Hello+I%27m+'+userDetails.name+'%2C+I+would+like+to+enquire+about+following+property%0D%0AProperty+%3A+'+ stateCurrOrder.Title +'%0D%0ALocation+%3A+'+ stateCurrOrder.Location +'%0D%0ACheckInDate+%3A+'+ stateCurrOrder.CheckInDate + '%0D%0ACheckOutDate+%3A+'+ stateCurrOrder.CheckOutDate +'%0D%0ARoom+Type+%3A+'+ stateCurrOrder.RoomType +'%0D%0ANumber+of+Adult+%3A+'+ stateCurrOrder.adultNumber +'%0D%0ANumber+of+Child+%3A+'+ stateCurrOrder.childNumber +'%0D%0AAmenities+%3A+'+ amenityTitle;
 
 
         window.open('https://api.whatsapp.com/send?phone=919136886650&text='+msg, '_blank', 'noreferrer');
@@ -171,8 +179,12 @@ export default function Booking() {
             },
             propertyId:stateCurrOrder.Id,
             userId:user.uid,
-            amenities:stateCurrOrder.amenities
+            amenities:stateCurrOrder.amenities,
+            totalPrice: (price * numberOfNights) + amenitiesPrice
         }
+
+        if(finalOrder.accomodation === "private-rooms") finalOrder.privateRooms = roomNumber;
+
         console.log(finalOrder);
         dispatch(createOrder(finalOrder));
         dispatch(reset());
@@ -225,9 +237,12 @@ export default function Booking() {
               },
               propertyId:stateCurrOrder.Id,
               userId: user.uid,
-              amenities:stateCurrOrder.amenities
+              amenities:stateCurrOrder.amenities,
+              totalPrice: (price * numberOfNights) + amenitiesPrice
           }
-          console.log(finalOrder);
+          
+          if(finalOrder.accomodation === "private-rooms") finalOrder.privateRooms = roomNumber;
+
           dispatch(createOrder(finalOrder));
           dispatch(reset());
 
@@ -317,7 +332,7 @@ export default function Booking() {
                     </div>
                     <div className='p-4 border-b-2 flex justify-between items-center'>
                         <div><h1 className='text-lg font-medium'>Stay Amount</h1><h1>{stateCurrOrder?.adultNumber} Adults x {numberOfNights} Nights</h1></div>
-                        <div><h1 className='text-[#268F43] font-bold'>RS {price}/-</h1></div>
+                        <div><h1 className='text-[#268F43] font-bold'>RS {price * numberOfNights}/-</h1></div>
                     </div>
                     <div className='p-4 border-b-2 flex justify-between items-center'>
                         <div><h1 className='text-lg font-medium'>Total Service Charges</h1><h1>( {stateCurrOrder?.amenities.length} Items)</h1></div>
@@ -325,7 +340,7 @@ export default function Booking() {
                     </div>
                     <div className='p-4 border-b-2 flex justify-between items-center'>
                         <div><h1 className='text-lg font-medium'>Amount to be Paid</h1></div>
-                        <div><h1 className='text-[#268F43] font-bold'>RS {property?.price + amenitiesPrice}/-</h1></div>
+                        <div><h1 className='text-[#268F43] font-bold'>RS {(price * numberOfNights) + amenitiesPrice}/-</h1></div>
                     </div>
                     <div className='p-4 border-b-2'>
                     <button onClick={() => setOpenModal(true)} className=' bg-[#F79489] w-full md:text-xl text-xl py-2 rounded font-medium text-white'>Book Now</button>
