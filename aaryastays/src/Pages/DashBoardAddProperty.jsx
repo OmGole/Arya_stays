@@ -25,6 +25,49 @@ const DashBoardAddProperty = () => {
   const [amenities, setAmenities] = useState([]);
   const [cards, setCards] = useState([]);
   const [id, setId] = useState();
+  const user = useSelector(state => state.user);
+
+  useEffect(() =>{
+    const unlisten = onAuthStateChanged(authentication,
+       user => {
+        if (user) {
+          const userData = {
+            token:user.accessToken,
+            uid:user.uid,
+            provider:user.providerData[0].providerId
+          }
+          
+          dispatch(login(userData));
+          setOpenModal(false);
+        } else {
+          dispatch(logout());
+        }
+       });
+    return () => {
+        unlisten();
+    }
+ }, []);
+
+ useEffect(() => {
+  const fetchData = async () => {
+    try {
+      console.log(user.user.uid);
+      const response = await api.get(`/api/v1/user/${user.user.uid}`);
+      console.log(response.data);
+      if(response.data.isAdmin != 'admin'){
+        navigate('/')
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  if (user && user.user && user.user.uid) {
+    fetchData();
+  }
+},[user])
+
+
 
   const handleTitle = (e) => {
     setTitle(e.target.value);
