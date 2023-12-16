@@ -2,19 +2,64 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllCards } from "../Store/cardSlice";
 import DashBoardCardRow from "../Components/DashBoardCardRow";
+import { onAuthStateChanged } from "firebase/auth";
+import api from "../api/api";
+import { logout, login } from '../Store/userSlice';
+import { useNavigate } from "react-router-dom";
 
 import AddCardModal from "../Components/AddCardModal";
 import DashBoardNavbar from "../Components/DashBoardNavbar";
+import { authentication } from '../firebase/config';
 
 function DashBoardCards() {
   const cards = useSelector((state) => state.card);
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [openModal, setOpenModal] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getAllCards());
   }, []);
+
+  useEffect(() =>{
+    const unlisten = onAuthStateChanged(authentication,
+       user => {
+        if (user) {
+          const userData = {
+            token:user.accessToken,
+            uid:user.uid,
+            provider:user.providerData[0].providerId
+          }
+          
+          const fetchData = async()=>{
+            try {
+              console.log(user.uid);
+              const response = await api.get(`/api/v1/user/${user.uid}`);
+              console.log(response.data.role);
+              if(response.data.role != 'admin'){
+                navigate('/')
+              }
+            } catch (error) {
+              navigate('/')
+              // console.log(error)
+            }
+          }
+          // console.log(user)
+          fetchData()
+          dispatch(login(userData));
+
+          // setOpenModal(false);
+        } else {
+          dispatch(logout());
+          navigate('/')
+        }
+       });
+    return () => {
+        unlisten();
+    }
+ }, []);
+
 
   return (
     <>

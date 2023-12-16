@@ -19,6 +19,9 @@ import DashBoardCalender from "../Components/DashBoardCalender";
 import { deleteEvent } from "../Store/eventSlice";
 import { deleteOrdersByPropertyId } from "../Store/orderSlice";
 import { deleteReview } from "../Store/reviewSlice";
+import { onAuthStateChanged } from "firebase/auth";
+import { logout, login } from '../Store/userSlice';
+import { authentication } from '../firebase/config';
 
 const DashBoardEditProperty = () => {
   const { id } = useParams();
@@ -57,6 +60,46 @@ const DashBoardEditProperty = () => {
   const [aimage, setAImage] = useState();
 
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+  const user = useSelector(state => state.user);
+
+  useEffect(() =>{
+    const unlisten = onAuthStateChanged(authentication,
+       user => {
+        if (user) {
+          const userData = {
+            token:user.accessToken,
+            uid:user.uid,
+            provider:user.providerData[0].providerId
+          }
+          
+          const fetchData = async()=>{
+            try {
+              console.log(user.uid);
+              const response = await api.get(`/api/v1/user/${user.uid}`);
+              console.log(response.data.role);
+              if(response.data.role != 'admin'){
+                navigate('/')
+              }
+            } catch (error) {
+              navigate('/')
+              // console.log(error)
+            }
+          }
+          // console.log(user)
+          fetchData()
+          dispatch(login(userData));
+
+          // setOpenModal(false);
+        } else {
+          dispatch(logout());
+          navigate('/')
+        }
+       });
+    return () => {
+        unlisten();
+    }
+ }, []);
 
   const convertBase64 = (file) => {
     return new Promise((resolve, reject) => {

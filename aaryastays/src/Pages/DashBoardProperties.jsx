@@ -4,6 +4,11 @@ import DashBoardPropertyRow from "../Components/DashBoardPropertyRow";
 import { getAllProperties } from "../Store/propertySlice";
 import { Link } from "react-router-dom";
 import DashBoardNavbar from "../Components/DashBoardNavbar";
+import { onAuthStateChanged } from "firebase/auth";
+import api from "../api/api";
+import { logout, login } from '../Store/userSlice';
+import { authentication } from '../firebase/config';
+import { useNavigate } from "react-router-dom";
 
 
 function DashBoardProperties() {
@@ -11,6 +16,48 @@ function DashBoardProperties() {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [openModal,setOpenModal] = useState();
+  const user = useSelector(state => state.user);
+
+  const navigate = useNavigate();
+  useEffect(() =>{
+    const unlisten = onAuthStateChanged(authentication,
+       user => {
+        if (user) {
+          const userData = {
+            token:user.accessToken,
+            uid:user.uid,
+            provider:user.providerData[0].providerId
+          }
+          
+          const fetchData = async()=>{
+            try {
+              console.log(user.uid);
+              const response = await api.get(`/api/v1/user/${user.uid}`);
+              console.log(response.data.role);
+              if(response.data.role != 'admin'){
+                navigate('/')
+              }
+            } catch (error) {
+              navigate('/')
+              // console.log(error)
+            }
+          }
+          // console.log(user)
+          fetchData()
+          dispatch(login(userData));
+
+          // setOpenModal(false);
+        } else {
+          dispatch(logout());
+          navigate('/')
+        }
+       });
+    return () => {
+        unlisten();
+    }
+ }, []);
+
+ 
 
   useEffect(() => {
     dispatch(getAllProperties());
