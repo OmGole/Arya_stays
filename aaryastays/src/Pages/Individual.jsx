@@ -1024,7 +1024,11 @@ export default function Individual() {
         {/* </Link> */}
       </div>
 
-      <div className="w-100 md:mx-20 mx-10 mt-20 rounded-lg overflow-auto">
+
+      <h1 className="md:text-4xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4" id="amenities">
+        Around <span className="text-[#179FEB]">Aarya Stays</span>
+      </h1>
+      <div className="w-100 md:mx-20 mx-10 md:mt-20 mt-10 rounded-lg overflow-auto">
         <Slide slides={property.slides} />
       </div>
       {/* <h1 className="lg:text-4xl md:tex-3xl text-xl text-center font-medium my-10 underline decoration-[#F79489] underline-offset-8 decoration-4">
@@ -1032,7 +1036,7 @@ export default function Individual() {
         <span className="text-[#179FEB]">Before You Book</span>
       </h1>  */}
 
-      <div className='flex items-center justify-center mb-8 '>
+      <div className='flex items-center justify-center mb-8 mt-5 md:mt-0'>
             <div className='bg-[#F79489] md:w-52 w-36 h-1'> </div>
             <div className='px-1 text-center lg:text-4xl md:tex-3xl text-xl font-medium'>Everything You Need To Know <span className='text-[#179FEB]'>Before You Book</span></div>
             <div className='bg-[#F79489] md:w-52 w-36 h-1'> </div>

@@ -19,26 +19,31 @@ const DashBoardSingleOrder = () => {
 
   const curruser = useSelector(state => state.user);
 
+  const [visible, setVisible] = useState(false);
+
   useEffect(() =>{
     const unlisten = onAuthStateChanged(authentication,
-       user2 => {
-        if (user2) {
+       user => {
+        if (user) {
           const userData = {
-            token:user2.accessToken,
-            uid:user2.uid,
-            provider:user2.providerData[0].providerId
+            token:user.accessToken,
+            uid:user.uid,
+            provider:user.providerData[0].providerId
           }
           
           const fetchData = async()=>{
             try {
-              console.log(user2.uid);
-              const response = await api.get(`/api/v1/user/${user2.uid}`);
+              console.log(user.uid);
+              const response = await api.get(`/api/v1/user/${user.uid}`);
               console.log(response.data.role);
+              setVisible(true)
+
               if(response.data.role != 'admin'){
                 navigate('/')
               }
             } catch (error) {
               navigate('/')
+
               // console.log(error)
             }
           }
@@ -173,6 +178,10 @@ Rohit Arya`;
       setAmenitiesPrice(totalSum);
     }
   }, [order]);
+
+  if(!visible){
+    return <div></div>
+  }
 
   return (
     <div className="h-screen">

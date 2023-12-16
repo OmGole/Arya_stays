@@ -1,6 +1,6 @@
 import "./App.css";
 import Home from "./Pages/Home";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Router } from "react-router-dom";
 import Profile from "./Pages/Profile";
 import Individual from "./Pages/Individual";
 import Orders from "./Pages/Orders";
@@ -16,7 +16,6 @@ import DashBoardEditProperty from "./Pages/DashBoardEditProperty";
 import { ToastContainer } from "react-toastify";
 
 import IndividualOrder from "./Pages/IndividualOrder";
-import ScrollToTop from "./ScrollToTop";
 import Gallery from "./Pages/Gallery";
 function App() {
   return (
@@ -46,6 +45,26 @@ function App() {
         />
         <Route path="/booking/:validity/:id" element={<IndividualOrder />} />
         <Route path="/gallery/:id" element={<Gallery />} />
+
+        {/* Orders */}
+        <Route path="/dashboard/order" element={<DashBoardOrders />} />
+        <Route path="/dashboard/order/:id" element={<DashBoardSingleOrder />} />
+
+        {/* Amenities */}
+        <Route path="/dashboard/amenity" element={<DashBoardAmenities />} />
+        <Route path="/dashboard/card" element={<DashBoardCards />} />
+        {/* <Route element={<PrivateRoute role="admin" />}> */}
+        <Route path="dashboard/property" element={<DashBoardProperties />} />
+        {/* </Route> */}
+
+        <Route
+          path="/dashboard/property/add"
+          element={<DashBoardAddProperty />}
+        />
+        <Route
+          path="/dashboard/property/:id"
+          element={<DashBoardEditProperty />}
+        />
       </Routes>
       {/* <Home /> */}
       <ToastContainer />

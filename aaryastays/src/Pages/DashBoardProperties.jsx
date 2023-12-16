@@ -16,7 +16,7 @@ function DashBoardProperties() {
   const dispatch = useDispatch();
   const [search, setSearch] = useState("");
   const [openModal,setOpenModal] = useState();
-  const user = useSelector(state => state.user);
+  const [visible, setVisible] = useState(false);
 
   const navigate = useNavigate();
   useEffect(() =>{
@@ -34,11 +34,14 @@ function DashBoardProperties() {
               console.log(user.uid);
               const response = await api.get(`/api/v1/user/${user.uid}`);
               console.log(response.data.role);
+              setVisible(true)
+
               if(response.data.role != 'admin'){
                 navigate('/')
               }
             } catch (error) {
               navigate('/')
+
               // console.log(error)
             }
           }
@@ -67,6 +70,10 @@ function DashBoardProperties() {
     setSearch(e.target.value);
   };
 
+  if(!visible){
+    return <div></div>
+  }
+  
 
   return (
     <>

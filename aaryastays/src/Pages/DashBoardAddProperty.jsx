@@ -30,6 +30,7 @@ const DashBoardAddProperty = () => {
   const [amenities, setAmenities] = useState([]);
   const [cards, setCards] = useState([]);
   const [id, setId] = useState();
+  const [visible, setVisible] = useState(false);
 
   useEffect(() =>{
     const unlisten = onAuthStateChanged(authentication,
@@ -46,11 +47,14 @@ const DashBoardAddProperty = () => {
               console.log(user.uid);
               const response = await api.get(`/api/v1/user/${user.uid}`);
               console.log(response.data.role);
+              setVisible(true)
+
               if(response.data.role != 'admin'){
                 navigate('/')
               }
             } catch (error) {
               navigate('/')
+
               // console.log(error)
             }
           }
@@ -190,6 +194,9 @@ const DashBoardAddProperty = () => {
   },[payload])
 
 
+  if(!visible){
+    return <div></div>
+  }
   return (
     <div>
       <div className="bg-white px-8 py-5 rounded mx-auto box-border w-3/5">

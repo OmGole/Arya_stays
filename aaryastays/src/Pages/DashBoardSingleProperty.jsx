@@ -14,6 +14,8 @@ const DashBoardSingleProperty = () => {
   const navigate = useNavigate();
   const [property, setProperty] = useState();
 
+  const [visible, setVisible] = useState(false);
+
   useEffect(() =>{
     const unlisten = onAuthStateChanged(authentication,
        user => {
@@ -28,12 +30,15 @@ const DashBoardSingleProperty = () => {
             try {
               console.log(user.uid);
               const response = await api.get(`/api/v1/user/${user.uid}`);
-              // console.log(response.data.role);
+              console.log(response.data.role);
+              setVisible(true)
+
               if(response.data.role != 'admin'){
                 navigate('/')
               }
             } catch (error) {
               navigate('/')
+
               // console.log(error)
             }
           }
@@ -64,6 +69,9 @@ const DashBoardSingleProperty = () => {
 
 
 
+  if(!visible){
+    return <div></div>
+  }
   return (
     <div className='h-screen'>
       {/*  */}

@@ -25,6 +25,8 @@ function DashBoardAmenities() {
     dispatch(getAllAmenity());
   }, []);
 
+  const [visible, setVisible] = useState(false);
+
   useEffect(() =>{
     const unlisten = onAuthStateChanged(authentication,
        user => {
@@ -40,11 +42,14 @@ function DashBoardAmenities() {
               console.log(user.uid);
               const response = await api.get(`/api/v1/user/${user.uid}`);
               console.log(response.data.role);
+              setVisible(true)
+
               if(response.data.role != 'admin'){
                 navigate('/')
               }
             } catch (error) {
               navigate('/')
+
               // console.log(error)
             }
           }
@@ -64,7 +69,9 @@ function DashBoardAmenities() {
  }, []);
 
 
-
+ if(!visible){
+  return <div></div>
+}
   return (
     <>
     <DashBoardNavbar/>

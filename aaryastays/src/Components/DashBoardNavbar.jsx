@@ -7,9 +7,9 @@ const DashBoardNavbar = () => {
   return (
     <div className="px-10">
       <Navbar fluid rounded>
-        <Navbar.Brand>
+        <Navbar.Brand  href="/">
           <img src={logo} className="mr-3 h-9 sm:h-9" alt="Aarya Stays Logo" />
-        </Navbar.Brand>
+        </Navbar.Brand> 
         <Navbar.Toggle />
         <Navbar.Collapse>
           <Navbar.Link href="/dashboard/order" className="text-lg">
