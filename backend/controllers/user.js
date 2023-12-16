@@ -13,7 +13,6 @@ const getAllUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    console.log(req.body);
     const { _id, name, email, age, phone } = req.body;
     // const object_Id = new ObjectId(_id);
 
@@ -44,7 +43,6 @@ const createUser = async (req, res) => {
 const getUser = async (req, res) => {
   try {
     const { id: userID } = req.params;
-    console.log(userID);
     const user = await User.findOne({ _id: userID });
     if (!user) {
       return res.status(404).json({ msg: `No User with id: ${userID}` });

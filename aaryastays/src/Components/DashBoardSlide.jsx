@@ -58,7 +58,6 @@ const DashBoardSlide = ({ id, propertyId, type }) => {
     e.preventDefault();
     const newSlide = {image,public_id};
     const updatedSlide = {id, newSlide}
-    console.log(updatedSlide)
     dispatch(editSlide(updatedSlide));
   }
 
@@ -72,7 +71,6 @@ const DashBoardSlide = ({ id, propertyId, type }) => {
     e.preventDefault();
     const propertyDetails = { propertyId, type}
     const data = {id, propertyDetails};
-    console.log(data)
     dispatch(deleteSlide(data));
   }
 

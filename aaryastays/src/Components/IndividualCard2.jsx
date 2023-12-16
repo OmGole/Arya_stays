@@ -22,9 +22,7 @@ export default function IndividualCard2({cards}) {
         // }
     }
 
-    useEffect(()=>{
-        console.log(cardData);
-    },[cardData])
+
   return (
     <>
         <div className="flex flex-wrap  gap-y-3 ">

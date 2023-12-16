@@ -22,7 +22,6 @@ const createAmenity = async(req,res) => {
     const {icon, title, description, price, type} = req.body;
   
     if(!icon || !title || !description || !price || !type) {
-      console.log(req.body);
       return res.status(401).send("Please fill the missing fields");
     }
 
@@ -44,7 +43,6 @@ const updateAmenity = async (req,res) => {
     const amenity = await Amenity.findById({_id:amenityID});
     if(req.body.icon && req.body.icon !== '') {
       const imgId = amenity.icon.public_id;
-      console.log(imgId);
       await cloudinary.uploader.destroy(imgId);
 
       const newImage = await cloudinary.uploader.upload(req.body.icon, {
@@ -56,7 +54,6 @@ const updateAmenity = async (req,res) => {
         url: newImage.secure_url
       }
     }
-    console.log(req.body);
     const updatedAmenity = await Amenity.findOneAndUpdate({_id:amenityID},req.body,{
       new:true,
     });
@@ -64,8 +61,6 @@ const updateAmenity = async (req,res) => {
     if(!updatedAmenity) {
       return res.status(404).json({msg:`No task with id : ${amenityID}`});
     }
-
-    console.log(updatedAmenity);
 
     return res.status(200).json(updatedAmenity);
   } catch(error) {

@@ -5,16 +5,6 @@ import DummyImgSqr from '../Resources/DummyImgSqr.png'
 
 export default function Slide2({slides}) {
   const [slideDetails,setSlideDetails] = useState([]);
-  // const parentRef = useRef(null);
-    // const childRef = useRef(null);
-  
-    // useEffect(() => {
-    //   const parentHeight = parentRef;
-    //   console.log("parent",parentHeight)
-    //   // childRef.current.style.height = ${parentHeight}px;
-    //   // console.log("child",childRef.current.style.height)
-    // }, []); 
-  
 
 
   const getSlideDetails = async()=>{
@@ -24,7 +14,6 @@ export default function Slide2({slides}) {
             const result = await api.get(`/api/v1/slide/${id}`);
             return result.data[0];
       }));
-      console.log(slideDetails)
       setSlideDetails(slideDetails)
     }catch(err){
       console.log(err)

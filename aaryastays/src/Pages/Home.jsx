@@ -32,7 +32,6 @@ export default function Home() {
           id: property._id,
         };
       });
-      console.log(dropdownArray)
       setDropdownArray(dropdownArray);
     }
   }

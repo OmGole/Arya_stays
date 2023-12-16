@@ -27,7 +27,6 @@ const createProperty = async (req,res) => {
   const {title,location,reviews, location_description,room_description,surrounding_description,cards,price,amenities,slides,roomType,currentLocation_images,ats_image,bhk} = req.body;
 
   if(!title || !location || !reviews || !price  || !location_description || !room_description || !surrounding_description || !cards || !amenities || !roomType || !currentLocation_images || !ats_image || !slides || !bhk) {
-    console.log(req.body);
     return res.status(401).send("Please fill the missing fields");
   }
 
@@ -49,11 +48,8 @@ const updateProperty = async (req,res) => {
     const type = req.body.type;
     const public_id = req.body.public_id;
     const imgs = currentProperty[type];
-    console.log(imgs);
-    // const imgs =  type === "currentLocation_images" ? currentProperty.currentLocation_images : currentProperty.surrounding_images;
     const img = imgs.find(img => img.public_id == public_id);
     const imgIndex = imgs.findIndex(img => img.public_id == public_id);
-    console.log(img);
     await cloudinary.uploader.destroy(img.public_id);
 
     const upload = await cloudinary.uploader.upload(req.body.image, {

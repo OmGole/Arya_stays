@@ -96,62 +96,50 @@ export const eventSlice = createSlice({
 
   extraReducers: {
     [getAllEvents.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.allEvents = payload;
       state.error = "";
     },
     [getAllEvents.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.allEvents = {};
       state.error = payload;
     },
     [getOverlap.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.overlap = payload;
       state.error = "";
     },
     [getOverlap.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.overlap = {};
       state.error = payload;
     },
     [getEventById.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.eventById = payload;
       state.error = "";
     },
     [getEventById.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.eventById = {};
       state.error = payload;
     },
     [createEvent.fulfilled]: (state, { payload }) => {
-      state.allEvents.push(payload);
       state.createdEvent = payload;
       state.error = "";
     },
     [createEvent.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.createdEvent = {};
       state.error = payload;
     },
     [editEvent.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.updatedEvent = payload;
       state.error = "";
     },
     [editEvent.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.updatedEvent = {};
       state.error = payload;
     },
     [deleteEvent.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.deletedEvent = payload;
       state.error = "";
     },
     [deleteEvent.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.deletedEvent = {};
       state.error = payload;
     },

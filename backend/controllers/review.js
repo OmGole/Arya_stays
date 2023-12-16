@@ -14,7 +14,6 @@ const createReview = async (req, res) => {
     const { userId, propertyId, rating, description } = req.body;
 
     if (!userId || !propertyId || !rating || !description) {
-      console.log(req.body);
       return res.status(401).send("Please fill the missing fields");
     }
 

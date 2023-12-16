@@ -8,9 +8,6 @@ export default function AddOn({item}) {
     const currOrder = useSelector(state => state.currentOrder.currentOrder)
     const [Qty,setQty] = useState(1);
 
-    // useEffect(()=>{
-    //     console.log(currOrder)
-    // },[currOrder])
     const incrQty = ()=>{
         const updatedQty = Qty + 1;
         setQty(updatedQty);
@@ -33,7 +30,6 @@ export default function AddOn({item}) {
                 }
                 return amenity;
             })
-            console.log(newAmenities)
             dispatch(updateOrder({key:'amenities',value:newAmenities}))
 
         }

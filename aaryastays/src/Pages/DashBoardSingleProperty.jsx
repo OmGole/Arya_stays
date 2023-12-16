@@ -19,9 +19,6 @@ const DashBoardSingleProperty = () => {
     getProperty();
   },[]);
 
-  useEffect(() => {
-    console.log(property);
-  },[property])
 
 
   return (

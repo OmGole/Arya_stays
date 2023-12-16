@@ -52,7 +52,6 @@ export const createAmenity = createAsyncThunk(
   'amenity/createNewAmenity',
   async (newAmenity, {rejectWithValue}) => {
     try {
-      console.log(newAmenity);
       const response = await api.post(`/api/v1/amenity`, newAmenity);
       return response.data;
     } catch (error) {

@@ -95,7 +95,6 @@ Rohit Arya`;
 
   const getOrder = async () => {
     const response = await api.get(`api/v1/order/${id}`);
-    console.log(response.data[0]);
     setOrder(response.data[0]);
   };
 
@@ -103,7 +102,6 @@ Rohit Arya`;
     const amenities = await Promise.all(
       order.amenities.map(async (amenity) => {
         const response = await api.get(`/api/v1/amenity/${amenity.id}`);
-        console.log(response.data);
         const formatedAmenity = {
           title: response.data.title,
           price: amenity.price,

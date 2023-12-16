@@ -2,7 +2,6 @@ import React from 'react'
 
 export default function Query() {
   const contactUs = () =>{
-    console.log("hello")
     window.open('https://api.whatsapp.com/send?phone=919136886650&text=Hello I want to enquire', '_blank', 'noreferrer');
     
   }

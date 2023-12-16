@@ -16,20 +16,11 @@ export default function WishListCard({property}) {
   const [extraAmenities, setExtraAmenities] = useState([]);
   const [user,setUser] = useState();
   const [wishlist,setWishList] = useState([])
-  // const [isInWishlist, setIsInWishlist] = useState(wishlist.includes(property._id));
+
     useEffect(()=>{
-        // console.log(property)
         getSlideImage();
         getAmenities();
     },[])
-
-    // useEffect(() => {
-    //   const imgElement = document.querySelector('[data-testid="carousel-item"] img');
-  
-    //   if (imgElement) {
-    //     imgElement.classList.remove('absolute', 'top-1/2', 'left-1/2', 'block', 'w-full', '-translate-x-1/2', '-translate-y-1/2');
-    //   }
-    // }, [slideImage]);
 
     useEffect(() => {
       const unsubscribe = authentication.onAuthStateChanged(async (currentUser) => {
@@ -52,9 +43,7 @@ export default function WishListCard({property}) {
 
     const getWishlist = ()=>{
       try {
-        console.log(user)
         const wishlistData = api.get(`api/v1/user/wishlist/${user.uid}`);
-        console.log(wishlist)
         setWishList(wishlistData.data);
       } catch (error) {
         console.error('Error fetching wishlist:', error);
@@ -78,7 +67,6 @@ export default function WishListCard({property}) {
 
     const getAmenities = async()=>{
       try{
-        // console.log("hello")
         const new_amenities = await Promise.all(property.amenities.map(async (id,index) => {
           
               const result = await api.get(`/api/v1/amenity/${id}`);

@@ -53,7 +53,6 @@ export const createCard = createAsyncThunk(
   "amenity/createNewCard",
   async (newCard, { rejectWithValue }) => {
     try {
-      console.log(newCard);
       const response = await api.post(`/api/v1/card`, newCard);
       return response.data;
     } catch (error) {

@@ -102,7 +102,6 @@ export default function Profile() {
 
     const navigate = useNavigate()
     useEffect(() => {
-        // console.log(user)
         if(!loading && userget === null){
             alert("you must me logged in")
             navigate('/')
@@ -111,12 +110,10 @@ export default function Profile() {
             dispatch(getUserById(userget.uid));
         }
     },[userget, loading])
-    // useEffect(() => {
-        
-    // },[userget,loading])
+
 
     useEffect(() => {
-        // console.log(user.userDetails)
+
         if(Object.keys(user.userDetails).length > 0) {
             setName(user.userDetails.name);
             setEmail(user.userDetails.email);

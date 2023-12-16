@@ -21,13 +21,8 @@ export default function Booking() {
     const {state} = useLocation();
     const dispatch = useDispatch();
     const currOrder = useSelector(state => state.currentOrder.currentOrder);
-    // if(state === null){
-    //     navigate('/')
-    // }
     const [stateCurrOrder,setStateCurrOrder] = useState()
     const [property,setProperty] = useState()
-    // const { property, stateCurrOrder } = state;
-    // console.log(stateCurrOrder)
     const userDetails = useSelector(state => state.user.userDetails);
     const [slideImage,setSlideImage] = useState([])
     const [numberOfNights,setNumberOfNights] = useState()
@@ -66,34 +61,7 @@ export default function Booking() {
         }
       }, [stateCurrOrder, property]);
 
-    // calculate nights
-    // useEffect(()=>{
-    //     if (state === null) {
-    //         navigate('/');
-    //       }else{
-    //         console.log("hello")
-    //         console.log(state)
-    //         const{propertyDetails,stateCurrOrders} = state
-    //     setStateCurrOrder(stateCurrOrders)
-    //     setProperty(propertyDetails)
-        
-        
-    //       }
-    // },[])
-
     
-    // useEffect(()=>{
-        
-    //     const [day, month, year] = stateCurrOrder.CheckInDate.split('/').map(Number);
-    //     const checkInDate = new Date(year, month - 1, day);
-    //     const [day2, month2, year2] = stateCurrOrder.CheckOutDate.split('/').map(Number);
-    //     const checkOutDate = new Date(year2, month2 - 1, day2); // Replace this with your check-out date
-    //     const differenceInTime = checkOutDate.getTime() - checkInDate.getTime();
-    //     const oneDayInMilliseconds = 1000 * 60 * 60 * 24;
-    //     const numOfNights = Math.round(differenceInTime / oneDayInMilliseconds);
-    //     setNumberOfNights(numOfNights)
-        
-    // },[stateCurrOrder,property])
 
     useEffect(() => {
         const unsubscribe = authentication.onAuthStateChanged(async (currentUser) => {
@@ -159,7 +127,6 @@ export default function Booking() {
     }
 
     const WhatsappMessage = () =>{
-        console.log(amenityTitle);
 
         let msg = 'Hello+I%27m+'+userDetails.name+'%2C+I+would+like+to+enquire+about+following+property%0D%0AProperty+%3A+'+ stateCurrOrder.Title +'%0D%0ALocation+%3A+'+ stateCurrOrder.Location +'%0D%0ACheckInDate+%3A+'+ stateCurrOrder.CheckInDate + '%0D%0ACheckOutDate+%3A+'+ stateCurrOrder.CheckOutDate +'%0D%0ARoom+Type+%3A+'+ stateCurrOrder.RoomType +'%0D%0ANumber+of+Adult+%3A+'+ stateCurrOrder.adultNumber +'%0D%0ANumber+of+Child+%3A+'+ stateCurrOrder.childNumber +'%0D%0AAmenities+%3A+'+ amenityTitle;
 
@@ -184,22 +151,11 @@ export default function Booking() {
         }
 
         if(finalOrder.accomodation === "private-rooms") finalOrder.privateRooms = roomNumber;
-
-        console.log(finalOrder);
-        dispatch(createOrder(finalOrder));
+dispatch(createOrder(finalOrder));
         dispatch(reset());
         navigate('/orders')
     }
 
-    // const sendEmail = () => {
-    //     console.log(amenityTitle)
-    //     let msg = 'Hello+I%27m+UserName%2C+I+would+like+to+enquire+about+following+property%0D%0AProperty+%3A+'+ currOrder.Title +'%0D%0ALocation+%3A+'+ currOrder.Location +'%0D%0ACheckInDate+%3A+'+ currOrder.CheckInDate + '%0D%0ACheckOutDate+%3A+'+ currOrder.CheckOutDate +'%0D%0ARoom+Type+%3A+'+ currOrder.RoomType +'%0D%0ANumber+of+Adult+%3A+'+ currOrder.adultNumber +'%0D%0ANumber+of+Child+%3A+'+ currOrder.childNumber +'%0D%0AAmenities+%3A+'+ amenityTitle
-    //     // console.log(msg)
-    //     const subject = `Book Property ${currOrder.Title}`;
-    //     window.open(`mailto:omgole82@gmail.com`);
-    //     // window.open("youtube.com");
-    //     // navigate('/orders');
-    // }
 
     const sendEmail = () => {
         const param = {
@@ -215,11 +171,10 @@ export default function Booking() {
             childnumber:stateCurrOrder.childNumber,
             amenities:amenityTitle,
         };
-        console.log(param)
     
         emailjs.send('service_xocsixq', 'template_5jokq89', param, 'hxrJoDY6Iai13B0RZ')
           .then((result) => {
-              console.log(result.text);
+
           }, (error) => {
               console.log(error.text);
           });

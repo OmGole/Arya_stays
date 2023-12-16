@@ -22,14 +22,10 @@ export default function Gallery() {
 
   useEffect(()=>{
     dispatch(getPropertyById(routeParamsID)).then((data)=>{
-        console.log(data.payload.currentLocation_images)
         getSlideImage(data.payload.currentLocation_images)
     })
   },[])
 
-//   useEffect(()=>{
-//     console.log(slideImage)
-//   },[slideImage])
 
   const getSlideImage = async(data)=>{
     try{
@@ -46,7 +42,6 @@ export default function Gallery() {
 
 //   comment out this for scroll
   useEffect(() => {
-    console.log(slideImage)
     const imgElement = document.querySelector('[data-testid="carousel-item"] img');
   
       if (imgElement) {

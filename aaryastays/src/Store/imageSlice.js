@@ -94,62 +94,50 @@ export const imageSlice = createSlice({
 
   extraReducers: {
     [getAllImages.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.allImages = payload;
       state.error = "";
     },
     [getAllImages.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.allImages = {};
       state.error = payload;
     },
     [getHeadingImages.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.headingImages = payload;
       state.error = "";
     },
     [getHeadingImages.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.headingImages = {};
       state.error = payload;
     },
     [getImageById.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.imageById = payload;
       state.error = "";
     },
     [getImageById.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.imageById = {};
       state.error = payload;
     },
     [createImage.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.createdImage = payload;
       state.error = "";
     },
     [createImage.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.createdImage = {};
       state.error = payload;
     },
     [editImage.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.updatedImage = payload;
       state.error = "";
     },
     [editImage.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.updatedImage = {};
       state.error = payload;
     },
     [deleteImage.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.deletedImage = payload;
       state.error = "";
     },
     [deleteImage.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.deletedImage = {};
       state.error = payload;
     },

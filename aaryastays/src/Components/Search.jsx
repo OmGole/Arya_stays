@@ -18,7 +18,6 @@ export default function Search({dropdownArray}) {
     const [selectedId,setSelectedId] = useState('');
    const [isChoose,SetisChoose] =useState(false);
 
-    console.log(dropdownArray)
    const changeDropdown = (title,loc,id)=>{
         setSelectedLoc(loc)
         setSelectedTitle(title)
@@ -33,14 +32,10 @@ export default function Search({dropdownArray}) {
     const [checkInDate,setCheckInDate] = useState();  
     const [checkOutDate,setCheckOutDate] = useState(); 
     useEffect(()=>{
-        // console.log
-        // const currentDate = new Date();
         const checkin = new Date();
         checkin.setDate(new Date().getDate());
         const checkout = new Date();
         checkout.setDate(new Date().getDate()+1);
-        console.log(checkin)
-        console.log(checkout)
 
         setCheckInDate(`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`);
         dispatch(updateOrder({key:'CheckInDate',value:`${checkin.getDate()}/${checkin.getMonth() + 1}/${checkin.getFullYear()}`}))
@@ -50,45 +45,15 @@ export default function Search({dropdownArray}) {
         dispatch(updateOrder({key:'childNumber',value:1}))
     },[]) 
 
-    useEffect(()=>{
-        console.log("checkin "+checkInDate)
-        console.log("checkout "+checkOutDate)
-    },[checkInDate,checkOutDate])
 
     const handleCheckIn = (date) => {
-        // console.log(date)
-        // console.log(checkOutDate)
-        // const checkOutDateParts = checkOutDate.split('/'); // Assuming checkOutDate is '10/12/2023'
-        // const day = parseInt(checkOutDateParts[0], 10);
-        // const month = parseInt(checkOutDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
-        // const year = parseInt(checkOutDateParts[2], 10);
-
-        // const checkout = new Date(year, month, day);
-        // console.log(checkout)
-        // if(date < checkout){
         setCheckInDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
         dispatch(updateOrder({key:'CheckInDate',value:date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear()}))
-        // }
-        // else{
-        //     alert('CheckIn date should be less than CheckOut date')
-        // }
     };
 
     const handleCheckOut = (date) => {
-//         const checkInDateParts = checkInDate.split('/'); // Assuming checkInDate is '10/12/2023'
-// const day = parseInt(checkInDateParts[0], 10);
-// const month = parseInt(checkInDateParts[1], 10) - 1; // Subtract 1 since months are zero-indexed in Date objects
-// const year = parseInt(checkInDateParts[2], 10);
-
-// const checkin = new Date(year, month, day);
-//         console.log(checkin)
-//         console.log(date)
-//         if(date > checkin){
         setCheckOutDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
         dispatch(updateOrder({key:'CheckOutDate', value:date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear()}))
-        // }else{
-        //     alert('CheckOut date should be greater than CheckIn date')
-        // }
     };
    
 

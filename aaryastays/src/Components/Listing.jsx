@@ -32,23 +32,6 @@ export default function Listing({properties}) {
     
   }, []);
 
-  // useEffect(()=>{
-  //   getWishlist()
-
-  // },[user])
-  
-
-
-  // const getWishlist = async()=>{
-  //   try {
-  //       console.log(user)
-  //       const wishlistData = await api.get(`api/v1/user/wishlist/${user.uid}`);
-  //       console.log(wishlist)
-  //       setWishList(wishlistData.data);
-  //   } catch (error) {
-  //     console.error('Error fetching wishlist:', error);
-  //   }
-  // }
 
   return (
     <div className='text-black'>

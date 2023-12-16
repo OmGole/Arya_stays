@@ -63,7 +63,7 @@ const Image = ({ id, type, propertyId }) => {
     e.preventDefault();
     const propertyDetails = { propertyId, type };
     const data = { id, propertyDetails };
-    console.log(data);
+
     dispatch(deleteImage(data)).then((data) => setImage(""));
   };
 

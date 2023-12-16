@@ -8,12 +8,10 @@ const authCheck = async (req,res,next) => {
     // return res.status(401).json({ error: 'Unauthorized: No ID token provided' });
     next(new Error('No token added to the header'));
   }
-  // console.log(idToken);
   admin.auth().verifyIdToken(idToken)
     .then((decodedToken) => {
       // Perform additional checks or operations if needed
       req.user = decodedToken;
-      console.log(decodedToken);
       next();
     })
     .catch((error) => {

@@ -17,7 +17,7 @@ export default function SearchMobile({dropdownArray}) {
     const [selectedId,setSelectedId] = useState('');
    const [isChoose,SetisChoose] =useState(false);
 
-    console.log(dropdownArray)
+
    const changeDropdown = (title,loc,id)=>{
         setSelectedLoc(loc)
         setSelectedTitle(title)
@@ -45,12 +45,8 @@ export default function SearchMobile({dropdownArray}) {
         dispatch(updateOrder({key:'childNumber',value:1}))
     },[]) 
 
-    useEffect(()=>{
-        console.log(currOrder)
-    },[currOrder])
 
     const handleCheckIn = (date) => {
-        console.log(typeof date)
         setCheckInDate(date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear());
         dispatch(updateOrder({key:'CheckInDate',value:date.getDate()+'/'+(date.getMonth()+1) +'/'+date.getFullYear()}))
     };

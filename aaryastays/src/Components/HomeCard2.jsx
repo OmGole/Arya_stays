@@ -49,13 +49,8 @@ export default function HomeCard2({property, wishlist}) {
     }
   }
 
-  useEffect(()=>{
-    console.log(slideImage)
-  },[slideImage])
-
   const getAmenities = async()=>{
     try{
-      // console.log("hello")
       const new_amenities = await Promise.all(property.amenities.map(async (id,index) => {
         
             const result = await api.get(`/api/v1/amenity/${id}`);

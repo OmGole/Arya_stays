@@ -21,7 +21,6 @@ const createCard = async(req,res) => {
     const {icon, title, description} = req.body;
   
     if(!icon || !title || !description) {
-      console.log(req.body);
       return res.status(401).send("Please fill the missing fields");
     }
 
@@ -43,7 +42,6 @@ const updateCard = async (req,res) => {
     const card = await Card.findById({_id:cardID});
     if(req.body.icon && req.body.icon !== '') {
       const imgId = card.icon.public_id;
-      console.log(imgId);
       await cloudinary.uploader.destroy(imgId);
 
       const newImage = await cloudinary.uploader.upload(req.body.icon, {

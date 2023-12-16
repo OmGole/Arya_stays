@@ -20,7 +20,6 @@ const createSlide = async(req,res) => {
     const {propertyId, images, description} = req.body;
   
     if(!propertyId ||  !images || images.length == 0  || !description) {
-      console.log(req.body);
       return res.status(401).send("Please fill the missing fields");
     }
 
@@ -66,12 +65,9 @@ const updateSlide = async (req,res) => {
     if(req.body.image && req.body.image !== '') {
       const imgID = req.body.public_id;
       const imgIndex = currentSlide.images.findIndex(img => img.public_id == imgID);
-      console.log(imgIndex);
       await cloudinary.uploader.destroy(imgID, (error, result) => {
         if (error) {
           console.error('Error deleting asset:', error);
-        } else {
-          console.log('Deletion result:', result);
         }
       });
 
@@ -84,7 +80,6 @@ const updateSlide = async (req,res) => {
         url: upload.secure_url
       }
 
-      console.log(newImage);
   
       currentSlide.images.splice(imgIndex,1);
       currentSlide.images.splice(imgIndex, 0, newImage);
@@ -107,7 +102,6 @@ const updateSlide = async (req,res) => {
 
 const deleteSlide = async (req,res) => {
   const {id:slideID} = req.params;
-  console.log(req.body);
   const { propertyId, type } = req.body;
   const property = await Property.findById({_id:propertyId});
 

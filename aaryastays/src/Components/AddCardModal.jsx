@@ -20,7 +20,6 @@ const AddCardModal = ({ openModal, setOpenModal }) => {
   const handleIcon = (files) => {
     const file = files[0];
     setFileToBase(file);
-    console.log(file);
   };
 
   const handleTitle = (e) => {
@@ -38,7 +37,6 @@ const AddCardModal = ({ openModal, setOpenModal }) => {
       return;
     }
     const newCard = { icon, title, description };
-    console.log(newCard);
     dispatch(createCard(newCard));
     setOpenModal(false);
   };

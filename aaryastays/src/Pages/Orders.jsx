@@ -46,7 +46,6 @@ export default function Orders() {
       
               try {
                 const wishlistData = await api.get(`api/v1/user/wishlist/${currentUser.uid}`);
-                console.log(wishlistData.data)
                 setWishList(wishlistData.data)
                 getWishListProperty(wishlistData.data)
               } catch (error) {
@@ -70,7 +69,6 @@ export default function Orders() {
               wishlistData.map(async (item, index) => {
                 try{
                   const result = await api.get(`/api/v1/property/${item}`);
-                  console.log(result.data)
                     return result.data; 
                 }catch(err){
                   return null
@@ -78,7 +76,6 @@ export default function Orders() {
                   
                 })
             );
-            // console.log(list[0])
             const filteredList = list.filter((item) => item !== null);
             setWishlistProperties(filteredList)
         }else{
@@ -91,7 +88,6 @@ export default function Orders() {
 
       useEffect(() => {
         if (!loading && user) {
-          console.log(user)
           if (selectedTab === 1) {
             dispatch(getCurrentOrders(user.uid));
           } else if (selectedTab === 2) {

@@ -21,7 +21,6 @@ const EditCardModal = ({ id, openModal, setOpenModal }) => {
   const handleIcon = (files) => {
     const file = files[0];
     setFileToBase(file);
-    console.log(file);
   };
 
   const handleTitle = (e) => {
@@ -39,7 +38,7 @@ const EditCardModal = ({ id, openModal, setOpenModal }) => {
     if (title) newCard.title = title;
     if (description) newCard.description = description;
     const updatedCard = { id, newCard };
-    console.log(updatedCard);
+
     dispatch(editCard(updatedCard));
     setOpenModal(false);
   };

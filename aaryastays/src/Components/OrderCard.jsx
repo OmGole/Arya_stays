@@ -11,10 +11,6 @@ const OrderCard = ({order, validity}) => {
   const [image, setImage] = useState();
   const [amenitiesPrice, setAmenitiesPrice] = useState();
 
-  useEffect(() => {
-    console.log(order);
-  },[order]);
-
   const getPropertyById = async (id) => {
     const property = await api.get(`api/v1/property/${id}`);
     const data = property.data;
@@ -61,14 +57,6 @@ const OrderCard = ({order, validity}) => {
       getImageById(property.currentLocation_images[0]);
     }
   },[property]);
-
-  useEffect(() => {
-    console.log(image);
-  },[image]);
-
-  useEffect(() => {
-    console.log(userDetails)
-  },[userDetails])
 
   useEffect(()=>{
     const totalSum = order.amenities.reduce((accumulator, amenity) => {

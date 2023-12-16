@@ -185,7 +185,6 @@ function DashBoardCalender({ property }) {
   }, [property]);
 
   useEffect(() => {
-    console.log(allEvents)
     if (selectedTab == 1) {
       const events = allEvents.filter(
         (event) => event.type === "full-property"

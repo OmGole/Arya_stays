@@ -29,7 +29,6 @@ const getPastOrders = async (req, res) => {
     userId: id,
     check_out: { $lt: currentISTDate },
   });
-  console.log(orders);
 
   return res.status(201).json(orders);
 };
@@ -72,7 +71,6 @@ const createOrder = async (req, res) => {
       !check_in ||
       !check_out
     ) {
-      console.log(req.body);
       return res.status(401).send("Please fill the missing fields");
     }
 

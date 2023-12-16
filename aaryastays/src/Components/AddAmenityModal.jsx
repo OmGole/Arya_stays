@@ -22,7 +22,6 @@ const AddAmenityModal = ({ openModal, setOpenModal }) => {
   const handleIcon = (files) => {
     const file = files[0];
     setFileToBase(file);
-    console.log(file);
   };
 
   const handleTitle = (e) => {
@@ -44,7 +43,6 @@ const AddAmenityModal = ({ openModal, setOpenModal }) => {
       return;
     }
     const newAmenity = { icon, type, title, description, price };
-    console.log(newAmenity);
     dispatch(createAmenity(newAmenity));
     setOpenModal(false);
   };

@@ -50,65 +50,21 @@ export const reviewSlice = createSlice({
 
   extraReducers: {
     [postReview.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.createReview = payload;
       state.error = "";
     },
     [postReview.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.createReview = {};
       state.error = payload;
     },
     [deleteReview.fulfilled]: (state, { payload }) => {
-      console.log(payload);
       state.deletedReview = payload;
       state.error = "";
     },
     [deleteReview.rejected]: (state, { payload }) => {
-      console.log(payload);
       state.deletedReview = {};
       state.error = payload;
     },
-    //     [getCurrentOrders.fulfilled] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.current = payload;
-    //       state.error = '';
-    //     },
-    //     [getCurrentOrders.rejected] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.current = {};
-    //       state.error = payload;
-    //     },
-    //     [createOrder.fulfilled] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.createOrder = payload;
-    //       state.error = '';
-    //     },
-    //     [createOrder.rejected] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.createdOrder = {};
-    //       state.error = payload;
-    //     },
-    //     [editOrder.fulfilled] : (state,{ payload }) => {
-    //       console.log(payload);
-    //       state.updatedOrder = payload;
-    //       state.error = '';
-    //     },
-    //     [editOrder.rejected] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.updatedOrder = {};
-    //       state.error = payload;
-    //     },
-    //     [deleteOrder.fulfilled] : (state,{ payload }) => {
-    //       console.log(payload);
-    //       state.deletedOrder = payload;
-    //       state.error = '';
-    //     },
-    //     [deleteOrder.rejected] : (state, { payload }) => {
-    //       console.log(payload);
-    //       state.deletedOrder = {};
-    //       state.error = payload;
-    //     },
   },
 });
 

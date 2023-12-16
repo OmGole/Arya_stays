@@ -22,7 +22,6 @@ const EditAmenityModal = ({ amenity, openModal, setOpenModal }) => {
   const handleIcon = (files) => {
     const file = files[0];
     setFileToBase(file);
-    console.log(file);
   };
 
   const handleTitle = (e) => {
@@ -46,7 +45,7 @@ const EditAmenityModal = ({ amenity, openModal, setOpenModal }) => {
     if (description) newAmenity.description = description;
     if (price) newAmenity.price = Number(price);
     const updatedAmenity = { id: amenity._id, newAmenity };
-    console.log(updatedAmenity);
+
     dispatch(editAmenity(updatedAmenity));
     setOpenModal(false);
   };

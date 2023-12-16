@@ -23,10 +23,8 @@ const createImage = async (req,res) => {
   try {
   // req.body.createdBy = req.user.userId; 
   const {propertyId, type, image} = req.body;
-  console.log(req.body);
 
   if(!propertyId || !image || !type) {
-    // console.log(req.body);
     return res.status(401).send("Please fill the missing fields");
   }
 
@@ -46,7 +44,6 @@ const createImage = async (req,res) => {
   }
 
   const createdImage = await Image.create({...uploadedImage});
-  console.log(property);
   property[type].push(createdImage);
   await property.save();
 
@@ -98,7 +95,6 @@ const updateImage = async (req,res) => {
 
 const deleteImage = async (req,res) => {
   const {id:imageID} = req.params;
-  console.log(req.body);
   const { propertyId, type } = req.body;
   const property = await Property.findById({_id:propertyId});
 

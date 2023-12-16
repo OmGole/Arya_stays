@@ -12,7 +12,6 @@ function DashBoardCardRow({ card }) {
   const handleDelete = () => {
     dispatch(deleteCard(card._id));
   };
-  console.log(card);
 
   return (
     <div className="md:flex text-center py-9 md:justify-center content-center items-center border-b-2 border-black">

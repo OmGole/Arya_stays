@@ -114,7 +114,6 @@ export default function Individual() {
             return result.data.url;
           }catch(err){}
       }));
-      console.log(new_slide_images) 
       setSlideImage(new_slide_images)
 
     }catch(err){
@@ -145,15 +144,12 @@ export default function Individual() {
 
   const getAmenities = async (prop) => {
     try {
-      // console.log("hello")
       const new_amenities = await Promise.all(
         prop.map(async (id, index) => {
           const result = await api.get(`/api/v1/amenity/${id}`);
           return result.data;
         })
       );
-      // console.log(new_amenities);
-      // setAmenities(new_amenities)
       const essential = new_amenities.filter(
         (amenity) => amenity.type === "essential"
       );
@@ -209,7 +205,6 @@ export default function Individual() {
       dispatch(updateOrder({ key: "amenities", value: [...arr, obj] }));
       setAddedOnDemand((prev) => new Set([...prev, item]));
     }
-    // console.log(item)
     
     setShowOnDemand(true);
   };
@@ -236,8 +231,6 @@ export default function Individual() {
 
   
   useEffect(() => {
-    // setCheckInDate(currOrder.CheckInDate);
-    // setCheckOutDate(currOrder.CheckOutDate);
     setRoomType(currOrder.RoomType);
     const totalSum = currOrder.amenities.reduce((accumulator, amenity) => {
       return accumulator + amenity.price * amenity.qty;
@@ -245,7 +238,6 @@ export default function Individual() {
     setAmenitiesPrice(totalSum);
 
     if (currOrder.amenities.length > 0) {
-      // console.log("have amenities");
       setShowOnDemand(true);
       getAlreadyAddedAmenity(currOrder.amenities);
     }
@@ -345,13 +337,9 @@ export default function Individual() {
       const extraFees = extraAdults > 0 ? extraAdults * 500 : 0;
       setFinalPrice(price + extraFees);
     } else if(roomType === "dorm-beds") {
-      console.log("price", price);
       const adultFee = adultNumber * price;
-      console.log("adultFee", adultFee);
       const childrenBed = childNumber % 2 === 0 ? childNumber / 2 : Math.ceil(childNumber / 2);
-      console.log("childrenbed", childrenBed);
       const childFee = childrenBed * price;
-      console.log("childFee", childFee);
       setFinalPrice(adultFee + childFee);
     } else {
       setFinalPrice(price * roomNumber)
@@ -412,7 +400,6 @@ export default function Individual() {
           alert("Check In Date cannot be greater than Check Out Date")
           return;
         }else{
-          console.log(finalPrice);
           navigate('/booking',{state:{propertyDetails:property,stateCurrOrders:currOrder, price:finalPrice, prooms:roomNumber}})
         }
 

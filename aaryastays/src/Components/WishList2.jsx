@@ -27,7 +27,6 @@ export default function WishList2() {
       
               try {
                 const wishlistData = await api.get(`api/v1/user/wishlist/${currentUser.uid}`);
-                console.log(wishlistData.data)
                 getWishListProperty(wishlistData.data)
               } catch (error) {
                 console.error('Error fetching wishlist:', error);
@@ -43,7 +42,6 @@ export default function WishList2() {
     }, []);
 
     useEffect(()=>{
-        // console.log(property)
         getSlideImage();
         getAmenities();
     },[wishlistProperties])
@@ -117,7 +115,6 @@ export default function WishList2() {
     const getWishlist = async() =>{
         try {
             const wishlistData = await api.get(`api/v1/user/wishlist/${user.uid}`);
-            // console.log(wishlistData.data)
             getWishListProperty(wishlistData.data)
         } catch (error) {
             console.error('Error fetching wishlist:', error);
@@ -130,7 +127,6 @@ export default function WishList2() {
               wishlistData.map(async (item, index) => {
                 try{
                   const result = await api.get(`/api/v1/property/${item}`);
-                  console.log(result.data)
                     return result.data; 
                 }catch(err){
                   return null
@@ -138,7 +134,6 @@ export default function WishList2() {
                   
                 })
             );
-            // console.log(list[0])
             const filteredList = list.filter((item) => item !== null);
             setWishlistProperties(filteredList)
         }else{

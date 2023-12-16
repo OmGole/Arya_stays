@@ -52,7 +52,6 @@ export const createSlide = createAsyncThunk(
   'slide/createNewSlide',
   async (newSlide, {rejectWithValue}) => {
     try {
-      console.log(newSlide);
       const response = await api.post(`/api/v1/slide`, newSlide);
       return response.data;
     } catch (error) {
@@ -81,52 +80,42 @@ export const slideSlice = createSlice({
 
   extraReducers:  {
     [getAllSlides.fulfilled] : (state, { payload }) => {
-      console.log(payload);
       state.allSlides = payload;
       state.error = '';
     },
     [getAllSlides.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.allSlides = {};
       state.error = payload;
     },
     [getSingleSlide.fulfilled] : (state, { payload }) => {
-      console.log(payload);
       state.slideById = payload;
       state.error = '';
     },
     [getSingleSlide.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.slideById = {};
       state.error = payload;
     },
     [createSlide.fulfilled] : (state, { payload }) => {
-      console.log(payload);
       state.createdSlide = payload;
       state.error = '';
     },
     [createSlide.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.createdSlide = {};
       state.error = payload;
     },
     [editSlide.fulfilled] : (state,{ payload }) => {
-      console.log(payload);
       state.editedSlide = payload;
       state.error = '';
     },
     [editSlide.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.editedSlide = {};
       state.error = payload;
     },
     [deleteSlide.fulfilled] : (state,{ payload }) => {
-      console.log(payload);
       state.deletedSlide = payload;
       state.error = '';
     },
     [deleteSlide.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.deletedSlide = {};
       state.error = payload;
     },

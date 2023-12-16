@@ -37,20 +37,6 @@ export default function NavbarC() {
   const [role,setRole] = useState('')
   
 
-  useEffect(()=>{
-    // onAuthStateChanged(authentication, (user) => {
-    //   if (user) {
-    //     // User is signed in, see docs for a list of available properties
-    //     // https://firebase.google.com/docs/reference/js/auth.user
-    //     const uid = user.uid;
-    //     console.log(user)
-    //     // ...
-    //   } else {
-    //     // User is signed out
-    //     // ...
-    //   }
-    // });
-  },[])
 
   const generateRecaptcha = () =>{
     window.recaptchaVerifier = new RecaptchaVerifier(authentication, 'recaptcha-container', {
@@ -79,11 +65,8 @@ export default function NavbarC() {
   
 
   const change = (selectedcountry,countrycode)=>{
-    // console.log(countrycode)
     setSelectedCountry(selectedcountry);
     setSelectedCountryCode(countrycode);
-    // SetisChooseCountry(true);
-
 }
 
     const handleVerifyOtp = () =>{
@@ -91,7 +74,6 @@ export default function NavbarC() {
       confirmationResult.confirm(OTP).then((result) => {
         // User signed in successfully.
         const user = result.user;
-        console.log(user)
         navigate('/profile')
         // ...
       }).catch((error) => {
@@ -104,7 +86,6 @@ export default function NavbarC() {
       const provider = new GoogleAuthProvider()
       signInWithPopup(authentication,provider).then((result)=>{
         const user = result.user;
-        console.log(user)
         navigate('/profile')
       }).catch((error) => {
         // Handle Errors here.
@@ -116,7 +97,6 @@ export default function NavbarC() {
       const provider = new OAuthProvider('apple.com');
       signInWithPopup(authentication,provider).then((result)=>{
         const user = result.user;
-        console.log(user)
         navigate('/profile')
       }).catch((error) => {
         // Handle Errors here.
@@ -178,9 +158,7 @@ export default function NavbarC() {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          console.log(user.user.uid);
           const response = await api.get(`/api/v1/user/${user.user.uid}`);
-          console.log(response.data);
           setRole(response.data.isAdmin);
           // Process the data fetched from the API call here
         } catch (error) {

@@ -16,7 +16,6 @@ const createEvent = async (req,res) => {
   try {
     const {propertyId, title, start, end} = req.body;
     // const object_Id = new ObjectId(_id);
-    console.log(req.body)
     if(!propertyId || !title || !start || !end) {
     return res.status(401).send("Please Provide Name, Email and Password");
   }

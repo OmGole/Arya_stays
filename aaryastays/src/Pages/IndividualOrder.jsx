@@ -65,7 +65,6 @@ export default function IndividualOrder() {
   }, [pathname]);
 
     useEffect(()=>{
-        console.log(Validity)
         dispatch(getOrderById(routeParamsID)).then(async (data)=>{
             setSingleOrder(data.payload[0])
             const totalSum = data.payload[0].amenities.reduce((accumulator, amenity) => {
@@ -79,13 +78,6 @@ export default function IndividualOrder() {
             dispatch(getUserById(data.payload[0].userId)).then((data3)=>{
                 setUserName(data3.payload.name)
             })
-            // console.log(data.payload[0].amenities)
-            // data.payload[0].amenities.map(async (obj,index) => {
-            //     console.log(obj.id)
-            //     const result = await api.get(`/api/v1/amenity/${obj.id}`);
-            //     console.log(toolTip2)
-            //     setToolTip2((toolTip2)=>[...toolTip2,result.data.title + ' x ' + data.payload[0].amenities[index].qty + ' = ' + result.data.price * data.payload[0].amenities[index].qty + ' Rs'])
-            // })
 
             const fetchedTooltips = await Promise.all(
                 data.payload[0].amenities.map(async (obj) => {
@@ -119,9 +111,7 @@ export default function IndividualOrder() {
     }
 
     const PostReview = async()=>{
-        // console.log(typeof selectedStar)
         const data = {
-            // orderId: singleOrder._id,
             userId: singleOrder.userId,
             propertyId: singleOrder.propertyId,
             rating: selectedStar,
@@ -131,7 +121,6 @@ export default function IndividualOrder() {
             
         })
         const result = await api.patch(`/api/v1/order/reviewed/${singleOrder._id}`)
-        // console.log(result.data)
         setSingleOrder(result.data)
         setOpenModal(false)
     }

@@ -26,16 +26,13 @@ export default function HomeCard1({property}) {
 
   const getSlideImage = async()=>{
     try{
-      console.log("hello2")
       const new_slide_images = await Promise.all(property.currentLocation_images.map(async (id,index) => {
         if(index!=2){
             const result = await api.get(`/api/v1/image/${id}`);
             return result.data.url;
         }
       }));
-      console.log(new_slide_images)
       setSlideImage(new_slide_images)
-
     }catch(err){
       console.log(err)
     }
@@ -65,7 +62,6 @@ export default function HomeCard1({property}) {
 
   const getAmenities = async()=>{
     try{
-      // console.log("hello")
       const new_amenities = await Promise.all(property.amenities.map(async (id,index) => {
         
             const result = await api.get(`/api/v1/amenity/${id}`);

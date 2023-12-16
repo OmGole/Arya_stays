@@ -64,32 +64,26 @@ export const userSlice = createSlice({
 
   extraReducers:  {
     [getUserById.fulfilled] : (state, { payload }) => {
-      console.log(payload);
       state.userDetails = payload;
       state.error = '';
     },
     [getUserById.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.userDetails = {};
       state.error = payload;
     },
     [createUser.fulfilled] : (state, { payload }) => {
-      console.log(payload);
       state.userDetails = payload;
       state.error = '';
     },
     [createUser.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.userDetails = {};
       state.error = payload;
     },
     [editUser.fulfilled] : (state,{ payload }) => {
-      console.log(payload);
       state.userDetails = payload;
       state.error = '';
     },
     [editUser.rejected] : (state, { payload }) => {
-      console.log(payload);
       state.userDetails = {};
       state.error = payload;
     },

@@ -240,7 +240,6 @@ const DashBoardEditProperty = () => {
   };
 
   const handleAmenityChange = (event) => {
-    console.log(amenities);
     const { value, checked } = event.target;
     if (checked) {
       setAmenities([...amenities, value]);
@@ -252,60 +251,20 @@ const DashBoardEditProperty = () => {
   const handlePropertyDeleteModal = (e) => {
     e.preventDefault();
     setOpenDeleteModal(true);
-    // e.preventDefault();
-    // property.ats_image.forEach((id) =>
-    //   dispatch(deleteImage(id)).then((data) => console.log("ats"))
-    // );
-
-    // property.currentLocation_images.forEach((id) =>
-    //   dispatch(deleteImage(id)).then((data) =>
-    //     console.log("currentLocation_images")
-    //   )
-    // );
-
-    // property.slides.forEach((id) =>
-    //   dispatch(deleteSlide(id)).then((data) => console.log("slides"))
-    // );
-
-    // property.events.forEach((id) =>
-    //   dispatch(deleteEvent(id)).then((data) => console.log("events"))
-    // );
-
-    // property.reviews.forEach((id) =>
-    //   dispatch(deleteReview(id)).then((data) => console.log("events"))
-    // );
-
-    // dispatch(deleteOrdersByPropertyId(id));
-
-    // dispatch(deleteProperty(property._id));
-
-    // navigate("/dashboard/property");
   };
 
   const handlePropertyDelete = (e) => {
     e.preventDefault();
 
-    property.ats_image.forEach((id) =>
-      dispatch(deleteImage(id)).then((data) => console.log("ats"))
-    );
+    property.ats_image.forEach((id) => dispatch(deleteImage(id)));
 
-    property.currentLocation_images.forEach((id) =>
-      dispatch(deleteImage(id)).then((data) =>
-        console.log("currentLocation_images")
-      )
-    );
+    property.currentLocation_images.forEach((id) => dispatch(deleteImage(id)));
 
-    property.slides.forEach((id) =>
-      dispatch(deleteSlide(id)).then((data) => console.log("slides"))
-    );
+    property.slides.forEach((id) => dispatch(deleteSlide(id)));
 
-    property.events.forEach((id) =>
-      dispatch(deleteEvent(id)).then((data) => console.log("events"))
-    );
+    property.events.forEach((id) => dispatch(deleteEvent(id)));
 
-    property.reviews.forEach((id) =>
-      dispatch(deleteReview(id)).then((data) => console.log("events"))
-    );
+    property.reviews.forEach((id) => dispatch(deleteReview(id)));
 
     dispatch(deleteOrdersByPropertyId(id));
 
@@ -354,7 +313,6 @@ const DashBoardEditProperty = () => {
   }, []);
 
   useEffect(() => {
-    console.log(property);
     if (property) {
       setTitle(property.title);
       setLocation(property.location);
